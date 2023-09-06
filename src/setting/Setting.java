@@ -20,6 +20,15 @@ public class Setting {
 		
 		System.out.println("history db 생성");
 		
+		stmt.execute("CREATE TABLE `mirim-market`.`category` (\r\n"
+				+ "  `no` int NOT NULL AUTO_INCREMENT,\r\n"
+				+ "  `name` text,\r\n"
+				+ "  PRIMARY KEY (`no`)\r\n"
+				+ ") ENGINE=InnoDB AUTO_INCREMENT=569 DEFAULT CHARSET=utf8mb3;\r\n"
+				+ "");
+		
+		System.out.println("category db 생성");
+		
 		stmt.execute("CREATE TABLE `mirim-market`.`user` (\r\n"
 				+ "  `no` int NOT NULL AUTO_INCREMENT,\r\n"
 				+ "  `name` text,\r\n"
@@ -33,19 +42,8 @@ public class Setting {
 		
 		System.out.println("user db 생성");
 		
-		stmt.execute("CREATE TABLE `mirim-market`.`store` (\r\n"
-				+ "  `no` int NOT NULL AUTO_INCREMENT,\r\n"
-				+ "  `name` text,\r\n"
-				+ "  `explan` text,\r\n"
-				+ "  PRIMARY KEY (`no`)\r\n"
-				+ ") ENGINE=InnoDB AUTO_INCREMENT=87 DEFAULT CHARSET=utf8mb3;\r\n"
-				+ "");
-		
-		System.out.println("store db 생성");
-		
 		stmt.execute("CREATE TABLE `mirim-market`.`post` (\r\n"
 				+ "  `no` int NOT NULL AUTO_INCREMENT,\r\n"
-				+ "  `store` int DEFAULT NULL,\r\n"
 				+ "  `title` text,\r\n"
 				+ "  `explanation` text,\r\n"
 				+ "  `price` int DEFAULT NULL,\r\n"
@@ -56,8 +54,8 @@ public class Setting {
 				+ "  `category_datail` int DEFAULT NULL,\r\n"
 				+ "  `satae` int DEFAULT NULL,\r\n"
 				+ "  PRIMARY KEY (`no`),\r\n"
-				+ "  KEY `fk_post_store_idx` (`store`),\r\n"
-				+ "  CONSTRAINT `fk_post_store` FOREIGN KEY (`store`) REFERENCES `store` (`no`) ON DELETE CASCADE ON UPDATE CASCADE\r\n"
+				+ "  KEY `fk_post_category_idx` (`category`),\r\n"
+				+ "  CONSTRAINT `fk_post_category` FOREIGN KEY (`category`) REFERENCES `category` (`no`) ON DELETE CASCADE ON UPDATE CASCADE\r\n"
 				+ ") ENGINE=InnoDB AUTO_INCREMENT=1048 DEFAULT CHARSET=utf8mb3;\r\n"
 				+ "");
 		
@@ -80,11 +78,8 @@ public class Setting {
 		stmt.execute("CREATE TABLE `mirim-market`.`follower` (\r\n"
 				+ "  `no` int NOT NULL AUTO_INCREMENT,\r\n"
 				+ "  `user` int DEFAULT NULL,\r\n"
-				+ "  `store` int DEFAULT NULL,\r\n"
 				+ "  PRIMARY KEY (`no`),\r\n"
 				+ "  KEY `fk_follower_user_idx` (`user`),\r\n"
-				+ "  KEY `fk_follower_store_idx` (`store`),\r\n"
-				+ "  CONSTRAINT `fk_follower_store` FOREIGN KEY (`store`) REFERENCES `store` (`no`) ON DELETE CASCADE ON UPDATE CASCADE,\r\n"
 				+ "  CONSTRAINT `fk_follower_user` FOREIGN KEY (`user`) REFERENCES `user` (`no`) ON DELETE CASCADE ON UPDATE CASCADE\r\n"
 				+ ") ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=utf8mb3;\r\n"
 				+ "");
@@ -115,7 +110,7 @@ public class Setting {
 		
 		stmt.execute("USE `mirim-market`");
 		
-		String[] tables = "user,store,post,review,favorite,follower,history".split(",");
+		String[] tables = "user,category,post,review,favorite,follower,history".split(",");
 		
 		for(String table : tables) {
 			stmt.execute("LOAD DATA LOCAL INFILE 'datafiles/" + table + ".txt'"
