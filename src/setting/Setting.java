@@ -109,7 +109,7 @@ public class Setting {
 		
 		stmt.execute("DROP USER IF EXISTS 'user'@'127.0.0.1'");
 		stmt.execute("CREATE USER 'user'@'127.0.0.1' IDENTIFIED BY '1234'");
-		stmt.execute("GRANT SELECT, INSERT, DELETE, UPDATE ON `market`.* TO 'user'@'127.0.0.1'");
+		stmt.execute("GRANT SELECT, INSERT, DELETE, UPDATE ON `mirim-market`.* TO 'user'@'127.0.0.1'");
 		
 		System.out.println("user 생성");
 		
