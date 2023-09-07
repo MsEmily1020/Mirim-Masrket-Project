@@ -18,13 +18,14 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
 public class MainFrame extends BaseFrame {
+	
 	public MainFrame() {
 		super("메인", 1000, 700);
 		메인 = this;
 		try {
 			stmt.execute("delete from sys.list1");
 			
-			main.add(setBounds(btn[2] = actbtn("로그인/회원가입", e -> new LoginFrame().setVisible(true)), 800, 5, 105, 25));
+			main.add(setBounds(btn[2] = actbtn("로그인/회원가입", e -> { dispose(); new LoginFrame().setVisible(true); }), 800, 5, 105, 25));
 			main.add(setBounds(btn[3] = actbtn("내상점", e -> dispose()), 910, 5, 65, 25));
 			main.add(setBounds(btn[5] = actbtn("기능장터", e -> changePage(new BackgroundFrame().main)), 10, 45, 150, 30));
 			main.add(setBounds(btn[6] = actbtn("판매하기", e -> dispose()), 715, 45, 90, 25));
