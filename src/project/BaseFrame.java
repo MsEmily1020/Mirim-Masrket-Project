@@ -77,7 +77,7 @@ public class BaseFrame extends JFrame {
 
 	static {
 		try {
-			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1/market?serverTimezone=UTC", "root", "1234");
+			con = DriverManager.getConnection("jdbc:mysql://127.0.0.1/mirim-market?serverTimezone=UTC", "root", "1234");
 			stmt = con.createStatement();
 			
 			rs = getResult("select * from post");

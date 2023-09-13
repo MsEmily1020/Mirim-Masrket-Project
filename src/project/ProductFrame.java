@@ -22,6 +22,9 @@ public class ProductFrame extends BaseFrame {
 	public ProductFrame() {
 		super("메인", 880, 640);
 		try {
+			rs = getResult("select *, (select count(*) from follower) as fwer from post where no = ?", p_no);
+			rs.next();
+
 			for (int i = 0; i < 3; i++) {
 				str += category.get(filter.get(p_no).get(i)) == null ? "" : " > " + category.get(filter.get(p_no).get(i));
 			}
@@ -38,6 +41,8 @@ public class ProductFrame extends BaseFrame {
 			main.add(setBounds(lb[9] = new JLabel("상점정보"), 630, 510, 225, 30));
 			main.add(setBounds(lb[10] = new JLabel("<HTML><p>" + rs.getString("explanation") + "</p></HTML>"), 10, 550, 615, 80));
 			
+			main.add(setBounds(lb[13] = new JLabel("상품11 | 팔로워" + rs.getString("fwer")), 675, 580, 180, 20));
+
 			main.add(setBounds(btn[0] = new JButton("♥찜 0"), 305, 240, 275, 50));
 			main.add(setBounds(btn[1] = new JButton("바로구매"), 590, 240, 265, 50));
 			main.add(setBounds(btn[2] = new JButton("팔로우"), 630, 610, 225, 35));
