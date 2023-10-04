@@ -22,7 +22,7 @@ public class EmailLogin extends BaseFrame{
 		main.add(setBounds(tf[1] = new JTextField("비밀번호"), 300, 405, 385, 40));
 		
 		main.add(setBounds(btn[0] = new JButton("로그인"), 300, 470, 190, 35));
-		main.add(setBounds(btn[1] = new JButton("닫기"), 495, 470, 190, 35));
+		main.add(setBounds(btn[1] = actbtn("닫기", e -> changeFrame(new LoginFrame())), 495, 470, 190, 35));
 		
 		main.add(setBounds(jp[0] = new JPanel(), 280, 215, 425, 310));
 		
@@ -50,8 +50,7 @@ public class EmailLogin extends BaseFrame{
 				if(rs.next()) {
 					BaseFrame.u_no = rs.getInt("no");
 					showInfo(rs.getString("name") + "님 환영합니다.");
-					dispose();
-					new MainFrame().setVisible(true);
+					changeFrame(new MainFrame());
 				}
 				
 				else {
@@ -60,11 +59,6 @@ public class EmailLogin extends BaseFrame{
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-		});
-		
-		btn[1].addActionListener(e -> {
-			dispose();
-			new MainFrame().setVisible(true);
 		});
 	}
 	

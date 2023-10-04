@@ -267,6 +267,12 @@ public class BaseFrame extends JFrame {
 		}
 	}
 	
+	public void changeFrame(JFrame frame) {
+		dispose();
+		frame.setVisible(true);
+		main.requestFocus();
+	}
+	
 	public void 상품리스트(JPanel page, ResultSet rs) {
 		int w = (int) (page.getWidth() * (page.getName().equals("5") ? 0.2 : page.getName().equals("6") ? 0.17 : 1)) - 7;
 		var tr = new Thread() {

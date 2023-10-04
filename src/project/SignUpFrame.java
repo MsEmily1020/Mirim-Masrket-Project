@@ -36,7 +36,7 @@ public class SignUpFrame extends BaseFrame {
 		}
 		main.add(setBounds(jp[0] = new JPanel(), 290, 415, 435, 40));
 		main.add(setBounds(btn[0] = new JButton("회원가입"), 295, 700, 205, 40));
-		main.add(setBounds(btn[1] = new JButton("닫기"), 505, 700, 225, 40));
+		main.add(setBounds(btn[1] = actbtn("닫기", e -> changeFrame(new LoginFrame())), 505, 700, 225, 40));
 		
 		main.add(setBounds(page = new JPanel(), 260, 10, 495, 745));
 		

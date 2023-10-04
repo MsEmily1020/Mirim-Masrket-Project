@@ -25,9 +25,9 @@ public class MainFrame extends BaseFrame {
 		try {
 			stmt.execute("delete from sys.list1");
 			
-			main.add(setBounds(btn[2] = actbtn("로그인/회원가입", e -> { dispose(); new LoginFrame().setVisible(true); }), 800, 5, 105, 25));
+			main.add(setBounds(btn[2] = actbtn("로그인/회원가입", e -> changeFrame(new LoginFrame())), 800, 5, 105, 25));
 			main.add(setBounds(btn[3] = actbtn("내상점", e -> dispose()), 910, 5, 65, 25));
-			main.add(setBounds(btn[5] = actbtn("미림장터", e -> changePage(new BackgroundFrame().main)), 10, 45, 150, 30));
+			main.add(setBounds(btn[5] = new JButton("미림장터", getIcon("datafiles/logo.png", 30, 30)), 10, 45, 150, 30));
 			main.add(setBounds(btn[6] = actbtn("판매하기", e -> dispose()), 715, 45, 90, 25));
 			main.add(setBounds(btn[7] = actbtn("내상점", e -> dispose()), 810, 45, 95, 25));
 			main.add(setBounds(btn[8] = actbtn("차트", e -> dispose()), 910, 45, 65, 25));
@@ -94,6 +94,7 @@ public class MainFrame extends BaseFrame {
 			jp[2].setBorder(new CompoundBorder(new LineBorder(Color.BLACK), new EmptyBorder(30, 0, 0, 0)));
 			jp[5].setBackground(getBackground());
 
+			btn[5].setForeground(new Color(0, 128, 0));
 			btn[9].setIcon(new ImageIcon("./datafiles/image/icon/search.png"));
 			btn[10].setBorder(new MatteBorder(0, 0, 2, 0, new Color(0, 128, 0)));
 			btn[11].setBorder(new MatteBorder(0, 0, 2, 0, Color.GRAY));
