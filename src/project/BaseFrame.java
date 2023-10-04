@@ -16,6 +16,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -25,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -59,13 +62,13 @@ public class BaseFrame extends JFrame {
 	public JTextArea jta;
 	public JScrollPane jsp;
 	public JPanel p, page, main;
-	public JPanel[] jp = new JPanel[30];
-	public JLabel[] lb = new JLabel[30];
-	public JButton[] btn = new JButton[30];
-	public JTextField[] tf = new JTextField[30];
-	public JComboBox[] cbx = new JComboBox[30];
-	public JCheckBox[] ch = new JCheckBox[30];
-	public JRadioButton[] rb =new JRadioButton[30];
+	public JPanel[] jp = new JPanel[1000];
+	public JLabel[] lb = new JLabel[1000];
+	public JButton[] btn = new JButton[1000];
+	public JTextField[] tf = new JTextField[1000];
+	public JComboBox[] cbx = new JComboBox[1000];
+	public JCheckBox[] ch = new JCheckBox[1000];
+	public JRadioButton[] rb =new JRadioButton[1000];
 
 	public static String aaa;
 	public static String jop;
@@ -99,6 +102,12 @@ public class BaseFrame extends JFrame {
 		setLayout(null);
 		setDefaultCloseOperation(2);
 		setLocationRelativeTo(null);
+		
+		try {
+			setIconImage(ImageIO.read(new File("datafiles/logo.png")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		setCursor(new Cursor(CROSSHAIR_CURSOR));
 		add(main = setBounds(new JPanel(null), 0, 0, w, h));
