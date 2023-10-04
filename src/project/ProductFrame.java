@@ -49,7 +49,7 @@ public class ProductFrame extends BaseFrame {
 
 			main.add(setBounds(btn[3] = actbtn("◀", e -> 페이징(-1)), 5, 370, 40, 40));
 			main.add(setBounds(btn[4] = actbtn("▶", e -> 페이징(1)), 815, 370, 40, 40));
-			main.add(setBounds(jp[0] = new JPanel(new FlowLayout(0, 4, 0)), 5, 325, 860, 185));
+			main.add(setBounds(jp[0] = new JPanel(new FlowLayout(0, 4, 0)), 5, 325, 860, 160));
 
 			jp[0].setName("6");
 			
@@ -86,12 +86,12 @@ public class ProductFrame extends BaseFrame {
 			btn[0].setForeground(getBackground());
 			btn[1].setForeground(getBackground());
 			btn[2].setBorder(new LineBorder(Color.GRAY));
-			btn[3].setMargin(new Insets(0, 0, 0, 0));
-			btn[4].setMargin(new Insets(0, 0, 0, 0));
-			btn[3].setBackground(Color.LIGHT_GRAY);
-			btn[4].setBackground(Color.LIGHT_GRAY);
-			btn[3].setBorder(null);
-			btn[4].setBorder(null);
+			btn[3].setOpaque(false);
+			btn[4].setOpaque(false);
+			btn[3].setFont(new Font("맑은 고딕", 1, 20));
+			btn[4].setFont(new Font("맑은 고딕", 1, 20));
+			btn[3].setForeground(Color.black);
+			btn[4].setForeground(Color.black);
 			jp[0].setBackground(Color.WHITE);
 			jp[0].setBorder(new CompoundBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK), new EmptyBorder(0, 0, 30, 0)));
 			
