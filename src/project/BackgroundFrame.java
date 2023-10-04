@@ -15,8 +15,8 @@ public class BackgroundFrame extends BaseFrame {
 		
 		try {
 			main.add(setBounds(lb[0] = new JLabel("오늘의 상품 추천"), 5, 290, 155, 35));
-			main.add(setBounds(btn[0] = actbtn("", e -> 그림이동(1)), 0, 100, 30, 50));
-			main.add(setBounds(btn[1] = actbtn("", e -> 그림이동(-1)), 830, 100, 30, 50));
+			main.add(setBounds(btn[0] = actbtn("<", e -> 그림이동(1)), 10, 100, 30, 50));
+			main.add(setBounds(btn[1] = actbtn(">", e -> 그림이동(-1)), 820, 100, 30, 50));
 			main.add(setBounds(jp[0] = new JPanel(new FlowLayout(0, 0, 0)), 0, 0, 860 * 60, 275));
 			main.add(setBounds(page = new JPanel(new FlowLayout(0)), 0, 330, 860, 50000));
 			
@@ -40,8 +40,12 @@ public class BackgroundFrame extends BaseFrame {
 			
 			setComponent(main);
 			
-			btn[0].setBackground(Color.LIGHT_GRAY);
-			btn[1].setBackground(Color.LIGHT_GRAY);
+			btn[0].setOpaque(false);
+			btn[1].setOpaque(false);
+			btn[0].setForeground(Color.white);
+			btn[1].setForeground(Color.white);
+			btn[0].setFont(new Font("맑은 고딕", 1, 20));
+			btn[1].setFont(new Font("맑은 고딕", 1, 20));
 			
 			lb[0].setFont(new Font("맑은 고딕", 1, 18));
 			
