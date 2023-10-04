@@ -45,13 +45,13 @@ public class SearchFrame extends BaseFrame {
 			lb[1].setFont(new Font("HY견고딕", 1, 12));
 			lb[2].setFont(new Font("HY견고딕", 1, 12));
 			lb[3].setFont(new Font("HY견고딕", 1, 12));
-			lb[4].setForeground(Color.RED);
+			lb[4].setForeground(new Color(0, 128, 0));
 			lb[6].setForeground(Color.GRAY);
 			
 			btn[0].setBorder(new MatteBorder(0, 0, 0, 1, Color.LIGHT_GRAY));
 			btn[1].setBorder(new MatteBorder(0, 0, 0, 1, Color.LIGHT_GRAY));
 			btn[2].setBorder(new MatteBorder(0, 0, 0, 1, Color.LIGHT_GRAY));
-			btn[0].setForeground(Color.RED);
+			btn[0].setForeground(new Color(0, 128, 0));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

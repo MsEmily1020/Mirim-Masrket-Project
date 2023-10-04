@@ -33,7 +33,7 @@ public class IdLogin extends BaseFrame {
 		tf[1].setBorder(new MatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 		btn[0].setForeground(getBackground());
 		btn[1].setForeground(getBackground());
-		btn[0].setBackground(Color.RED);
+		btn[0].setBackground(new Color(0, 128, 0));
 		btn[1].setBackground(Color.BLACK);
 		jp[0].setBorder(new LineBorder(Color.LIGHT_GRAY));
 		jp[0].setBackground(Color.WHITE);

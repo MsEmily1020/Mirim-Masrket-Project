@@ -45,7 +45,7 @@ public class SignUpFrame extends BaseFrame {
 		lb[0].setFont(new Font("맑은 고딕", 1, 24));
 		btn[0].setForeground(getBackground());
 		btn[1].setForeground(getBackground());
-		btn[0].setBackground(Color.RED);
+		btn[0].setBackground(new Color(0, 128, 0));
 		btn[1].setBackground(Color.BLACK);
 		page.setBackground(Color.WHITE);
 		jp[0].setBorder(new LineBorder(Color.LIGHT_GRAY));

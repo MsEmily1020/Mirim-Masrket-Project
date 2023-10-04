@@ -61,7 +61,7 @@ public class MainFrame extends BaseFrame {
 			for (int i = 0; rs.next(); i++) {
 				jp[4].add(setBounds(btn[20] = actbtn((i % 2) * 10 + i / 2 + 1 + "", e -> 검색()), (int) (jp[3].getWidth() * 0.05), jp[3].getHeight() / 10));
 				jp[4].add(setBounds(btn[21] = actbtn(rs.getString("content"), e -> 검색()), (int) (jp[3].getWidth() * 0.45), jp[3].getHeight() / 10));
-				btn[20].setForeground(Color.RED);
+				btn[20].setForeground(new Color(0, 128, 0));
 				btn[21].setHorizontalAlignment(2);
 			}
 
@@ -85,7 +85,7 @@ public class MainFrame extends BaseFrame {
 
 			tf[0].setForeground(Color.GRAY);
 			
-			lb[0].setBorder(new LineBorder(Color.RED));
+			lb[0].setBorder(new LineBorder(new Color(0, 128, 0)));
 
 			jp[0].setVisible(false);
 			jp[0].setBorder(new LineBorder(Color.GRAY));
@@ -95,9 +95,9 @@ public class MainFrame extends BaseFrame {
 			jp[5].setBackground(getBackground());
 
 			btn[9].setIcon(new ImageIcon("./datafiles/image/icon/search.png"));
-			btn[10].setBorder(new MatteBorder(0, 0, 2, 0, Color.RED));
+			btn[10].setBorder(new MatteBorder(0, 0, 2, 0, new Color(0, 128, 0)));
 			btn[11].setBorder(new MatteBorder(0, 0, 2, 0, Color.GRAY));
-			btn[10].setForeground(Color.RED);
+			btn[10].setForeground(new Color(0, 128, 0));
 			btn[11].setForeground(Color.GRAY);
 			btn[12].setBackground(new Color(238, 238, 238));
 			btn[13].setBackground(new Color(238, 238, 238));
@@ -144,11 +144,11 @@ public class MainFrame extends BaseFrame {
 	}
 	
 	public void 검색어(Object obj) {
-		if(((JButton) obj).getForeground() == Color.RED) return;
-		btn[10].setBorder(new MatteBorder(0, 0, 2, 0, !jp[3].isShowing() ? Color.RED : Color.GRAY));
-		btn[11].setBorder(new MatteBorder(0, 0, 2, 0, jp[3].isShowing() ? Color.RED : Color.GRAY));
-		btn[10].setForeground(!jp[3].isShowing() ? Color.RED : Color.GRAY);
-		btn[11].setForeground(jp[3].isShowing() ? Color.RED : Color.GRAY);
+		if(((JButton) obj).getForeground() == new Color(0, 128, 0)) return;
+		btn[10].setBorder(new MatteBorder(0, 0, 2, 0, !jp[3].isShowing() ? new Color(0, 128, 0) : Color.GRAY));
+		btn[11].setBorder(new MatteBorder(0, 0, 2, 0, jp[3].isShowing() ? new Color(0, 128, 0) : Color.GRAY));
+		btn[10].setForeground(!jp[3].isShowing() ? new Color(0, 128, 0) : Color.GRAY);
+		btn[11].setForeground(jp[3].isShowing() ? new Color(0, 128, 0) : Color.GRAY);
 		jp[3].setVisible(!jp[3].isShowing());
 		jp[4].setVisible(!jp[4].isShowing());
 		btn[12].setVisible(jp[3].isShowing());
