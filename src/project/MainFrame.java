@@ -25,12 +25,11 @@ public class MainFrame extends BaseFrame {
 		try {
 			stmt.execute("delete from sys.list1");
 			
-			main.add(setBounds(btn[2] = actbtn("로그인/회원가입", e -> changeFrame(new LoginFrame())), 800, 5, 105, 25));
-			main.add(setBounds(btn[3] = actbtn("내상점", e -> dispose()), 910, 5, 65, 25));
+			main.add(setBounds(btn[2] = actbtn("로그인/회원가입", e -> changeFrame(new LoginFrame())), 860, 10, 105, 25));
 			main.add(setBounds(btn[5] = new JButton("미림장터", getIcon("datafiles/logo.png", 30, 30)), 10, 45, 150, 30));
-			main.add(setBounds(btn[6] = actbtn("판매하기", e -> dispose()), 715, 45, 90, 25));
-			main.add(setBounds(btn[7] = actbtn("내상점", e -> dispose()), 810, 45, 95, 25));
-			main.add(setBounds(btn[8] = actbtn("차트", e -> dispose()), 910, 45, 65, 25));
+			main.add(setBounds(btn[6] = new JButton("판매하기", getIcon("datafiles/image/icon/sell.png", 20, 20)), 715, 45, 90, 25));
+			main.add(setBounds(btn[7] = new JButton("내상점", getIcon("datafiles/image/icon/store.png", 20, 20)), 810, 45, 95, 25));
+			main.add(setBounds(btn[8] = new JButton("차트", getIcon("datafiles/image/icon/chart.png", 20, 20)), 905, 48, 65, 25));
 			main.add(setBounds(btn[9] = actbtn("", e -> 검색()), 600, 46, 28, 28));
 
 			main.add(setBounds(tf[0] = new JTextField("상품명, 지역명, @상점명 입력"), 171, 46, 430, 28));
