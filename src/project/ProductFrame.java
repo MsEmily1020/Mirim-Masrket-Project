@@ -41,6 +41,7 @@ public class ProductFrame extends BaseFrame {
 			main.add(setBounds(lb[9] = new JLabel("상점정보"), 630, 510, 225, 30));
 			main.add(setBounds(lb[10] = new JLabel("<HTML><p>" + rs.getString("explanation") + "</p></HTML>"), 10, 550, 615, 80));
 			
+			main.add(setBounds(lb[11] = new JLabel(getIcon("./datafiles/image/store/" + rs.getString("store") + ".jpg", 45, 45)), 630, 550, 45, 45));
 			main.add(setBounds(lb[13] = new JLabel("상품11 | 팔로워" + rs.getString("fwer")), 675, 580, 180, 20));
 
 			main.add(setBounds(btn[0] = new JButton("♥찜 0"), 305, 240, 275, 50));

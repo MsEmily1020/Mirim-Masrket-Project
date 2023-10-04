@@ -87,6 +87,7 @@ public class BaseFrame extends JFrame {
 			for (int i = 1; rs.next(); i++) {
 				filter.put(i, new ArrayList(Arrays.asList(rs.getInt("category"), rs.getInt("category_sub"), rs.getInt("category_datail"))));
 			}
+			
 			rs = getResult("select * from category");
 			for (int i = 1; rs.next(); i++) {
 				category.put(i, rs.getString(2));
