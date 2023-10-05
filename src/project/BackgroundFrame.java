@@ -15,8 +15,8 @@ public class BackgroundFrame extends BaseFrame {
 		
 		try {
 			main.add(setBounds(lb[0] = new JLabel("오늘의 상품 추천"), 5, 290, 155, 35));
-			main.add(setBounds(btn[0] = actbtn("<", e -> 그림이동(1)), 10, 100, 30, 50));
-			main.add(setBounds(btn[1] = actbtn(">", e -> 그림이동(-1)), 820, 100, 30, 50));
+			main.add(setBounds(btn[0] = actbtn("<", e -> movePicture(1)), 10, 100, 30, 50));
+			main.add(setBounds(btn[1] = actbtn(">", e -> movePicture(-1)), 820, 100, 30, 50));
 			main.add(setBounds(jp[0] = new JPanel(new FlowLayout(0, 0, 0)), 0, 0, 860 * 60, 275));
 			main.add(setBounds(page = new JPanel(new FlowLayout(0)), 0, 330, 860, 50000));
 			
@@ -24,19 +24,18 @@ public class BackgroundFrame extends BaseFrame {
 				jp[0].add(new JLabel(getIcon("./datafiles/image/background/" + ((i % 7) + 1) + ".jpg", 860, 275)));
 			}
 			
-			var th = new Thread() {
+			new Thread() {
 				public void run() {
 					try {
 						while (true) {
 							Thread.sleep(5000);
-							그림이동(-1);
+							movePicture(-1);
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				};
-			};
-			th.start();
+			}.start();
 			
 			setComponent(main);
 			
@@ -55,16 +54,13 @@ public class BackgroundFrame extends BaseFrame {
 			
 			Thread.sleep(100);
 			
-			// System.out.println(page.getComponent(0).getPreferredSize().height); = 205 
-			// ↓ 330은 page의 x값의 위치 + ↑page 안의 컴포넌트 상품의 패널의 높이 + 5(간격) * 4 20개를 만들기 위해 5개 * 4줄
 			main.setPreferredSize(new Dimension(860, 330 + (205 + 5) * 4));
 			
 			메인.jsp.getVerticalScrollBar().addAdjustmentListener(e -> {
 				try {
 					JPanel comp = (JPanel) 메인.jsp.getViewport().getView();
-					// https://doyounara.tistory.com/2
 					if (e.getAdjustable().getMaximum() - e.getAdjustable().getVisibleAmount() == e.getValue()) {
-						Thread.sleep(1000); // 스크롤 최대로 내렸을 때 로드 지연시간 (주작)
+						Thread.sleep(1000);
 						comp.setPreferredSize(new Dimension(860, comp.getPreferredSize().height + 210 * 4));
 					}
 				} catch (Exception e1) {
@@ -77,7 +73,7 @@ public class BackgroundFrame extends BaseFrame {
 		}
 	}
 	
-	public void 그림이동(int a) {
+	public void movePicture(int a) {
 		if (jp[0].getLocation().x % 860 != 0) return;
 		var th = new Thread() {
 			public void run() {

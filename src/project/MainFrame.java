@@ -37,7 +37,7 @@ public class MainFrame extends BaseFrame {
 			main.add(setBounds(lb[0] = new JLabel(), 165, 45, 465, 30));
 			main.add(setBounds(lb[1] = new JLabel("찜한상품", 0), 910, 120, 60, 15));
 			main.add(setBounds(lb[2] = new JLabel("♥ 0", 0), 910, 140, 60, 15));
-			main.add(setBounds(lb[3] = new JLabel("recentProduct", 0), 900, 175, 80, 15));
+			main.add(setBounds(lb[3] = new JLabel("최근본상품", 0), 900, 175, 80, 15));
 
 			main.add(setBounds(jp[0] = new JPanel(null), 165, 80, 430, 350));
 			main.add(setBounds(jp[1] = new JPanel(), 900, 110, 80, 55));
@@ -45,9 +45,9 @@ public class MainFrame extends BaseFrame {
 
 			main.add(setBounds(jsp = new JScrollPane(), 10, 110, 885, 545));
 
-			jp[0].add(setBounds(btn[10] = actbtn("최근search", e -> search(e.getSource())), 5, 5, 205, 35));
-			jp[0].add(setBounds(btn[11] = actbtn("인기search", e -> search(e.getSource())), 215, 5, 205, 35));
-			jp[0].add(setBounds(btn[12] = actbtn("search visibleFalseAll", e -> visibleFalseAll()), 5, 320, 110, 20));
+			jp[0].add(setBounds(btn[10] = actbtn("최근검색어", e -> search(e.getSource())), 5, 5, 205, 35));
+			jp[0].add(setBounds(btn[11] = actbtn("인기검색어", e -> search(e.getSource())), 215, 5, 205, 35));
+			jp[0].add(setBounds(btn[12] = actbtn("검색어 전체삭제", e -> visibleFalseAll()), 5, 320, 110, 20));
 			jp[0].add(setBounds(btn[13] = actbtn("닫기", e -> jsp.requestFocus()), 380, 320, 40, 20));
 			jp[0].add(setBounds(jp[3] = new JPanel(new FlowLayout(0, 0, 0)), 5, 45, 415, 265));
 			jp[0].add(setBounds(jp[4] = new JPanel(new FlowLayout(0, 0, 0)), 5, 45, 415, 265));
@@ -113,6 +113,17 @@ public class MainFrame extends BaseFrame {
 
 	}
 
+	private void visibleFalseAll() {                                                                                  
+		for (Component comp : jp[3].getComponents()) {
+			comp.setVisible(false);
+		}
+	}
+	 
+	public void recentProduct() throws Exception {
+		jp[2].removeAll();
+		상품리스트(jp[2], getResult("select distinct(no), title, price from sys.list1 order by sort desc limit 5"));
+	}
+
 	private void search() {
 		try {
 			jp[3].add(setBounds(actbtn("X", e -> {
@@ -130,17 +141,6 @@ public class MainFrame extends BaseFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	private void visibleFalseAll() {                                                                                  
-		for (Component comp : jp[3].getComponents()) {
-			comp.setVisible(false);
-		}
-	}
-	 
-	public void recentProduct() throws Exception {
-		jp[2].removeAll();
-		상품리스트(jp[2], getResult("select distinct(no), title, price from sys.list1 order by sort desc limit 5"));
 	}
 	
 	public void search(Object obj) {

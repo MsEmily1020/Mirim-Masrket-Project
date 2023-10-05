@@ -45,7 +45,7 @@ public class ProductFrame extends BaseFrame {
 
 			main.add(setBounds(btn[0] = new JButton("♥찜 0"), 305, 240, 275, 50));
 			main.add(setBounds(btn[1] = new JButton("바로구매"), 590, 240, 265, 50));
-			main.add(setBounds(btn[2] = new JButton("팔로우"), 630, 610, 225, 35));
+			main.add(setBounds(btn[2] = new JButton("팔로우"), 630, 610, 225, 35)); 
 
 			main.add(setBounds(btn[3] = actbtn("◀", e -> paging(-1)), 5, 370, 40, 40));
 			main.add(setBounds(btn[4] = actbtn("▶", e -> paging(1)), 815, 370, 40, 40));
@@ -55,7 +55,7 @@ public class ProductFrame extends BaseFrame {
 			
 			상품리스트(jp[0], getResult("select * from post where no != ? and category = ? order by rand() limit 24", p_no, filter.get(p_no).get(0)));
 			
-			var th = new Thread() {
+			new Thread() {
 				public void run() {
 					try {
 						while (true) {
@@ -68,8 +68,7 @@ public class ProductFrame extends BaseFrame {
 						e.printStackTrace();
 					}
 				};
-			};
-			th.start();
+			}.start();
 
 			setComponent(main);
 			setComponent(jp[0]);
@@ -94,8 +93,6 @@ public class ProductFrame extends BaseFrame {
 			btn[4].setForeground(Color.black);
 			jp[0].setBackground(Color.WHITE);
 			jp[0].setBorder(new CompoundBorder(new MatteBorder(0, 0, 1, 0, Color.BLACK), new EmptyBorder(0, 0, 30, 0)));
-			
-			Thread.sleep(800);
 			
 			paging(0);
 			
