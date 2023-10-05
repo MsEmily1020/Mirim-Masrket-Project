@@ -294,7 +294,7 @@ public class BaseFrame extends JFrame {
 									p_no = Integer.parseInt(((JPanel) e.getSource()).getName());
 									update("update post set view = view + 1 where no = ?", p_no);
 									update("insert into sys.list1 values(null,?,null,null)", p_no);
-									메인.최근본상품();
+									메인.recentProduct();
 									changePage(new ProductFrame().main);
 								} catch (Exception e1) {
 									e1.printStackTrace();

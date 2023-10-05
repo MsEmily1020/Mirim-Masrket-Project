@@ -47,8 +47,8 @@ public class ProductFrame extends BaseFrame {
 			main.add(setBounds(btn[1] = new JButton("바로구매"), 590, 240, 265, 50));
 			main.add(setBounds(btn[2] = new JButton("팔로우"), 630, 610, 225, 35));
 
-			main.add(setBounds(btn[3] = actbtn("◀", e -> 페이징(-1)), 5, 370, 40, 40));
-			main.add(setBounds(btn[4] = actbtn("▶", e -> 페이징(1)), 815, 370, 40, 40));
+			main.add(setBounds(btn[3] = actbtn("◀", e -> paging(-1)), 5, 370, 40, 40));
+			main.add(setBounds(btn[4] = actbtn("▶", e -> paging(1)), 815, 370, 40, 40));
 			main.add(setBounds(jp[0] = new JPanel(new FlowLayout(0, 4, 0)), 5, 325, 860, 160));
 
 			jp[0].setName("6");
@@ -97,7 +97,7 @@ public class ProductFrame extends BaseFrame {
 			
 			Thread.sleep(800);
 			
-			페이징(0);
+			paging(0);
 			
 			main.setPreferredSize(new Dimension(850, 660));
 			
@@ -106,7 +106,7 @@ public class ProductFrame extends BaseFrame {
 		}
 	}
 
-	private void 페이징(int page) {
+	private void paging(int page) {
 		lb[7].setText(Integer.parseInt(lb[7].getText().split("/")[0]) + page + "/4");
 		int a = (Integer.parseInt(lb[7].getText().split("/")[0]) - 1) * 6;
 		btn[3].setEnabled(!lb[7].getText().equals("1/4"));
