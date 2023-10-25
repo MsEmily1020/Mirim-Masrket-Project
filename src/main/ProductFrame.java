@@ -1,10 +1,9 @@
-package project;
+package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.Insets;
 import java.io.File;
 
 import javax.swing.JButton;
@@ -14,6 +13,8 @@ import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
+
+import base.BaseFrame;
 
 public class ProductFrame extends BaseFrame {
 
@@ -50,10 +51,10 @@ public class ProductFrame extends BaseFrame {
 			main.add(setBounds(btn[3] = actbtn("◀", e -> paging(-1)), 5, 370, 40, 40));
 			main.add(setBounds(btn[4] = actbtn("▶", e -> paging(1)), 815, 370, 40, 40));
 			main.add(setBounds(jp[0] = new JPanel(new FlowLayout(0, 4, 0)), 5, 325, 860, 160));
-
+			
 			jp[0].setName("6");
 			
-			상품리스트(jp[0], getResult("select * from post where no != ? and category = ? order by rand() limit 24", p_no, filter.get(p_no).get(0)));
+			showProductList(jp[0], getResult("select * from post where no != ? and category = ? order by rand() limit 24", p_no, filter.get(p_no).get(0)));
 			
 			new Thread() {
 				public void run() {
@@ -72,7 +73,7 @@ public class ProductFrame extends BaseFrame {
 
 			setComponent(main);
 			setComponent(jp[0]);
-
+			
 			lb[1].setBorder(new LineBorder(Color.BLACK));
 			lb[2].setFont(new Font("맑은 고딕", 1, 18));
 			lb[3].setFont(new Font("맑은 고딕", 1, 24));

@@ -1,4 +1,4 @@
-package project;
+package main;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
+
+import base.BaseFrame;
 
 public class SignUpFrame extends BaseFrame {
 	

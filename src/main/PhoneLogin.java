@@ -1,4 +1,4 @@
-package project;
+package main;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -10,15 +10,18 @@ import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
-public class IdLogin extends BaseFrame {
-	public IdLogin() {
+import base.BaseFrame;
+
+public class PhoneLogin extends BaseFrame {
+	public PhoneLogin() {
+
 		super("로그인", 1000, 800);
 		main.setBackground(getBackground());
 
-		main.add(setBounds(lb[0] = new JLabel(getIcon("./datafiles/image/icon/id.png", 30, 30), 0), 460, 220, 60, 30));
-		main.add(setBounds(lb[1] = new JLabel("아이디로 로그인", 0), 280, 260, 425, 45));
+		main.add(setBounds(lb[0] = new JLabel(getIcon("./datafiles/image/icon/phone.png", 30, 30), 0), 460, 220, 60, 30));
+		main.add(setBounds(lb[1] = new JLabel("전화번호로 로그인", 0), 280, 260, 425, 45));
 		
-		main.add(setBounds(tf[0] = new JTextField("아이디"), 300, 335, 385, 40));
+		main.add(setBounds(tf[0] = new JTextField("전화번호"), 300, 335, 385, 40));
 		main.add(setBounds(tf[1] = new JTextField("비밀번호"), 300, 405, 385, 40));
 		
 		main.add(setBounds(btn[0] = new JButton("로그인"), 300, 470, 190, 35));
@@ -45,7 +48,7 @@ public class IdLogin extends BaseFrame {
 			}
 			
 			try {
-				var rs = getResult("select * from user where id = ? and pw = ?", tf[0].getText(), tf[1].getText());
+				var rs = getResult("select * from user where phone = ? and pw = ?", tf[0].getText(), tf[1].getText());
 				
 				if(rs.next()) {
 					BaseFrame.u_no = rs.getInt("no");
@@ -61,8 +64,8 @@ public class IdLogin extends BaseFrame {
 			}
 		});
 	}
-
+	
 	public static void main(String[] args) {
-		new IdLogin().setVisible(true);
+		new PhoneLogin().setVisible(true);
 	}
 }

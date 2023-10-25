@@ -100,7 +100,71 @@ public class Setting {
 				+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;\r\n"
 				+ "");
 		
+		stmt.execute("ALTER TABLE `mirim-market`.`history` \r\n"
+				+ "ADD COLUMN `user_no` INT NULL AFTER `content`,\r\n"
+				+ "ADD INDEX `fk_history_user_idx` (`user_no` ASC) VISIBLE;\r\n"
+				+ ";\r\n");
+		
+		stmt.execute("ALTER TABLE `mirim-market`.`history` \r\n"
+				+ "ADD CONSTRAINT `fk_history_user`\r\n"
+				+ "  FOREIGN KEY (`user_no`)\r\n"
+				+ "  REFERENCES `mirim-market`.`user` (`no`)\r\n"
+				+ "  ON DELETE CASCADE\r\n"
+				+ "  ON UPDATE CASCADE;\r\n"
+				+ "");
+		
+		stmt.execute("ALTER TABLE `mirim-market`.`history` \r\n"
+				+ "CHANGE COLUMN `user_no` `user_no` INT NULL DEFAULT NULL AFTER `no`;\r\n"
+				+ "");
+		
 		System.out.println("review db 생성");
+		
+		stmt.execute("CREATE TABLE `mirim-market`.`recent` (\r\n"
+				+ "  `no` INT NOT NULL AUTO_INCREMENT,\r\n"
+				+ "  `user_no` INT NULL,\r\n"
+				+ "  `post_no` INT NULL,\r\n"
+				+ "  PRIMARY KEY (`no`),\r\n"
+				+ "  INDEX `fk_recent_user_idx` (`user_no` ASC) VISIBLE,\r\n"
+				+ "  INDEX `fk_recent_post_idx` (`post_no` ASC) VISIBLE,\r\n"
+				+ "  CONSTRAINT `fk_recent_user`\r\n"
+				+ "    FOREIGN KEY (`user_no`)\r\n"
+				+ "    REFERENCES `mirim-market`.`user` (`no`)\r\n"
+				+ "    ON DELETE CASCADE\r\n"
+				+ "    ON UPDATE CASCADE,\r\n"
+				+ "  CONSTRAINT `fk_recent_post`\r\n"
+				+ "    FOREIGN KEY (`post_no`)\r\n"
+				+ "    REFERENCES `mirim-market`.`post` (`no`)\r\n"
+				+ "    ON DELETE CASCADE\r\n"
+				+ "    ON UPDATE CASCADE);\r\n"
+				+ "");
+		
+		System.out.println("recent db 생성");
+		
+		stmt.execute("ALTER TABLE `mirim-market`.`recent` \r\n"
+				+ "DROP FOREIGN KEY `fk_recent_post`;\r\n");
+		
+		stmt.execute("ALTER TABLE `mirim-market`.`recent` \r\n"
+				+ "DROP COLUMN `post_no`,\r\n"
+				+ "ADD COLUMN `title` TEXT NULL AFTER `user_no`,\r\n"
+				+ "ADD COLUMN `price` INT NULL AFTER `title`,\r\n"
+				+ "CHANGE COLUMN `no` `sort` INT NOT NULL AUTO_INCREMENT ,\r\n"
+				+ "DROP INDEX `fk_recent_post_idx` ;\r\n");
+		
+		stmt.execute("ALTER TABLE `mirim-market`.`recent` \r\n"
+				+ "ADD COLUMN `no` INT NULL AFTER `price`;\r\n"
+				+ "");
+		
+		stmt.execute("ALTER TABLE `mirim-market`.`recent` \r\n"
+				+ "ADD INDEX `fk_recent_post_idx` (`no` ASC) VISIBLE;\r\n"
+				+ ";\r\n");
+		
+		stmt.execute("ALTER TABLE `mirim-market`.`recent` \r\n"
+				+ "ADD CONSTRAINT `fk_recent_post`\r\n"
+				+ "  FOREIGN KEY (`no`)\r\n"
+				+ "  REFERENCES `mirim-market`.`post` (`no`)\r\n"
+				+ "  ON DELETE CASCADE\r\n"
+				+ "  ON UPDATE CASCADE;\r\n"
+				+ "");
 		
 		stmt.execute("DROP USER IF EXISTS 'user'@'127.0.0.1'");
 		stmt.execute("CREATE USER 'user'@'127.0.0.1' IDENTIFIED BY '1234'");
@@ -110,7 +174,7 @@ public class Setting {
 		
 		stmt.execute("USE `mirim-market`");
 		
-		String[] tables = "user,category,post,review,favorite,follower,history".split(",");
+		String[] tables = "user,category,post,review,favorite,follower,history,recent".split(",");
 		
 		for(String table : tables) {
 			stmt.execute("LOAD DATA LOCAL INFILE 'datafiles/" + table + ".txt'"

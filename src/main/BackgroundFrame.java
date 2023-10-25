@@ -1,4 +1,4 @@
-package project;
+package main;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -7,6 +7,8 @@ import java.awt.Font;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import base.BaseFrame;
 
 public class BackgroundFrame extends BaseFrame {
 	
@@ -50,15 +52,15 @@ public class BackgroundFrame extends BaseFrame {
 			
 			page.setName("5");
 			
-			상품리스트(page, getResult("select * from post order by rand()"));
+			showProductList(page, getResult("select * from post order by rand()"));
 			
 			Thread.sleep(100);
 			
 			main.setPreferredSize(new Dimension(860, 330 + (205 + 5) * 4));
 			
-			메인.jsp.getVerticalScrollBar().addAdjustmentListener(e -> {
+			mainCls.jsp.getVerticalScrollBar().addAdjustmentListener(e -> {
 				try {
-					JPanel comp = (JPanel) 메인.jsp.getViewport().getView();
+					JPanel comp = (JPanel) mainCls.jsp.getViewport().getView();
 					if (e.getAdjustable().getMaximum() - e.getAdjustable().getVisibleAmount() == e.getValue()) {
 						Thread.sleep(1000);
 						comp.setPreferredSize(new Dimension(860, comp.getPreferredSize().height + 210 * 4));
@@ -82,7 +84,7 @@ public class BackgroundFrame extends BaseFrame {
 					for (int i = 0; i < 861; i++) {
 						jp[0].setLocation(x + i * a, 0);
 						Thread.sleep(1);
-						메인.main.repaint();
+						mainCls.main.repaint();
 						main.repaint();
 					} 
 				} catch (Exception e) {

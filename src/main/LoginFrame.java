@@ -1,13 +1,14 @@
-package project;
+package main;
 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
 
-import javax.management.AttributeChangeNotificationFilter;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import base.BaseFrame;
 
 public class LoginFrame extends BaseFrame {
 	public LoginFrame() {
