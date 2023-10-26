@@ -27,11 +27,6 @@ public class SearchFrame extends BaseFrame {
 			main.add(setBounds(cbx[1] = new JComboBox(), 200, 5, 120, 25));
 			main.add(setBounds(cbx[2] = new JComboBox(), 345, 5, 120, 25));
 
-			main.add(setBounds(btn[0] = new JButton("최신순"), 650, 60, 50, 20));
-			main.add(setBounds(btn[1] = new JButton("인기순"), 700, 60, 50, 20));
-			main.add(setBounds(btn[2] = new JButton("저가순"), 750, 60, 50, 20));
-			main.add(setBounds(btn[3] = new JButton("고가순"), 800, 60, 50, 20));
-
 			main.add(setBounds(jp[0] = new JPanel(new FlowLayout(0, 0, 0)), 5, 60, 460, 30));
 			main.add(setBounds(page = new JPanel(new FlowLayout(0)), 0, 90, 860, 10000));
 
@@ -58,11 +53,6 @@ public class SearchFrame extends BaseFrame {
 			lb[3].setFont(new Font("HY견고딕", 1, 12));
 			lb[4].setForeground(new Color(0, 128, 0));
 			lb[6].setForeground(Color.GRAY);
-
-			btn[0].setBorder(new MatteBorder(0, 0, 0, 1, Color.LIGHT_GRAY));
-			btn[1].setBorder(new MatteBorder(0, 0, 0, 1, Color.LIGHT_GRAY));
-			btn[2].setBorder(new MatteBorder(0, 0, 0, 1, Color.LIGHT_GRAY));
-			btn[0].setForeground(new Color(0, 128, 0));
 
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -104,9 +104,6 @@ public class MainFrame extends BaseFrame {
 			btn[12].setBackground(new Color(238, 238, 238));
 			btn[13].setBackground(new Color(238, 238, 238));
 			
-			jsp.setVerticalScrollBarPolicy(22);
-			jsp.getVerticalScrollBar().setUnitIncrement(22);
-			
 			jsp.getViewport().setView(new BackgroundFrame().main);
 			
 			recentProduct();

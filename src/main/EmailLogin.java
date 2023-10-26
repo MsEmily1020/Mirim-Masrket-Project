@@ -30,7 +30,7 @@ public class EmailLogin extends BaseFrame{
 		
 		setComponent(main);
 		
-		lb[1].setFont(new Font("맑은 고딕", 1, 18));
+		lb[1].setFont(new Font("나눔고딕 Light", 1, 18));
 		tf[0].setBorder(new MatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 		tf[1].setBorder(new MatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 		btn[0].setForeground(getBackground());

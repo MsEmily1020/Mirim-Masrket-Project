@@ -266,7 +266,7 @@ public class BaseFrame extends JFrame {
 			}
 			((JComponent) comp).setBorder(null);
 			comp.setBackground(Color.WHITE);
-			comp.setFont(new Font("맑은 고딕", 1, 12));
+			comp.setFont(new Font("나눔고딕 Light", 1, 12));
 		}
 	}
 
@@ -280,12 +280,13 @@ public class BaseFrame extends JFrame {
 		int w = (int) (page.getWidth() * (page.getName().equals("5") ? 0.2 : page.getName().equals("6") ? 0.17 : 1)) - 7;
 		try {
 			for (int i = 1; rs.next(); i++) {
-				page.add(p = setBounds(new JPanel(new FlowLayout(0, 0, 0)), w, w + (page.getName().equals("5") ? 40 : page.getName().equals("6") ? 20 : 0)));
+				page.add(p = setBounds(new JPanel(new FlowLayout(0, 0, 0)), w, w + (page.getName().equals("5") ? 40 : page.getName().equals("6") ? 150 : 0)));
 				p.add(new JLabel(getIcon("./datafiles/image/post/" + rs.getInt("no") + "/1.jpg", w - 2, w - 2)));
 				p.add(new JLabel(rs.getString("title") + "                                     "));
 				p.add(new JLabel(String.format("%,d원", rs.getInt("price"))));
-				p.getComponent(1).setFont(new Font("맑은 고딕", 0, 12));
-				p.getComponent(2).setFont(new Font("맑은 고딕", 1, 12));
+				p.getComponent(1).setFont(new Font("나눔고딕 Light", 0, 12));
+				p.getComponent(2).setFont(new Font("나눔고딕 Light", 1, 12));
+				p.setBackground(Color.white);
 				p.setBorder(new LineBorder(Color.BLACK));
 				p.setName(rs.getString("no"));
 				p.addMouseListener(new MouseAdapter() {

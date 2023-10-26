@@ -30,7 +30,7 @@ public class BackgroundFrame extends BaseFrame {
 				public void run() {
 					try {
 						while (true) {
-							Thread.sleep(5000);
+							Thread.sleep(3000);
 							movePicture(-1);
 						}
 					} catch (Exception e) {
@@ -45,10 +45,10 @@ public class BackgroundFrame extends BaseFrame {
 			btn[1].setOpaque(false);
 			btn[0].setForeground(Color.white);
 			btn[1].setForeground(Color.white);
-			btn[0].setFont(new Font("맑은 고딕", 1, 20));
-			btn[1].setFont(new Font("맑은 고딕", 1, 20));
+			btn[0].setFont(new Font("나눔고딕 Light", 1, 20));
+			btn[1].setFont(new Font("나눔고딕 Light", 1, 20));
 			
-			lb[0].setFont(new Font("맑은 고딕", 1, 18));
+			lb[0].setFont(new Font("나눔고딕 Light", 1, 18));
 			
 			page.setName("5");
 			
@@ -62,7 +62,7 @@ public class BackgroundFrame extends BaseFrame {
 				try {
 					JPanel comp = (JPanel) mainCls.jsp.getViewport().getView();
 					if (e.getAdjustable().getMaximum() - e.getAdjustable().getVisibleAmount() == e.getValue()) {
-						Thread.sleep(1000);
+						Thread.sleep(500);
 						comp.setPreferredSize(new Dimension(860, comp.getPreferredSize().height + 210 * 4));
 					}
 				} catch (Exception e1) {
