@@ -2,6 +2,8 @@ package main;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -55,6 +57,12 @@ public class SignUpFrame extends BaseFrame {
 		for (int i = 0; i < 6; i++) {
 			tf[i].setBorder(new MatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 		}
+		
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				new MainFrame().setVisible(true);
+			};
+		});
 	}
 
 	public static void main(String[] args) {

@@ -2,6 +2,9 @@ package main;
 
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -61,6 +64,12 @@ public class IdLogin extends BaseFrame {
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
+		});
+		
+		addWindowListener(new WindowAdapter() {
+			public void windowClosing(WindowEvent e) {
+				new MainFrame().setVisible(true);
+			};
 		});
 	}
 
