@@ -42,6 +42,8 @@ public class ReviewFrame extends BaseFrame {
 						showInfo("수정이 완료되었습니다.");
 					}
 					
+					changeFrame(new MainFrame());
+					
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
