@@ -25,7 +25,17 @@ public class MainFrame extends BaseFrame {
 		super("메인", 1000, 700);
 		mainCls = this;
 		try {
-			main.add(setBounds(btn[2] = actbtn("로그인/회원가입", e -> changeFrame(new LoginFrame())), 860, 10, 105, 25));
+			main.add(setBounds(btn[2] = new JButton("로그인/회원가입"), 860, 10, 105, 25));
+			if(u_no > 0) btn[2].setText("로그아웃");
+			
+			btn[2].addActionListener(e -> {
+				if(btn[2].getText().equals("로그아웃")) {
+					u_no = 0;
+					changeFrame(new MainFrame());
+				}
+				else changeFrame(new LoginFrame());
+			});
+			
 			main.add(setBounds(btn[5] = new JButton("미림장터", getIcon("datafiles/logo.png", 30, 30)), 10, 45, 150, 30));
 			main.add(setBounds(btn[6] = new JButton("판매하기", getIcon("datafiles/image/icon/sell.png", 20, 20)), 715, 45, 90, 25));
 			main.add(setBounds(btn[7] = new JButton("내상점", getIcon("datafiles/image/icon/store.png", 20, 20)), 810, 45, 95, 25));
