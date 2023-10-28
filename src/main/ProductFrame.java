@@ -18,7 +18,7 @@ import base.BaseFrame;
 
 public class ProductFrame extends BaseFrame {
 
-	String str = "";
+	String str = "", lbTf = "";
 
 	public ProductFrame() {
 		super("미림장터", 880, 640);
@@ -35,10 +35,6 @@ public class ProductFrame extends BaseFrame {
 			main.add(setBounds(lb[1] = new JLabel(), 5, 30, 290, 260));
 			main.add(setBounds(lb[2] = new JLabel(rs.getString("title")), 305, 30, 550, 30));
 			main.add(setBounds(lb[3] = new JLabel(String.format("%,d원", rs.getInt("price"))), 305, 75, 550, 40));
-			main.add(setBounds(
-					lb[4] = new JLabel(
-							"찜: " + rs.getString("satae") + " | 조회수: " + rs.getString("view") + " | 배송비: 별도"),
-					305, 130, 550, 20));
 			main.add(setBounds(lb[5] = new JLabel("연관상품"), 5, 305, 70, 15));
 			main.add(setBounds(lb[6] = new JLabel("연관상품"), 5, 305, 70, 15));
 			main.add(setBounds(lb[7] = new JLabel("1/4", 4), 815, 300, 40, 20));
@@ -46,7 +42,17 @@ public class ProductFrame extends BaseFrame {
 			main.add(setBounds(lb[10] = new JLabel("<HTML><p>" + rs.getString("explanation") + "</p></HTML>"), 10, 470,
 					850, 200));
 
-			main.add(setBounds(btn[0] = new JButton("♥찜 0"), 305, 240, 275, 50));
+			lbTf += " | 조회수: " + rs.getString("view");
+			lbTf += " | 배송비: " + (rs.getInt("deliveryfee") == 0 ? "무료" : "있음"); 
+			
+			rs = getResult("select count(*) cnt from favorite where post = ?", p_no);
+			rs.next();
+			
+			lbTf = "찜: " + rs.getInt("cnt") + lbTf;
+
+			main.add(setBounds(lb[4] = new JLabel(lbTf),305, 130, 550, 20));
+			
+			main.add(setBounds(btn[0] = new JButton("♥찜 " + rs.getInt("cnt")), 305, 240, 275, 50));
 			main.add(setBounds(btn[1] = new JButton("바로구매"), 590, 240, 265, 50));
 
 			main.add(setBounds(btn[3] = actbtn("◀", e -> paging(-1)), 5, 370, 40, 40));
@@ -98,7 +104,27 @@ public class ProductFrame extends BaseFrame {
 			paging(0);
 
 			main.setPreferredSize(new Dimension(850, 660));
-
+			
+			btn[0].addActionListener(e -> {
+				try {
+					rs = getResult("select * from favorite where user = ? and post = ?", u_no, p_no);
+					
+					if(rs.next()) {
+						update("delete from favorite where user = ? and post = ?", u_no, p_no);
+						btn[0].setText("♥찜 " + (Integer.parseInt(btn[0].getText().replace("<html><font color='red'>♥</font>찜 ", "").replace("</html>", "")) - 1));
+						btn[0].setBackground(Color.gray);
+					}
+					
+					else {
+						update("insert into favorite(user, post) values (?, ?)", u_no, p_no);
+						btn[0].setText("<html><font color='red'>♥</font>찜 " + (Integer.parseInt(btn[0].getText().replace("♥찜 ", "")) + 1) + "</html>");
+						btn[0].setBackground(Color.black);
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			});
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
