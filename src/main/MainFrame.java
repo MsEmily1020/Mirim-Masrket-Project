@@ -48,7 +48,7 @@ public class MainFrame extends BaseFrame {
 
 			main.add(setBounds(lb[0] = new JLabel(), 165, 45, 465, 30));
 			main.add(setBounds(lb[1] = new JLabel("찜한상품", 0), 910, 120, 60, 15));
-			main.add(setBounds(lb[2] = new JLabel("♥ 0", 0), 910, 140, 60, 15));
+			main.add(setBounds(lb[2] = new JLabel("♥ 0", 0), 910, 140, 60, 15)); 
 			main.add(setBounds(lb[3] = new JLabel("최근본상품", 0), 900, 175, 80, 15));
 
 			main.add(setBounds(jp[0] = new JPanel(null), 165, 80, 430, 350));
@@ -155,15 +155,12 @@ public class MainFrame extends BaseFrame {
 
 	private void search() {
 		jp[3].removeAll();
-		jp[3].revalidate();
-		jp[3].repaint();
 
 		try {
 			update("insert into history values(null, ?, ?)", u_no, tf[0].getText());
 			rs = getResult("select distinct content from history where user_no = ?", u_no);
 
 			while(rs.next()) {
-				System.out.println(rs.getString("content"));
 				jp[3].add(setBounds(actbtn("X", e -> {
 					jp[3].remove(((JButton) e.getSource()));
 					jp[3].remove(jp[3].getComponentAt(0, ((JButton) e.getSource()).getY()));
@@ -178,12 +175,8 @@ public class MainFrame extends BaseFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		jp[3].revalidate();
-		jp[3].repaint();
 
 		changePage(new SearchFrame().main);
-		setComponent(jp[3]);
 	}
 
 	public void search(Object obj) {

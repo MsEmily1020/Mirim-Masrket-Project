@@ -45,10 +45,10 @@ public class BackgroundFrame extends BaseFrame {
 			btn[1].setOpaque(false);
 			btn[0].setForeground(Color.white);
 			btn[1].setForeground(Color.white);
-			btn[0].setFont(new Font("나눔고딕 Light", 1, 20));
-			btn[1].setFont(new Font("나눔고딕 Light", 1, 20));
+			btn[0].setFont(new Font("맑은 고딕", 1, 20));
+			btn[1].setFont(new Font("맑은 고딕", 1, 20));
 			
-			lb[0].setFont(new Font("나눔고딕 Light", 1, 18));
+			lb[0].setFont(new Font("맑은 고딕", 1, 18));
 			
 			page.setName("5");
 			

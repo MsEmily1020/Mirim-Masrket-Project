@@ -32,7 +32,7 @@ public class LoginFrame extends BaseFrame {
 		setComponent(jp[0]);
 		
 		jp[0].setBackground(getBackground());
-		lb[1].setFont(new Font("나눔고딕 Light", 1, 24));
+		lb[1].setFont(new Font("맑은 고딕", 1, 24));
 		btn[0].setIcon(getIcon("./datafiles/image/icon/cancel.png", 30, 30));
 		btn[0].setBackground(new Color(238, 238, 238));
 	
