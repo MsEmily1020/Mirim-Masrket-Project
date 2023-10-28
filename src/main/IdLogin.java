@@ -44,7 +44,7 @@ public class IdLogin extends BaseFrame {
 		jp[0].setBackground(Color.WHITE);
 		
 		btn[0].addActionListener(e -> {
-			if(tf[0].getText().trim().length() == 0 || tf[1].getText().trim().length() == 0) {
+			if(tf[0].getText().equals("아이디") || tf[1].getText().equals("비밀번호")) {
 				showErr("빈칸이 존재합니다.");
 				return;
 			}
