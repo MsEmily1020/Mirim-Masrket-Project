@@ -43,7 +43,8 @@ public class MainFrame extends BaseFrame {
 			main.add(setBounds(btn[9] = actbtn("", e -> search()), 600, 46, 28, 28));
 
 			btn[5].addActionListener(e -> changeFrame(new MainFrame()));
-
+			btn[6].addActionListener(e -> changePage(new SaleFrame().main));
+			
 			main.add(setBounds(tf[0] = new JTextField("상품명, 지역명, @상점명 입력"), 171, 46, 430, 28));
 
 			main.add(setBounds(lb[0] = new JLabel(), 165, 45, 465, 30));

@@ -13,9 +13,9 @@ import javax.swing.border.MatteBorder;
 import base.BaseFrame;
 
 public class SearchFrame extends BaseFrame {
+	
 	public SearchFrame() {
-
-		super("메인", 880, 640);
+		super("미림장터", 880, 640);
 		try {
 			rs = getResult("select * from history where user_no = ? order by no desc", u_no);
 			rs.next();

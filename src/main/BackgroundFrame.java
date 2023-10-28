@@ -13,7 +13,7 @@ import base.BaseFrame;
 public class BackgroundFrame extends BaseFrame {
 	
 	public BackgroundFrame() {
-		super("메인", 880, 940);
+		super("미림장터", 880, 940);
 		
 		try {
 			main.add(setBounds(lb[0] = new JLabel("오늘의 상품 추천"), 5, 290, 155, 35));

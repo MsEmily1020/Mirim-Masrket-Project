@@ -21,7 +21,7 @@ public class ProductFrame extends BaseFrame {
 	String str = "";
 
 	public ProductFrame() {
-		super("메인", 880, 640);
+		super("미림장터", 880, 640);
 		try {
 			rs = getResult("select *, (select count(*) from follower) as fwer from post where no = ?", p_no);
 			rs.next();
