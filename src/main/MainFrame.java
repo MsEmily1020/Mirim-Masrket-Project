@@ -97,8 +97,8 @@ public class MainFrame extends BaseFrame {
 				rs = getResult("select distinct content from history where user_no = ?", u_no);
 
 				while(rs.next()) {
-					System.out.println(rs.getString("content"));
 					jp[3].add(setBounds(actbtn("X", e -> {
+						update("delete from history where content = ? and user_no = ?", jp[3].getComponentAt(0, ((JButton) e.getSource()).getY()).getName(), u_no);
 						jp[3].remove(((JButton) e.getSource()));
 						jp[3].remove(jp[3].getComponentAt(0, ((JButton) e.getSource()).getY()));
 						jp[3].revalidate();
@@ -106,6 +106,7 @@ public class MainFrame extends BaseFrame {
 					}), (int) (jp[3].getWidth() * 0.05), jp[3].getHeight() / 10), 0);
 					jp[3].add(btn[20] = setBounds(actbtn(rs.getString("content"), e -> tf[0].setText(e.getActionCommand())), (int) (jp[3].getWidth() * 0.95), jp[3].getHeight() / 10), 0);
 					btn[20].setHorizontalAlignment(2);
+					btn[20].setName(rs.getString("content"));
 
 					setComponent(jp[3]);
 				}
@@ -177,6 +178,8 @@ public class MainFrame extends BaseFrame {
 	}
 
 	private void search() {
+		if(tf[0].getText().equals("상품명, 지역명, @상점명 입력")) { showErr("검색어를 입력해주세요."); return; }
+		
 		jp[3].removeAll();
 
 		try {
@@ -195,9 +198,17 @@ public class MainFrame extends BaseFrame {
 
 				setComponent(jp[3]);
 			}
+			rs = getResult("select * from history where user_no = ? order by no desc", u_no);
+			rs.next();
+			
+			rs = getResult("select * from post where title like '%" + rs.getString("content") + "%'");
+			if(!rs.next()) { showErr("검색 결과가 없습니다."); return; }
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		
 
 		changePage(new SearchFrame().main);
 	}
