@@ -26,22 +26,27 @@ public class ReviewFrame extends BaseFrame {
 			main.add(setBounds(btn[0] = actbtn("취소", e -> dispose()), 5, 145, 140, 40));
 			main.add(setBounds(btn[1] = actbtn(rs.getRow() == 0 ? "등록" : "수정", e -> {
 				try {
-					if(jp[0].getComponent(0).isEnabled() == false) { showErr("점수는 최소 1점 이상 입력해주세요."); return; }
+					if(!jp[0].getComponent(0).isEnabled()) { showErr("점수는 최소 1점 이상 입력해주세요."); return; }
 					if(jta.getText().length() == 0) { showErr("내용을 입력해주세요."); return; }
 					
 					int cnt = 0;
-					for (Component comp : jp[0].getComponents()) if(comp.getBackground() == Color.yellow) cnt++;
+					for (Component comp : jp[0].getComponents()) if(comp.isEnabled()) ++cnt;
 
-					if (e.getActionCommand().equals("등록"))
-						update("insert into review(user, post, content, score) values(?,?,?,?)", u_no, p_no, jta.getText(), cnt);					
+					if (e.getActionCommand().equals("등록")) {
+						update("insert into review(user, post, content, score) values(?,?,?,?)", u_no, p_no, jta.getText(), cnt);
+						showInfo("등록이 완료되었습니다.");
+					}
 					
-					else if (e.getActionCommand().equals("수정"))
-						update("update review set content = ? and score = ? where user = ? and post = ?", jta.getText(), cnt, u_no, p_no);
+					else if (e.getActionCommand().equals("수정")) {
+						update("update review set content = ?, score = ? where user = ? and post = ?", jta.getText(), cnt, u_no, p_no);
+						showInfo("수정이 완료되었습니다.");
+					}
 					
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 			}), 150, 145, 130, 40));
+
 
 			for (int i = 0; i < 5; i++) {
 				final int a = i;
@@ -61,6 +66,10 @@ public class ReviewFrame extends BaseFrame {
 
 			setComponent(main);
 
+			for (int i = 0; i < rs.getInt("score"); i++) {
+				jp[0].getComponent(i).setEnabled(true);
+			}
+			
 			jta.setBorder(new LineBorder(Color.BLACK));
 			jta.setLineWrap(true);
 
