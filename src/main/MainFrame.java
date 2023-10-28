@@ -20,14 +20,14 @@ import javax.swing.border.MatteBorder;
 import base.BaseFrame;
 
 public class MainFrame extends BaseFrame {
-	
+
 	public MainFrame() {
 		super("메인", 1000, 700);
 		mainCls = this;
 		try {
 			main.add(setBounds(btn[2] = new JButton("로그인/회원가입"), 860, 10, 105, 25));
 			if(u_no > 0) btn[2].setText("로그아웃");
-			
+
 			btn[2].addActionListener(e -> {
 				if(btn[2].getText().equals("로그아웃")) {
 					u_no = 0;
@@ -35,13 +35,13 @@ public class MainFrame extends BaseFrame {
 				}
 				else changeFrame(new LoginFrame());
 			});
-			
+
 			main.add(setBounds(btn[5] = new JButton("미림장터", getIcon("datafiles/logo.png", 30, 30)), 10, 45, 150, 30));
 			main.add(setBounds(btn[6] = new JButton("판매하기", getIcon("datafiles/image/icon/sell.png", 20, 20)), 715, 45, 90, 25));
 			main.add(setBounds(btn[7] = new JButton("내상점", getIcon("datafiles/image/icon/store.png", 20, 20)), 810, 45, 95, 25));
 			main.add(setBounds(btn[8] = new JButton("차트", getIcon("datafiles/image/icon/chart.png", 20, 20)), 905, 48, 65, 25));
 			main.add(setBounds(btn[9] = actbtn("", e -> search()), 600, 46, 28, 28));
-			
+
 			btn[5].addActionListener(e -> changeFrame(new MainFrame()));
 
 			main.add(setBounds(tf[0] = new JTextField("상품명, 지역명, @상점명 입력"), 171, 46, 430, 28));
@@ -59,7 +59,7 @@ public class MainFrame extends BaseFrame {
 
 			jp[0].add(setBounds(btn[10] = actbtn("최근검색어", e -> search(e.getSource())), 5, 5, 205, 35));
 			jp[0].add(setBounds(btn[11] = actbtn("인기검색어", e -> search(e.getSource())), 215, 5, 205, 35));
-			jp[0].add(setBounds(btn[12] = actbtn("검색어 전체삭제", e -> visibleFalseAll()), 5, 320, 110, 20));
+			jp[0].add(setBounds(btn[12] = actbtn("검색어 전체삭제", e -> deleteHistory()), 5, 320, 110, 20));
 			jp[0].add(setBounds(btn[13] = actbtn("닫기", e -> jsp.requestFocus()), 380, 320, 40, 20));
 			jp[0].add(setBounds(jp[3] = new JPanel(new FlowLayout(0, 0, 0)), 5, 45, 415, 265));
 			jp[0].add(setBounds(jp[4] = new JPanel(new FlowLayout(0, 0, 0)), 5, 45, 415, 265));
@@ -68,7 +68,7 @@ public class MainFrame extends BaseFrame {
 			jp[4].setVisible(false);
 
 			rs = getResult("select no, content, count(*) cnt from history group by content order by cnt desc, no desc limit 20;");
-			
+
 			for (int i = 0; rs.next(); i++) {
 				jp[4].add(setBounds(btn[20] = actbtn((i % 2) * 10 + i / 2 + 1 + "", e -> search()), (int) (jp[3].getWidth() * 0.05), jp[3].getHeight() / 10));
 				jp[4].add(setBounds(btn[21] = actbtn(rs.getString("content"), e -> search()), (int) (jp[3].getWidth() * 0.45), jp[3].getHeight() / 10));
@@ -89,13 +89,33 @@ public class MainFrame extends BaseFrame {
 					main.repaint();
 				}
 			});
-			
+
+			try {
+				rs = getResult("select distinct content from history where user_no = ?", u_no);
+
+				while(rs.next()) {
+					System.out.println(rs.getString("content"));
+					jp[3].add(setBounds(actbtn("X", e -> {
+						jp[3].remove(((JButton) e.getSource()));
+						jp[3].remove(jp[3].getComponentAt(0, ((JButton) e.getSource()).getY()));
+						jp[3].revalidate();
+						jp[3].repaint();
+					}), (int) (jp[3].getWidth() * 0.05), jp[3].getHeight() / 10), 0);
+					jp[3].add(btn[20] = setBounds(actbtn(rs.getString("content"), e -> tf[0].setText(e.getActionCommand())), (int) (jp[3].getWidth() * 0.95), jp[3].getHeight() / 10), 0);
+					btn[20].setHorizontalAlignment(2);
+
+					setComponent(jp[3]);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
 			setComponent(main);
 			setComponent(jp[0]);	
 			setComponent(jp[4]);
 
 			tf[0].setForeground(Color.GRAY);
-			
+
 			lb[0].setBorder(new LineBorder(new Color(0, 128, 0)));
 
 			jp[0].setVisible(false);
@@ -113,47 +133,59 @@ public class MainFrame extends BaseFrame {
 			btn[11].setForeground(Color.GRAY);
 			btn[12].setBackground(new Color(238, 238, 238));
 			btn[13].setBackground(new Color(238, 238, 238));
-			
+
 			jsp.getViewport().setView(new BackgroundFrame().main);
-			
+
 			recentProduct();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 	}
 
-	private void visibleFalseAll() {                                                                                  
-		for (Component comp : jp[3].getComponents()) {
-			comp.setVisible(false);
-		}
+	private void deleteHistory() {                                                                                  
+		update("delete from history where user_no = ?", u_no);
+		jp[3].removeAll();
 	}
-	 
+
 	public void recentProduct() throws Exception {
 		jp[2].removeAll();
 		showProductList(jp[2], getResult("select distinct(no), title, price from recent where user_no = ? order by sort desc limit 5", u_no));
 	}
 
 	private void search() {
+		jp[3].removeAll();
+		jp[3].revalidate();
+		jp[3].repaint();
+
 		try {
-			jp[3].add(setBounds(actbtn("X", e -> {
-				jp[3].remove(((JButton) e.getSource()));
-				jp[3].remove(jp[3].getComponentAt(0, ((JButton) e.getSource()).getY()));
-				jp[3].revalidate();
-				jp[3].repaint();
-			}), (int) (jp[3].getWidth() * 0.05), jp[3].getHeight() / 10), 0);
-			jp[3].add(btn[20] = setBounds(actbtn(tf[0].getText(), e -> tf[0].setText(e.getActionCommand())), (int) (jp[3].getWidth() * 0.95), jp[3].getHeight() / 10), 0);
-			btn[20].setHorizontalAlignment(2);
-			
 			update("insert into history values(null, ?, ?)", u_no, tf[0].getText());
-			changePage(new SearchFrame().main);
-			setComponent(jp[3]);
+			rs = getResult("select distinct content from history where user_no = ?", u_no);
+
+			while(rs.next()) {
+				System.out.println(rs.getString("content"));
+				jp[3].add(setBounds(actbtn("X", e -> {
+					jp[3].remove(((JButton) e.getSource()));
+					jp[3].remove(jp[3].getComponentAt(0, ((JButton) e.getSource()).getY()));
+					jp[3].revalidate();
+					jp[3].repaint();
+				}), (int) (jp[3].getWidth() * 0.05), jp[3].getHeight() / 10), 0);
+				jp[3].add(btn[20] = setBounds(actbtn(rs.getString("content"), e -> tf[0].setText(e.getActionCommand())), (int) (jp[3].getWidth() * 0.95), jp[3].getHeight() / 10), 0);
+				btn[20].setHorizontalAlignment(2);
+
+				setComponent(jp[3]);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		jp[3].revalidate();
+		jp[3].repaint();
+
+		changePage(new SearchFrame().main);
+		setComponent(jp[3]);
 	}
-	
+
 	public void search(Object obj) {
 		if(((JButton) obj).getForeground() == new Color(0, 128, 0)) return;
 		btn[10].setBorder(new MatteBorder(0, 0, 2, 0, !jp[3].isShowing() ? new Color(0, 128, 0) : Color.GRAY));
