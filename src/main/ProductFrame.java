@@ -8,6 +8,7 @@ import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
@@ -124,6 +125,14 @@ public class ProductFrame extends BaseFrame {
 					}
 				} catch (Exception e1) {
 					e1.printStackTrace();
+				}
+			});
+			
+			btn[1].addActionListener(e -> {
+				int yes = JOptionPane.showConfirmDialog(null, "정말 이 상품을 구매하시겠습니까?", "구매 확인", JOptionPane.YES_NO_OPTION);
+				if(yes == JOptionPane.YES_OPTION) {
+					update("update post set state = 3 where no = ?");
+					changeFrame(new ReviewFrame());
 				}
 			});
 			

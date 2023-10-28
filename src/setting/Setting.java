@@ -52,7 +52,7 @@ public class Setting {
 				+ "  `category` int DEFAULT NULL,\r\n"
 				+ "  `category_sub` int DEFAULT NULL,\r\n"
 				+ "  `category_datail` int DEFAULT NULL,\r\n"
-				+ "  `satae` int DEFAULT NULL,\r\n"
+				+ "  `state` int DEFAULT NULL,\r\n"
 				+ "  PRIMARY KEY (`no`),\r\n"
 				+ "  KEY `fk_post_category_idx` (`category`),\r\n"
 				+ "  CONSTRAINT `fk_post_category` FOREIGN KEY (`category`) REFERENCES `category` (`no`) ON DELETE CASCADE ON UPDATE CASCADE\r\n"
