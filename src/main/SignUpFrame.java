@@ -58,10 +58,30 @@ public class SignUpFrame extends BaseFrame {
 			tf[i].setBorder(new MatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 		}
 		
-		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				new MainFrame().setVisible(true);
-			};
+		ch[0].addActionListener(e -> {
+			if(ch[0].isSelected()) for(int i = 1; i < 7; i++) ch[i].setSelected(true);
+			else for(int i = 1; i < 7; i++) ch[i].setSelected(false);
+		});
+
+		for (int i = 1; i < 7; i++) {
+			ch[i].addActionListener(e -> {
+				ch[0].setSelected(false);
+			});
+		}
+		
+		btn[0].addActionListener(e -> {
+			for(int i = 0; i < 6; i++) if(tf[i].getText().equals(str[i])) { showErr("빈칸이 존재합니다."); return; }
+			if(!tf[2].getText().matches(".*[A-Za-z0-9!@#$") || tf[2].getText().length() < 4) { showErr("비밀번호 형식이 일치하지 않습니다."); return; }
+			if(!tf[3].getText().matches("^\\010-\\d{4}-\\d{4}$")) { showErr("전화번호 형식이 일치하지 않습니다."); return; }
+			if(!tf[4].getText().matches("^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$")) { showErr("이메일 형식이 일치하지 않습니다."); return; }
+			
+			for(int i = 1; i < 7; i++) if(!ch[i].isSelected()) { showErr("필수 항목은 모두 동의해주세요."); return; }
+			
+			showInfo("회원가입이 완료되었습니다.");
+			
+			update("insert into user (name, id, pw, phone, email) values (?, ?, ?, ?, ?)", tf[0].getText(), tf[1].getText(), tf[2].getText(), tf[3].getText(), tf[4].getText());
+			
+			changeFrame(new MainFrame());
 		});
 	}
 

@@ -65,12 +65,6 @@ public class IdLogin extends BaseFrame {
 				e1.printStackTrace();
 			}
 		});
-		
-		addWindowListener(new WindowAdapter() {
-			public void windowClosing(WindowEvent e) {
-				new MainFrame().setVisible(true);
-			};
-		});
 	}
 
 	public static void main(String[] args) {
