@@ -20,6 +20,8 @@ import javax.swing.border.MatteBorder;
 import base.BaseFrame;
 
 public class MainFrame extends BaseFrame {
+	
+	public static JLabel favoriteLb;
 
 	public MainFrame() {
 		super("메인", 1000, 700);
@@ -49,7 +51,7 @@ public class MainFrame extends BaseFrame {
 
 			main.add(setBounds(lb[0] = new JLabel(), 165, 45, 465, 30));
 			main.add(setBounds(lb[1] = new JLabel("찜한상품", 0), 910, 120, 60, 15));
-			main.add(setBounds(lb[2] = new JLabel("♥ 0", 0), 910, 140, 60, 15)); 
+			main.add(setBounds(favoriteLb = new JLabel("♥ 0", 0), 910, 140, 60, 15)); 
 			main.add(setBounds(lb[3] = new JLabel("최근본상품", 0), 900, 175, 80, 15));
 
 			main.add(setBounds(jp[0] = new JPanel(null), 165, 80, 430, 350));
@@ -118,6 +120,7 @@ public class MainFrame extends BaseFrame {
 			tf[0].setForeground(Color.GRAY);
 
 			lb[0].setBorder(new LineBorder(new Color(0, 128, 0)));
+			favoriteLb.setForeground(Color.LIGHT_GRAY);
 
 			jp[0].setVisible(false);
 			jp[0].setBorder(new LineBorder(Color.GRAY));
@@ -138,10 +141,29 @@ public class MainFrame extends BaseFrame {
 			jsp.getViewport().setView(new BackgroundFrame().main);
 
 			recentProduct();
+			favoriteList();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public static void favoriteList() {
+		try {
+			rs = getResult("select count(*) as cnt from favorite where user = ?", u_no);
+			if(rs.next()) {
+				favoriteLb.setText("♥ " + rs.getInt("cnt"));
+				favoriteLb.setForeground(Color.red);
+			}
+			
+			else {
+				favoriteLb.setText("♥ 0");
+				favoriteLb.setForeground(Color.lightGray);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	private void deleteHistory() {                                                                                  

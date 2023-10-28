@@ -113,12 +113,14 @@ public class ProductFrame extends BaseFrame {
 						update("delete from favorite where user = ? and post = ?", u_no, p_no);
 						btn[0].setText("♥찜 " + (Integer.parseInt(btn[0].getText().replace("<html><font color='red'>♥</font>찜 ", "").replace("</html>", "")) - 1));
 						btn[0].setBackground(Color.gray);
+						MainFrame.favoriteList();
 					}
 					
 					else {
 						update("insert into favorite(user, post) values (?, ?)", u_no, p_no);
 						btn[0].setText("<html><font color='red'>♥</font>찜 " + (Integer.parseInt(btn[0].getText().replace("♥찜 ", "")) + 1) + "</html>");
 						btn[0].setBackground(Color.black);
+						MainFrame.favoriteList();
 					}
 				} catch (Exception e1) {
 					e1.printStackTrace();
