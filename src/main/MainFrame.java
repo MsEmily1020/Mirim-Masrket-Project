@@ -6,6 +6,7 @@ import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
@@ -47,7 +48,7 @@ public class MainFrame extends BaseFrame {
 
 			btn[5].addActionListener(e -> changeFrame(new MainFrame()));
 			btn[6].addActionListener(e -> changePage(new SaleFrame().main));
-			btn[7].addActionListener(e -> changePage(new MyStoreFrame().main));
+			btn[7].addActionListener(e -> { favoritePage = false; changePage(new MyStoreFrame().main); });
 			btn[8].addActionListener(e -> changeFrame(new ChartFrame()));
 
 			main.add(setBounds(tf[0] = new JTextField("상품명, 지역명, @상점명 입력"), 171, 46, 430, 28));
@@ -150,6 +151,13 @@ public class MainFrame extends BaseFrame {
 			tf[0].addKeyListener(new KeyAdapter() {
 				public void keyPressed(KeyEvent e) {
 					if(e.getKeyCode() == KeyEvent.VK_ENTER) search();
+				};
+			});
+			
+			favoriteLb.addMouseListener(new MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					favoritePage = true;
+					changePage(new MyStoreFrame().main);
 				};
 			});
 
