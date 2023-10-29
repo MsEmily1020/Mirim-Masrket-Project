@@ -27,16 +27,21 @@ public class SearchFrame extends BaseFrame {
 			main.add(setBounds(cbx[1] = new JComboBox(), 200, 5, 120, 25));
 			main.add(setBounds(cbx[2] = new JComboBox(), 345, 5, 120, 25));
 
+			main.add(setBounds(btn[0] = new JButton("최신순"), 650, 60, 50, 20));
+			main.add(setBounds(btn[1] = new JButton("인기순"), 700, 60, 50, 20));
+			main.add(setBounds(btn[2] = new JButton("저가순"), 750, 60, 50, 20));
+			main.add(setBounds(btn[3] = new JButton("고가순"), 800, 60, 50, 20));
+			
 			main.add(setBounds(jp[0] = new JPanel(new FlowLayout(0, 0, 0)), 5, 60, 460, 30));
 			main.add(setBounds(page = new JPanel(new FlowLayout(0)), 0, 90, 860, 10000));
 
 			jp[0].add(lb[4] = new JLabel(rs.getString("content")));
 			jp[0].add(lb[5] = new JLabel("의 검색결과  "));
 
-			rs = getResult("select count(*) from history where user_no = ?", u_no);
+			rs = getResult("select count(*) as cnt from post where title like '%" + rs.getString("content") + "%'");
 			rs.next();
 
-			jp[0].add(lb[6] = new JLabel(rs.getInt("count(*)") + ""));
+			jp[0].add(lb[6] = new JLabel(rs.getInt("cnt") + "개"));
 
 			page.setName("5");
 
@@ -53,6 +58,42 @@ public class SearchFrame extends BaseFrame {
 			lb[3].setFont(new Font("HY견고딕", 1, 12));
 			lb[4].setForeground(new Color(0, 128, 0));
 			lb[6].setForeground(Color.GRAY);
+			
+			btn[0].addActionListener(e -> {
+				try {
+					page.removeAll();
+					showProductList(page, getResult("select * from post where title like '%" + rs.getString("content") + "%' order by no desc"));
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			});
+			
+			btn[1].addActionListener(e -> {
+				try {
+					page.removeAll();
+					showProductList(page, getResult("select * from post where title like '%" + rs.getString("content") + "%' order by view desc"));
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			});
+			
+			btn[2].addActionListener(e -> {
+				try {
+					page.removeAll();
+					showProductList(page, getResult("select * from post where title like '%" + rs.getString("content") + "%' order by price"));
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			});
+			
+			btn[3].addActionListener(e -> {
+				try {
+					page.removeAll();
+					showProductList(page, getResult("select * from post where title like '%" + rs.getString("content") + "%' order by price desc"));
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			});
 
 		} catch (Exception e) {
 			e.printStackTrace();

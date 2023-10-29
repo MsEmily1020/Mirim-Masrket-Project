@@ -78,7 +78,7 @@ public class MainFrame extends BaseFrame {
 
 			for (int i = 0; rs.next(); i++) {
 				jp[4].add(setBounds(btn[20] = actbtn((i % 2) * 10 + i / 2 + 1 + "", e -> search()), (int) (jp[3].getWidth() * 0.05), jp[3].getHeight() / 10));
-				jp[4].add(setBounds(btn[21] = actbtn(rs.getString("content"), e -> search()), (int) (jp[3].getWidth() * 0.45), jp[3].getHeight() / 10));
+				jp[4].add(setBounds(btn[21] = actbtn(rs.getString("content"), e -> tf[0].setText(e.getActionCommand())), (int) (jp[3].getWidth() * 0.45), jp[3].getHeight() / 10));
 				btn[20].setForeground(new Color(0, 128, 0));
 				btn[21].setHorizontalAlignment(2);
 			}
