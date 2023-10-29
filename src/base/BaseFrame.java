@@ -61,6 +61,7 @@ public class BaseFrame extends JFrame {
 
 	public static int u_no = 1;
 	public static int p_no = 1;
+	public static int s_no = 1;
 	public static boolean favoritePage = false;
 
 	public JTextArea jta;

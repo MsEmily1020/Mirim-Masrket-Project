@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
 import java.io.File;
 
 import javax.swing.JButton;
@@ -69,6 +70,7 @@ public class ProductFrame extends BaseFrame {
 					+ ";", p_no);
 			rs.next();
 			main.add(setBounds(lb[12] = new JLabel(rs.getString("name")), 675, 550, 180, 20));	
+			s_no = rs.getInt("user");
 
 			main.add(setBounds(lb[4] = new JLabel(lbTf),305, 130, 550, 20));
 			
@@ -185,6 +187,12 @@ public class ProductFrame extends BaseFrame {
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
+			});
+			
+			lb[12].addMouseListener(new MouseAdapter() {
+				public void mouseClicked(java.awt.event.MouseEvent e) {
+					changePage(new MyStoreFrame().main);
+				};
 			});
 			
 		} catch (Exception e) {
