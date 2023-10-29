@@ -24,9 +24,15 @@ public class ProductFrame extends BaseFrame {
 	public ProductFrame() {
 		super("미림장터", 880, 640);
 		try {
-			rs = getResult("select *, (select count(*) from follower) as fwer from post where no = ?", p_no);
+			rs = getResult("select *, \r\n"
+					+ "(select count(*) from follower f where f.post = ?) as fwer, \r\n"
+					+ "(select count(case when user = (select user from post where no = ?) then 1 end) from post p) as pcnt\r\n"
+					+ "from post p \r\n"
+					+ "where no = ?"
+					+ ";", p_no, p_no, p_no);
+			
 			rs.next();
-
+			
 			for (int i = 0; i < 3; i++) {
 				str += category.get(filter.get(p_no).get(i)) == null ? ""
 						: " > " + category.get(filter.get(p_no).get(i));
@@ -40,20 +46,32 @@ public class ProductFrame extends BaseFrame {
 			main.add(setBounds(lb[6] = new JLabel("연관상품"), 5, 305, 70, 15));
 			main.add(setBounds(lb[7] = new JLabel("1/4", 4), 815, 300, 40, 20));
 			main.add(setBounds(lb[8] = new JLabel("상품정보"), 10, 510, 615, 30));
-			main.add(setBounds(lb[10] = new JLabel("<HTML><p>" + rs.getString("explanation") + "</p></HTML>"), 10, 470,
-					850, 200));
+			main.add(setBounds(lb[9] = new JLabel("상점정보"), 630, 510, 225, 30));
 
+			main.add(setBounds(lb[10] = new JLabel("<HTML><p>" + rs.getString("explanation") + "</p></HTML>"), 10, 450, 615, 300));
+			
+			main.add(setBounds(lb[11] = new JLabel(getIcon("datafiles/image/user/" + u_no + ".jpg", 45, 45)), 630, 550, 45, 45));
+			main.add(setBounds(lb[13] = new JLabel("상품 " + rs.getInt("pcnt") + " | 팔로워 " + rs.getString("fwer")), 675, 580, 180, 20));
+			
 			lbTf += " | 조회수: " + rs.getString("view");
 			lbTf += " | 배송비: " + (rs.getInt("deliveryfee") == 0 ? "무료" : "있음"); 
-			
-			rs = getResult("select count(*) cnt from favorite where post = ?", p_no);
+
+			rs = getResult("select count(*) as cnt from favorite where post = ?", p_no);
 			rs.next();
 			
 			lbTf = "찜: " + rs.getInt("cnt") + lbTf;
+			main.add(setBounds(btn[0] = new JButton("♥찜 " + rs.getInt("cnt")), 305, 240, 275, 50));
+
+			rs = getResult("SELECT * \r\n"
+					+ "FROM post p\r\n"
+					+ "inner join user u on p.user = u.no\r\n"
+					+ "where p.no = ?\r\n"
+					+ ";", p_no);
+			rs.next();
+			main.add(setBounds(lb[12] = new JLabel(rs.getString("name")), 675, 550, 180, 20));	
 
 			main.add(setBounds(lb[4] = new JLabel(lbTf),305, 130, 550, 20));
 			
-			main.add(setBounds(btn[0] = new JButton("♥찜 " + rs.getInt("cnt")), 305, 240, 275, 50));
 			main.add(setBounds(btn[1] = new JButton("바로구매"), 590, 240, 265, 50));
 
 			main.add(setBounds(btn[3] = actbtn("◀", e -> paging(-1)), 5, 370, 40, 40));

@@ -166,6 +166,32 @@ public class Setting {
 				+ "  ON UPDATE CASCADE;\r\n"
 				+ "");
 		
+		stmt.execute("ALTER TABLE `mirim-market`.`post` \r\n"
+				+ "ADD COLUMN `user` INT NULL AFTER `state`,\r\n"
+				+ "ADD INDEX `fk_post_user_idx` (`user` ASC) VISIBLE;\r\n"
+				+ ";\r\n");
+		
+		stmt.execute("ALTER TABLE `mirim-market`.`post` \r\n"
+				+ "ADD CONSTRAINT `fk_post_user`\r\n"
+				+ "  FOREIGN KEY (`user`)\r\n"
+				+ "  REFERENCES `mirim-market`.`user` (`no`)\r\n"
+				+ "  ON DELETE CASCADE\r\n"
+				+ "  ON UPDATE CASCADE;\r\n"
+				+ "");
+		
+		stmt.execute("ALTER TABLE `mirim-market`.`follower` \r\n"
+				+ "ADD COLUMN `post` INT NULL AFTER `user`,\r\n"
+				+ "ADD INDEX `fk_follower_post_idx` (`post` ASC) VISIBLE;\r\n"
+				+ ";\r\n");
+		
+		stmt.execute("ALTER TABLE `mirim-market`.`follower` \r\n"
+				+ "ADD CONSTRAINT `fk_follower_post`\r\n"
+				+ "  FOREIGN KEY (`post`)\r\n"
+				+ "  REFERENCES `mirim-market`.`post` (`no`)\r\n"
+				+ "  ON DELETE CASCADE\r\n"
+				+ "  ON UPDATE CASCADE;\r\n"
+				+ "");
+		
 		stmt.execute("DROP USER IF EXISTS 'user'@'127.0.0.1'");
 		stmt.execute("CREATE USER 'user'@'127.0.0.1' IDENTIFIED BY '1234'");
 		stmt.execute("GRANT SELECT, INSERT, DELETE, UPDATE ON `mirim-market`.* TO 'user'@'127.0.0.1'");
