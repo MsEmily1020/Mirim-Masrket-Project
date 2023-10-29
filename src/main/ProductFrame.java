@@ -46,7 +46,7 @@ public class ProductFrame extends BaseFrame {
 			main.add(setBounds(lb[6] = new JLabel("연관상품"), 5, 305, 70, 15));
 			main.add(setBounds(lb[7] = new JLabel("1/4", 4), 815, 300, 40, 20));
 			main.add(setBounds(lb[8] = new JLabel("상품정보"), 10, 510, 615, 30));
-			main.add(setBounds(lb[9] = new JLabel("상점정보"), 630, 510, 225, 30));
+			main.add(setBounds(lb[9] = new JLabel("유저정보"), 630, 510, 225, 30));
 
 			main.add(setBounds(lb[10] = new JLabel("<HTML><p>" + rs.getString("explanation") + "</p></HTML>"), 10, 450, 615, 300));
 			
@@ -73,10 +73,11 @@ public class ProductFrame extends BaseFrame {
 			main.add(setBounds(lb[4] = new JLabel(lbTf),305, 130, 550, 20));
 			
 			main.add(setBounds(btn[1] = new JButton("바로구매"), 590, 240, 265, 50));
+			main.add(setBounds(btn[2] = new JButton("팔로우"), 630, 610, 225, 35));
 
 			main.add(setBounds(btn[3] = actbtn("◀", e -> paging(-1)), 5, 370, 40, 40));
 			main.add(setBounds(btn[4] = actbtn("▶", e -> paging(1)), 815, 370, 40, 40));
-			main.add(setBounds(jp[0] = new JPanel(new FlowLayout(0, 4, 0)), 5, 325, 860, 180));
+			main.add(setBounds(jp[0] = new JPanel(new FlowLayout(0, 4, 0)), 5, 325, 860, 170));
 
 			jp[0].setName("6");
 
@@ -107,10 +108,12 @@ public class ProductFrame extends BaseFrame {
 			lb[3].setFont(new Font("맑은 고딕", 1, 24));
 			lb[3].setBorder(new MatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 			lb[8].setBorder(new MatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
+			lb[9].setBorder(new MatteBorder(0, 0, 1, 0, Color.LIGHT_GRAY));
 			btn[0].setBackground(Color.GRAY);
 			btn[1].setBackground(new Color(0, 128, 0));
 			btn[0].setForeground(getBackground());
 			btn[1].setForeground(getBackground());
+			btn[2].setBorder(new LineBorder(Color.GRAY));
 			btn[3].setOpaque(false);
 			btn[4].setOpaque(false);
 			btn[3].setFont(new Font("맑은 고딕", 1, 20));
