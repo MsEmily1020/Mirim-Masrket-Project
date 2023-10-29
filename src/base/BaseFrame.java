@@ -16,6 +16,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -46,6 +48,7 @@ import javax.swing.border.MatteBorder;
 
 import main.MainFrame;
 import main.ProductFrame;
+import main.SaleFrame;
 
 /**
  * 공통된 부분을 메소드로 작업하는 클래스입니다.
@@ -181,7 +184,25 @@ public class BaseFrame extends JFrame {
 		});
 		main.setFocusable(true);
 		main.requestFocus();
-
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				if(!SaleFrame.isRegistration) {
+					try {
+						rs = getResult("select * from post order by no desc");
+						rs.next();
+						int deleteFolderNo = Integer.parseInt(rs.getString("no")) + 1;
+						File deleteFolder = new File("datafiles/image/post/" + deleteFolderNo + "/" );
+						File[] files = deleteFolder.listFiles();
+						for(File f: files) f.delete();
+						deleteFolder.delete();
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+			}
+		});
 	}
 	public <T extends JComponent> T setBounds(T comp, int x, int y, int w, int h) {
 		comp.setBounds(x, y, w, h); 
