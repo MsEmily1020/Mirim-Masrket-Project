@@ -1,14 +1,13 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.FileDialog;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
+import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -108,37 +107,93 @@ public class SaleFrame extends BaseFrame {
 				rs = getResult("select * from post order by no desc");
 				rs.next();
 
-				File file = new File(path + name);
-				BufferedImage image = ImageIO.read(file);
-
 				int newFolderNo = Integer.parseInt(rs.getString("no")) + 1;
 				
 				File newFolder = new File("datafiles/image/post/" + newFolderNo + "/");
 				if(!newFolder.isDirectory()) newFolder.mkdirs();
 
-				File newFile = new File(newFolder, cnt + ".jpg");
-				ImageIO.write(image, "jpg", newFile);
+				ImageIO.write(ImageIO.read(new File(path + name)), "jpg", new File(newFolder, cnt + ".jpg"));
 	
 				jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg", 170, 170)), 2, 2, 2, 2));
 				
 				lb[3].setText("<html>상품이미지<font color='red'>*</font> <font color='gray'>(" + cnt + "/7)</font></html>");
 				
-				File imgFile = new File("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg");
-				
-				jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg", 170, 170)), (cnt % 4) * 180 + 10, (cnt <= 3 ? 0 : 180), 170, 170));
+				jp[0].add(setBounds(btn[cnt + 1] = actbtn("X", e2 -> {
+					jp[0].remove(((JButton) e2.getSource()));
+					jp[0].remove(jp[0].getComponentAt(((JButton)e2.getSource()).getX(), ((JButton) e2.getSource()).getY()));
+					jp[0].revalidate();
+					jp[0].repaint();
+					System.out.println(((JButton)e2.getSource()).getName());
+					new File("datafiles/image/post/" + newFolderNo + "/" + ((JButton)e2.getSource()).getName() + ".jpg").delete();
+					File[] fileList = new File("datafiles/image/post/" + newFolderNo + "/").listFiles();
+					for (int i = 0; i < fileList.length; i++)
+						fileList[i].renameTo(new File("datafiles/image/post/" + newFolderNo + "/" + (i + 1) + ".jpg"));
+					cnt = fileList.length + 1;
+					changeProductImage(fileList.length);
+				}), (cnt % 4) * 180 + 135, (cnt <= 3 ? 0 : 180), 45, 45));
+				btn[cnt + 1].requestFocus();
+				btn[cnt + 1].setFont(new Font("맑은 고딕", 1, 15));
+				btn[cnt + 1].setOpaque(false);
+				btn[cnt + 1].setContentAreaFilled(false);
+				btn[cnt + 1].setBorderPainted(false);
+				btn[cnt + 1].setName(cnt + "");
 
+				jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg", 170, 170)), (cnt % 4) * 180 + 10, (cnt <= 3 ? 0 : 180), 170, 170));
 				++cnt;
 
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
-			
-			
 		});
+		
+
 		
 		btn[1].addActionListener(e -> {
 			isRegistration = true;
 		});
+	}
+	
+	public void changeProductImage(int fileListSize) {
+		
+		for(Component comp : jp[0].getComponents()) {
+			if(comp != btn[0]) jp[0].remove(comp);
+		}
+
+		try {
+			rs = getResult("select * from post order by no desc");
+			rs.next();
+			int newFolderNo = Integer.parseInt(rs.getString("no")) + 1;
+			
+			for(int i = 1; i <= fileListSize; i++) {
+				jp[0].add(setBounds(btn[i + 1] = actbtn("X", e2 -> {
+					jp[0].remove(((JButton) e2.getSource()));
+					jp[0].remove(jp[0].getComponentAt(((JButton)e2.getSource()).getX(), ((JButton) e2.getSource()).getY()));
+					jp[0].revalidate();
+					jp[0].repaint();
+					new File("datafiles/image/post/" + newFolderNo + "/" + ((JButton)e2.getSource()).getName() + ".jpg").delete();
+					File[] fileList = new File("datafiles/image/post/" + newFolderNo + "/").listFiles();
+					for (int j = 0; j < fileList.length; j++)
+						fileList[j].renameTo(new File("datafiles/image/post/" + newFolderNo + "/" + (j + 1) + ".jpg"));
+					cnt = fileList.length + 1;
+					changeProductImage(fileList.length);
+				}), (i % 4) * 180 + 135, (i <= 3 ? 0 : 180), 45, 45));
+				btn[i + 1].requestFocus();
+				btn[i + 1].setFont(new Font("맑은 고딕", 1, 15));
+				btn[i + 1].setOpaque(false);
+				btn[i + 1].setContentAreaFilled(false);
+				btn[i + 1].setBorderPainted(false);
+				btn[i + 1].setName(i + "");
+				
+				System.out.println(newFolderNo + " " + i);
+				jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + i + ".jpg", 170, 170)), (i % 4) * 180 + 10, (i <= 3 ? 0 : 180), 170, 170));
+			}
+			
+			jp[0].revalidate();
+			jp[0].repaint();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args) {
