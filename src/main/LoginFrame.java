@@ -3,6 +3,7 @@ package main;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -30,6 +31,23 @@ public class LoginFrame extends BaseFrame {
 		
 		setComponent(main);
 		setComponent(jp[0]);
+		
+		for(int i = 1; i <= str.length; i++) {
+			btn[i].addMouseListener(new MouseAdapter() {
+				public void mouseEntered(java.awt.event.MouseEvent e) {
+					for(int j = 1; j <= str.length; j++) {
+						if(btn[j] == e.getComponent()) btn[j].setBackground(Color.lightGray);
+						else btn[j].setBackground(Color.white);
+					}
+				};
+				
+				public void mouseExited(java.awt.event.MouseEvent e) {
+					for(int j = 1; j <= str.length; j++) {
+						if(btn[j] == e.getComponent()) btn[j].setBackground(Color.white);
+					}
+				};
+			});
+		}
 		
 		jp[0].setBackground(getBackground());
 		lb[1].setFont(new Font("맑은 고딕", 1, 24));
