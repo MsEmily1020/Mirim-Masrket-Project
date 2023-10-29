@@ -32,7 +32,7 @@ public class SaleFrame extends BaseFrame {
 		main.add(setBounds(lb[1] = new JLabel(), 20, 65, 950, 2));
 		main.add(setBounds(lb[2] = new JLabel("*필수항목"), 100, 20, 65, 35));
 		main.add(setBounds(lb[3] = new JLabel("<html>상품이미지<font color='red'>*</font> <font color='gray'>(0/7)</font></html>"), 20, 95, 140, 25));
-		main.add(setBounds(jp[0] = new JPanel(null), 140, 105, 765, 265));
+		main.add(setBounds(jp[0] = new JPanel(null), 140, 105, 765, 350));
 		jp[0].add(setBounds(btn[0] = new JButton("이미지 등록", getIcon("datafiles/image/icon/region.png", 50, 50)), 10, 0, 170, 170));
 		main.add(setBounds(lb[4] = new JLabel("<html><font color='#87cefac'>상품 이미지는 640x640dp 최적화 되어 있습니다. <br>-이미지는 상품 등록 시 정사각형으로 잘려서 등록됩니다.<br>-큰 이미지일 경우 이미지가 깨지는 경우가 발생할 수 있습니다.<br>최대 지원 사이즈인 640x640으로 리사이즈 해서 올려주세요.(개당 이미지 최대 10M)</font></html>"), 155, 455, 500, 85));
 		main.add(setBounds(lb[5] = new JLabel(), 20, 560, 950, 2));
@@ -94,7 +94,7 @@ public class SaleFrame extends BaseFrame {
 		btn[1].setForeground(Color.white);
 
 		btn[0].addActionListener(e -> {
-			if(cnt == 7) { showErr("등록할 수 있는 이미지 수를 초과 하였습니다."); return; }
+			if(cnt == 8) { showErr("등록할 수 있는 이미지 수를 초과 하였습니다."); return; }
 			
 			var fopen = new FileDialog(this, "이미지 열기", FileDialog.LOAD);
 			fopen.setVisible(true);
@@ -123,10 +123,16 @@ public class SaleFrame extends BaseFrame {
 				
 				lb[3].setText("<html>상품이미지<font color='red'>*</font> <font color='gray'>(" + cnt + "/7)</font></html>");
 				
-				cnt++;
+				File imgFile = new File("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg");
+				
+				jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg", 170, 170)), (cnt % 4) * 180 + 10, (cnt <= 3 ? 0 : 180), 170, 170));
+
+				++cnt;
+
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
+			
 			
 		});
 		
