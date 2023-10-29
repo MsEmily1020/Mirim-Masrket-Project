@@ -73,7 +73,8 @@ public class ProductFrame extends BaseFrame {
 			main.add(setBounds(lb[4] = new JLabel(lbTf),305, 130, 550, 20));
 			
 			main.add(setBounds(btn[1] = new JButton("바로구매"), 590, 240, 265, 50));
-			main.add(setBounds(btn[2] = new JButton("팔로우"), 630, 610, 225, 35));
+			
+			main.add(setBounds(btn[2] = new JButton("팔로우", getIcon("datafiles/image/icon/unfollow.png", 20, 10)), 630, 610, 225, 35));
 
 			main.add(setBounds(btn[3] = actbtn("◀", e -> paging(-1)), 5, 370, 40, 40));
 			main.add(setBounds(btn[4] = actbtn("▶", e -> paging(1)), 815, 370, 40, 40));
@@ -127,6 +128,14 @@ public class ProductFrame extends BaseFrame {
 
 			main.setPreferredSize(new Dimension(850, 660));
 			
+			rs = getResult("select * from follower where user = ? and post = ?", u_no, p_no);
+			if(rs.next()) {
+				btn[2].setBackground(new Color(0, 128, 0));
+				btn[2].setIcon(getIcon("datafiles/image/icon/follow.png", 20, 10));
+				btn[2].setForeground(Color.white);
+			}
+			
+			
 			btn[0].addActionListener(e -> {
 				try {
 					rs = getResult("select * from favorite where user = ? and post = ?", u_no, p_no);
@@ -154,6 +163,27 @@ public class ProductFrame extends BaseFrame {
 				if(yes == JOptionPane.YES_OPTION) {
 					update("update post set state = 3 where no = ?");
 					changeFrame(new ReviewFrame());
+				}
+			});
+			
+			btn[2].addActionListener(e -> {
+				try {
+					rs = getResult("select * from follower where user = ? and post = ?", u_no, p_no);
+					if(rs.next()) {
+						update("delete from follower where user = ? and post = ?", u_no, p_no);
+						btn[2].setBackground(Color.white);
+						btn[2].setIcon(getIcon("datafiles/image/icon/unfollow.png", 20, 10));
+						btn[2].setForeground(Color.black);
+					}
+					
+					else {
+						update("insert into follower(user, post) values (?, ?)", u_no, p_no);
+						btn[2].setBackground(new Color(0, 128, 0));
+						btn[2].setIcon(getIcon("datafiles/image/icon/follow.png", 20, 10));
+						btn[2].setForeground(Color.white);
+					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
 				}
 			});
 			
