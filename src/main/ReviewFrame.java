@@ -7,6 +7,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
 
+import javax.management.AttributeChangeNotificationFilter;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -23,7 +24,7 @@ public class ReviewFrame extends BaseFrame {
 			main.add(setBounds(jp[0] = new JPanel(), 0, 10, 285, 55));
 			main.add(setBounds(jta = new JTextArea(rs.next() ? rs.getString("content") : ""), 5, 70, 275, 70));
 			if(rs.isFirst()) this.setTitle("리뷰수정");  
-			main.add(setBounds(btn[0] = actbtn("취소", e -> dispose()), 5, 145, 140, 40));
+			main.add(setBounds(btn[0] = actbtn("취소", e -> changeFrame(new MainFrame())), 5, 145, 140, 40));
 			main.add(setBounds(btn[1] = actbtn(rs.getRow() == 0 ? "등록" : "수정", e -> {
 				try {
 					if(!jp[0].getComponent(0).isEnabled()) { showErr("점수는 최소 1점 이상 입력해주세요."); return; }
