@@ -19,14 +19,7 @@ public class SearchFrame extends BaseFrame {
 		try {
 			rs = getResult("select * from history where user_no = ? order by no desc", u_no);
 			rs.next();
-			main.add(setBounds(lb[0] = new JLabel("홈"), 10, 5, 20, 25));
-			main.add(setBounds(lb[1] = new JLabel(" > ", 0), 20, 5, 20, 25));
-			main.add(setBounds(lb[2] = new JLabel(" > ", 0), 170, 5, 40, 25));
-			main.add(setBounds(lb[3] = new JLabel(" > ", 0), 310, 5, 40, 25));
-			main.add(setBounds(cbx[0] = new JComboBox(), 45, 5, 130, 25));
-			main.add(setBounds(cbx[1] = new JComboBox(), 200, 5, 120, 25));
-			main.add(setBounds(cbx[2] = new JComboBox(), 345, 5, 120, 25));
-
+			
 			main.add(setBounds(btn[0] = new JButton("최신순"), 650, 60, 50, 20));
 			main.add(setBounds(btn[1] = new JButton("인기순"), 700, 60, 50, 20));
 			main.add(setBounds(btn[2] = new JButton("저가순"), 750, 60, 50, 20));
@@ -53,11 +46,7 @@ public class SearchFrame extends BaseFrame {
 			setComponent(main);
 			setComponent(jp[0]);
 
-			lb[1].setFont(new Font("HY견고딕", 1, 12));
-			lb[2].setFont(new Font("HY견고딕", 1, 12));
-			lb[3].setFont(new Font("HY견고딕", 1, 12));
 			lb[4].setForeground(new Color(0, 128, 0));
-			lb[6].setForeground(Color.GRAY);
 			
 			btn[0].addActionListener(e -> {
 				try {
