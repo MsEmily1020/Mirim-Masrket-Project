@@ -3,9 +3,13 @@ package main;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -20,7 +24,7 @@ import javax.swing.border.MatteBorder;
 import base.BaseFrame;
 
 public class MainFrame extends BaseFrame {
-	
+
 	public static JLabel favoriteLb;
 
 	public MainFrame() {
@@ -46,7 +50,7 @@ public class MainFrame extends BaseFrame {
 
 			btn[5].addActionListener(e -> changeFrame(new MainFrame()));
 			btn[6].addActionListener(e -> changePage(new SaleFrame().main));
-			
+
 			main.add(setBounds(tf[0] = new JTextField("상품명, 지역명, @상점명 입력"), 171, 46, 430, 28));
 
 			main.add(setBounds(lb[0] = new JLabel(), 165, 45, 465, 30));
@@ -143,12 +147,18 @@ public class MainFrame extends BaseFrame {
 
 			recentProduct();
 			favoriteList();
+			
+			tf[0].addKeyListener(new KeyAdapter() {
+				public void keyPressed(KeyEvent e) {
+					if(e.getKeyCode() == KeyEvent.VK_ENTER) search();
+				};
+			});
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void favoriteList() {
 		try {
 			rs = getResult("select count(*) as cnt from favorite where user = ?", u_no);
@@ -156,7 +166,7 @@ public class MainFrame extends BaseFrame {
 				favoriteLb.setText("♥ " + rs.getInt("cnt"));
 				favoriteLb.setForeground(Color.red);
 			}
-			
+
 			else {
 				favoriteLb.setText("♥ 0");
 				favoriteLb.setForeground(Color.lightGray);
@@ -164,7 +174,7 @@ public class MainFrame extends BaseFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	private void deleteHistory() {                                                                                  
@@ -178,11 +188,11 @@ public class MainFrame extends BaseFrame {
 	}
 
 	private void search() {
-		if(tf[0].getText().equals("상품명, 지역명, @상점명 입력")) { showErr("검색어를 입력해주세요."); return; }
-		
-		jp[3].removeAll();
-
 		try {
+			if(tf[0].getText().equals("상품명, 지역명, @상점명 입력") || tf[0].getText().length() == 0) { showErr("검색어를 입력해주세요."); return; }
+			
+			jp[3].removeAll();
+
 			update("insert into history values(null, ?, ?)", u_no, tf[0].getText());
 			rs = getResult("select distinct content from history where user_no = ?", u_no);
 
@@ -200,15 +210,13 @@ public class MainFrame extends BaseFrame {
 			}
 			rs = getResult("select * from history where user_no = ? order by no desc", u_no);
 			rs.next();
-			
+
 			rs = getResult("select * from post where title like '%" + rs.getString("content") + "%'");
 			if(!rs.next()) { showErr("검색 결과가 없습니다."); return; }
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
 
 		changePage(new SearchFrame().main);
 	}
