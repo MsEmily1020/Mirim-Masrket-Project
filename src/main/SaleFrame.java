@@ -7,7 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.io.File;
-import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
