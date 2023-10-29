@@ -1,21 +1,18 @@
 package main;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
+import javax.swing.JTextField;	
 import javax.swing.border.CompoundBorder;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -50,6 +47,8 @@ public class MainFrame extends BaseFrame {
 
 			btn[5].addActionListener(e -> changeFrame(new MainFrame()));
 			btn[6].addActionListener(e -> changePage(new SaleFrame().main));
+			btn[7].addActionListener(e -> changePage(new MyStoreFrame().main));
+			btn[8].addActionListener(e -> changeFrame(new ChartFrame()));
 
 			main.add(setBounds(tf[0] = new JTextField("상품명, 지역명, @상점명 입력"), 171, 46, 430, 28));
 

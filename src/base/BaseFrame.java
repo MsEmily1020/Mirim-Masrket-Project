@@ -73,6 +73,10 @@ public class BaseFrame extends JFrame {
 	public static JCheckBox[] ch = new JCheckBox[1000];
 	public JRadioButton[] rb =new JRadioButton[1000];
 
+	public static String aaa;
+	public static String jop;
+	public static JComponent comp;
+
 	public static HashMap<Integer, String> category = new HashMap();
 	public static HashMap<Integer, ArrayList> filter = new HashMap();
 	public static HashMap<Component, Component> list = new HashMap();
@@ -113,6 +117,66 @@ public class BaseFrame extends JFrame {
 
 		main.setBackground(Color.WHITE);
 
+		main.addKeyListener(new KeyAdapter() {
+
+			@Override
+			public void keyTyped(KeyEvent e) {
+				try {
+					String[] asdf = ",JLabel,JButton,JTextField,JComboBox,JPanel".split(",");
+					String[] as = ",lb[],btn[],tf[],cbx[],jp[]".split(",");
+
+					jop = asdf[Integer.parseInt(e.getKeyChar()+"")];
+					aaa = as[Integer.parseInt(e.getKeyChar()+"")];
+
+					Class c = Class.forName("javax.swing." + jop);
+					comp = (JComponent) c.newInstance();
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+			}
+		});
+
+		addMouseListener(new MouseAdapter() {
+			int startX, endX;
+			int startY, endY;
+
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				super.mousePressed(e);
+
+				startX = e.getX() - (e.getX() % 5);
+				startY = e.getY() - (e.getY() % 5);
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e){
+				super.mouseReleased(e);
+
+				endX = e.getX() - (e.getX() % 5);
+				endY = e.getY() - (e.getY() %  5);
+
+				int width = Math.abs(startX - endX);
+				int height = Math.abs(startY - endY);
+
+				comp.setBounds(startX - 5, startY - 30, width, height);
+
+				main.add(comp);
+
+				if (jop.equals("JLabel") || jop.equals("JPanel")) {
+					comp.setBorder(new LineBorder(Color.BLACK));
+				}
+
+				main.revalidate();
+				main.repaint();
+
+				main.setFocusable(true);
+				main.requestFocus();
+
+				System.out.println("main.add(setBounds(" + aaa + " = new " + jop + "(), " + (startX - 5) + ", " + (startY - 30) + ", " + width + ", " + height + "));");
+			}
+
+		});
 		main.setFocusable(true);
 		main.requestFocus();
 
