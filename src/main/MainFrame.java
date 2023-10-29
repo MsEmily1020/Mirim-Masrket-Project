@@ -48,7 +48,7 @@ public class MainFrame extends BaseFrame {
 
 			btn[5].addActionListener(e -> changeFrame(new MainFrame()));
 			btn[6].addActionListener(e -> changePage(new SaleFrame().main));
-			btn[7].addActionListener(e -> { favoritePage = false; changePage(new MyStoreFrame().main); });
+			btn[7].addActionListener(e -> { favoritePage = false; s_no = u_no; changePage(new StoreFrame().main); });
 			btn[8].addActionListener(e -> changeFrame(new ChartFrame()));
 
 			main.add(setBounds(tf[0] = new JTextField("상품명, 지역명, @상점명 입력"), 171, 46, 430, 28));
@@ -157,7 +157,7 @@ public class MainFrame extends BaseFrame {
 			favoriteLb.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					favoritePage = true;
-					changePage(new MyStoreFrame().main);
+					changePage(new StoreFrame().main);
 				};
 			});
 
@@ -169,7 +169,8 @@ public class MainFrame extends BaseFrame {
 	public static void favoriteList() {
 		try {
 			rs = getResult("select count(*) as cnt from favorite where user = ?", u_no);
-			if(rs.next()) {
+			rs.next();
+			if(rs.getInt("cnt") > 0) {
 				favoriteLb.setText("♥ " + rs.getInt("cnt"));
 				favoriteLb.setForeground(Color.red);
 			}

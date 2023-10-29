@@ -191,7 +191,7 @@ public class ProductFrame extends BaseFrame {
 			
 			lb[12].addMouseListener(new MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
-					changePage(new MyStoreFrame().main);
+					changePage(new StoreFrame().main);
 				};
 			});
 			
