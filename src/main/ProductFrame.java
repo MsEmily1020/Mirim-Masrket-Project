@@ -52,7 +52,8 @@ public class ProductFrame extends BaseFrame {
 			main.add(setBounds(lb[10] = new JLabel("<HTML><p>" + rs.getString("explanation") + "</p></HTML>"), 10, 450, 615, 300));
 			
 			main.add(setBounds(lb[11] = new JLabel(getIcon("datafiles/image/user/" + u_no + ".jpg", 45, 45)), 630, 550, 45, 45));
-			main.add(setBounds(lb[13] = new JLabel("상품 " + rs.getInt("pcnt") + " | 팔로워 " + rs.getString("fwer")), 675, 580, 180, 20));
+			main.add(setBounds(lb[13] = new JLabel("상품 " + rs.getInt("pcnt") + " | 팔로워 "), 675, 580, 180, 20));
+			main.add(setBounds(lb[200] = new JLabel(rs.getString("fwer")), 760, 580, 30, 20));
 			
 			lbTf += " | 조회수: " + rs.getString("view");
 			lbTf += " | 배송비: " + (rs.getInt("deliveryfee") == 0 ? "무료" : "있음"); 
@@ -176,6 +177,7 @@ public class ProductFrame extends BaseFrame {
 						btn[2].setBackground(Color.white);
 						btn[2].setIcon(getIcon("datafiles/image/icon/unfollow.png", 20, 10));
 						btn[2].setForeground(Color.black);
+						lb[200].setText((Integer.parseInt(lb[200].getText()) - 1) + "");
 					}
 					
 					else {
@@ -183,6 +185,7 @@ public class ProductFrame extends BaseFrame {
 						btn[2].setBackground(new Color(0, 128, 0));
 						btn[2].setIcon(getIcon("datafiles/image/icon/follow.png", 20, 10));
 						btn[2].setForeground(Color.white);
+						lb[200].setText((Integer.parseInt(lb[200].getText()) + 1) + "");
 					}
 				} catch (Exception e1) {
 					e1.printStackTrace();
