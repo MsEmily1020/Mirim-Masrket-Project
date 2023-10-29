@@ -294,6 +294,11 @@ public class BaseFrame extends JFrame {
 					public void mouseClicked(MouseEvent e) {
 						try {
 							p_no = Integer.parseInt(((JPanel) e.getSource()).getName());
+							var rs1 = getResult("select * from post where no = ?", p_no);
+							rs1.next();
+							if(rs1.getInt("state") == 2) { showErr("해당 상품은 예약상품입니다."); return; }
+							if(rs1.getInt("state") == 3) { showErr("해당 상품은 이미 판매완료되었습니다."); return; }
+							
 							var rs = getResult("select * from post where no = ?", p_no);
 							rs.next();
 							update("update post set view = view + 1 where no = ?", p_no);
