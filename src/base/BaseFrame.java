@@ -48,7 +48,6 @@ import javax.swing.border.MatteBorder;
 
 import main.MainFrame;
 import main.ProductFrame;
-import main.SaleFrame;
 
 /**
  * 공통된 부분을 메소드로 작업하는 클래스입니다.
