@@ -117,7 +117,7 @@ public class BaseFrame extends JFrame {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		add(main = setBounds(new JPanel(null), 0, 0, w, h));
 
 		main.setBackground(Color.WHITE);
@@ -184,22 +184,22 @@ public class BaseFrame extends JFrame {
 		});
 		main.setFocusable(true);
 		main.requestFocus();
-		
+
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
-				if(!SaleFrame.isRegistration) {
-					try {
-						rs = getResult("select * from post order by no desc");
-						rs.next();
-						int deleteFolderNo = Integer.parseInt(rs.getString("no")) + 1;
+				try {
+					rs = getResult("select * from post order by no desc");
+					rs.next();
+					int deleteFolderNo = Integer.parseInt(rs.getString("no")) + 1;
+					if(new File("datafiles/image/post/" + deleteFolderNo + "/").isDirectory()) {
 						File deleteFolder = new File("datafiles/image/post/" + deleteFolderNo + "/" );
 						File[] files = deleteFolder.listFiles();
 						for(File f: files) f.delete();
 						deleteFolder.delete();
-					} catch (Exception e1) {
-						e1.printStackTrace();
 					}
+				} catch (Exception e1) {
+					e1.printStackTrace();
 				}
 			}
 		});
@@ -296,6 +296,7 @@ public class BaseFrame extends JFrame {
 		dispose();
 		frame.setVisible(true);
 		main.requestFocus();
+		frame.requestFocus();
 	}
 
 	public void showProductList(JPanel page, ResultSet rs) {
@@ -319,7 +320,7 @@ public class BaseFrame extends JFrame {
 							rs1.next();
 							if(rs1.getInt("state") == 2) { showErr("해당 상품은 예약상품입니다."); return; }
 							if(rs1.getInt("state") == 3) { showErr("해당 상품은 이미 판매완료되었습니다."); return; }
-							
+
 							var rs = getResult("select * from post where no = ?", p_no);
 							rs.next();
 							update("update post set view = view + 1 where no = ?", p_no);

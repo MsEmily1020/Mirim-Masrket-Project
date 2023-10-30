@@ -148,7 +148,20 @@ public class SaleFrame extends BaseFrame {
 
 		
 		btn[1].addActionListener(e -> {
+
+			if(tf[0].getText().length() == 0 || tf[0].getText().equals("상품 제목을 입력해주세요.")) { showErr("빈칸이 존재합니다."); return; }
+			if(tf[1].getText().length() == 0 || tf[1].getText().equals("숫자만 입력해주세요.")) { showErr("빈칸이 존재합니다."); return; }
+			if(tf[2].getText().length() == 0 || tf[2].getText().equals("여러 장의 상품 사진과 구입 연도, 브랜드, 사용감, 하자 유무 등 구매자에게 필요한 정보를 꼭 포함해 주세요.")) { showErr("빈칸이 존재합니다."); return; }
+			
+			if(jp[0].getComponent(1) == null) { showErr("등록이미지는 최소 한 개의 이미지가 등록되어야 합니다."); return; }
+			
+			if(!tf[1].getText().matches(".*[0-9].*")) { showErr("가격은 숫자로만 입력해주세요."); return; }
+			
 			isRegistration = true;
+			
+			showInfo("등록이 완료되었습니다.");
+			
+			update("insert into post values(null, ?, ?, ?, 0, ?, ?, ?, ?, 1, ?)", tf[0].getText(), tf[2].getText(), tf[1].getText(), rb[0].isSelected() ? 1 : 0, 1000, 1000, 1000, u_no);
 		});
 	}
 	
@@ -183,7 +196,6 @@ public class SaleFrame extends BaseFrame {
 				btn[i + 1].setBorderPainted(false);
 				btn[i + 1].setName(i + "");
 				
-				System.out.println(newFolderNo + " " + i);
 				jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + i + ".jpg", 170, 170)), (i % 4) * 180 + 10, (i <= 3 ? 0 : 180), 170, 170));
 			}
 			
