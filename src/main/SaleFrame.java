@@ -13,7 +13,9 @@ import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.LineBorder;
 
 import base.BaseFrame;
@@ -21,6 +23,8 @@ import base.BaseFrame;
 public class SaleFrame extends BaseFrame {
 	
 	static int cnt = 1;
+	static int productCnt = 1;
+	static int productSubCnt = 1;
 	public static boolean isRegistration = false;
 	
 	public SaleFrame() {
@@ -41,9 +45,18 @@ public class SaleFrame extends BaseFrame {
 
 		main.add(setBounds(lb[8] = new JLabel("<html>카테고리<font color='red'>*</font></html>"), 25, 675, 70, 20));
 		main.add(setBounds(jp[1] = new JPanel(new FlowLayout(0, 0, 0)), 130, 670, 680, 241));
-		jp[1].add(setBounds(jp[2] = new JPanel(new GridLayout(0, 1)), 159, 239));
-		jp[1].add(setBounds(jp[3] = new JPanel(new GridLayout(0, 1)), 159, 239));
-		jp[1].add(setBounds(jp[4] = new JPanel(new GridLayout(0, 1)), 159, 239));
+
+		JScrollPane pane1 = new JScrollPane(jp[2] = new JPanel(new GridLayout(0, 1)));
+		pane1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		jp[1].add(setBounds(pane1, 225, 239));
+		
+		JScrollPane pane2 = new JScrollPane(jp[3] = new JPanel(new GridLayout(0, 1)));
+		pane2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		jp[1].add(setBounds(pane2, 225, 239));
+		
+		JScrollPane pane3 = new JScrollPane(jp[4] = new JPanel(new GridLayout(0, 1)));
+		pane3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		jp[1].add(setBounds(pane3, 228, 239));
 
 		main.add(setBounds(lb[9] = new JLabel("선택한 카테고리 : "), 130, 935, 145, 25));
 
@@ -63,6 +76,9 @@ public class SaleFrame extends BaseFrame {
 		setComponent(main);
 		setComponent(jp[0]);
 		setComponent(jp[1]);
+		
+		jp[3].setBackground(Color.white);
+		jp[4].setBackground(Color.white);
 
 		btn[0].setBackground(new Color(230, 230, 230));
 		btn[0].setVerticalTextPosition(JButton.BOTTOM);
@@ -145,10 +161,41 @@ public class SaleFrame extends BaseFrame {
 			}
 		});
 		
+		try {
+			rs = getResult("select * from category");
+			while(rs.next()) {
+				if(rs.getString("parent") == null) {
+					jp[2].add(setBounds(btn[rs.getRow() + 39] = new JButton(rs.getString("name")), 0, 50));
+					btn[rs.getRow() + 39].setBackground(Color.white);
+					btn[rs.getRow() + 39].setBorder(null);
+					btn[rs.getRow() + 39].setName(rs.getString("name"));
+				}
+			}
 
+			for(int i = 40; i < 59; i++) {
+				btn[i].addActionListener(e -> {
+					for(int j = 40; j < 59; j++) {
+						if(e.getSource() == btn[j]) {
+							btn[j].setBackground(new Color(0, 128, 0));
+							btn[j].setForeground(Color.white);
+							changeCategorySub(j - 39);
+							jp[3].revalidate();
+							jp[3].repaint();
+						}
+						
+						else {
+							btn[j].setBackground(Color.white);
+							btn[j].setForeground(Color.black);
+						}
+					}
+				});
+			}
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+		
 		
 		btn[1].addActionListener(e -> {
-
 			if(tf[0].getText().length() == 0 || tf[0].getText().equals("상품 제목을 입력해주세요.")) { showErr("빈칸이 존재합니다."); return; }
 			if(tf[1].getText().length() == 0 || tf[1].getText().equals("숫자만 입력해주세요.")) { showErr("빈칸이 존재합니다."); return; }
 			if(tf[2].getText().length() == 0 || tf[2].getText().equals("여러 장의 상품 사진과 구입 연도, 브랜드, 사용감, 하자 유무 등 구매자에게 필요한 정보를 꼭 포함해 주세요.")) { showErr("빈칸이 존재합니다."); return; }
@@ -163,6 +210,88 @@ public class SaleFrame extends BaseFrame {
 			
 			update("insert into post values(null, ?, ?, ?, 0, ?, ?, ?, ?, 1, ?)", tf[0].getText(), tf[2].getText(), tf[1].getText(), rb[0].isSelected() ? 1 : 0, 1000, 1000, 1000, u_no);
 		});
+	}
+	
+	public void changeCategorySub(int category) {
+		jp[3].removeAll();
+		try {
+			rs = getResult("select *,(select count(*) from category where parent like '%," + category + ",%') as cnt from category where parent like '%," + category + ",%'");
+
+			while(rs.next()) {
+				productCnt = rs.getInt("cnt");
+				jp[3].add(setBounds(btn[rs.getRow() + 58] = new JButton(rs.getString("name")), 0, 50));
+				btn[rs.getRow() + 58].setBackground(Color.white);
+				btn[rs.getRow() + 58].setBorder(null);
+				btn[rs.getRow() + 58].setName(rs.getString("name"));
+			}
+			
+			for(int i = 1; i <= productCnt; i++) {
+				btn[i + 58].addActionListener(e -> {
+					for(int j = 1; j <= productCnt; j++) {
+						if(e.getSource() == btn[j + 58]) {
+							btn[j + 58].setBackground(new Color(0, 128, 0));
+							btn[j + 58].setForeground(Color.white);
+							try {
+								rs = getResult("select * from category where name = ?", btn[j + 58].getName());
+								rs.next();
+								System.out.println(rs.getInt("no"));
+								changeCategoryDetail(rs.getInt("no"));
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+							jp[3].revalidate();
+							jp[3].repaint();
+						}
+						
+						else {
+							btn[j + 58].setBackground(Color.white);
+							btn[j + 58].setForeground(Color.black);
+						}
+					}
+				});
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void changeCategoryDetail(int categorySub) {
+		jp[4].removeAll();
+		try {
+			rs = getResult("select *, (select count(*) from category where parent like '%," + categorySub + ",%') as cnt from category where parent like '%," + categorySub + ",%'");
+
+			while(rs.next()) {
+				productSubCnt = rs.getInt("cnt");
+				jp[4].add(setBounds(btn[categorySub + rs.getRow()] = new JButton(rs.getString("name")), 0, 50));
+				btn[categorySub + rs.getRow()].setBackground(Color.white);
+				btn[categorySub + rs.getRow()].setBorder(null);
+				btn[categorySub + rs.getRow()].setName(rs.getString("name"));
+			}
+			
+			for(int i = 1; i <= productSubCnt; i++) {
+				btn[i + categorySub].addActionListener(e -> {
+					for(int j = 1; j <= productSubCnt; j++) {
+						if(e.getSource() == btn[j + categorySub]) {
+							btn[j + categorySub].setBackground(new Color(0, 128, 0));
+							btn[j + categorySub].setForeground(Color.white);
+						}
+						
+						else {
+							btn[j + categorySub].setBackground(Color.white);
+							btn[j + categorySub].setForeground(Color.black);
+						}
+					}
+					
+					jp[4].revalidate();
+					jp[4].repaint();
+				});
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		jp[4].revalidate();
+		jp[4].repaint();
 	}
 	
 	public void changeProductImage(int fileListSize) {
@@ -208,6 +337,6 @@ public class SaleFrame extends BaseFrame {
 	}
 
 	public static void main(String[] args) {
-		new MainFrame().setVisible(true);
+		new SaleFrame().setVisible(true);
 	}
 }
