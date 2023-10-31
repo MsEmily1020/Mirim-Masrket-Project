@@ -27,6 +27,10 @@ public class SaleFrame extends BaseFrame {
 	static int productSubCnt = 1;
 	public static boolean isRegistration = false;
 	
+	public static String category;
+	public static String categorySub;
+	public static String categoryDetail;
+	
 	public SaleFrame() {
 		super("미림장터", 1000, 1600);
 
@@ -178,6 +182,7 @@ public class SaleFrame extends BaseFrame {
 						if(e.getSource() == btn[j]) {
 							btn[j].setBackground(new Color(0, 128, 0));
 							btn[j].setForeground(Color.white);
+							category = btn[j].getName();
 							changeCategorySub(j - 39);
 							jp[3].revalidate();
 							jp[3].repaint();
@@ -233,12 +238,12 @@ public class SaleFrame extends BaseFrame {
 							btn[j + 58].setForeground(Color.white);
 							try {
 								rs = getResult("select * from category where name = ?", btn[j + 58].getName());
-								rs.next();
-								System.out.println(rs.getInt("no"));
-								changeCategoryDetail(rs.getInt("no"));
+								if(rs.next())
+									changeCategoryDetail(rs.getInt("no"));
 							} catch (Exception e1) {
 								e1.printStackTrace();
 							}
+							categorySub = btn[j + 58].getName();
 							jp[3].revalidate();
 							jp[3].repaint();
 						}
@@ -262,23 +267,24 @@ public class SaleFrame extends BaseFrame {
 
 			while(rs.next()) {
 				productSubCnt = rs.getInt("cnt");
-				jp[4].add(setBounds(btn[categorySub + rs.getRow()] = new JButton(rs.getString("name")), 0, 50));
-				btn[categorySub + rs.getRow()].setBackground(Color.white);
-				btn[categorySub + rs.getRow()].setBorder(null);
-				btn[categorySub + rs.getRow()].setName(rs.getString("name"));
+				jp[4].add(setBounds(btn[rs.getRow() + 185] = new JButton(rs.getString("name")), 0, 50));
+				btn[rs.getRow() + 185].setBackground(Color.white);
+				btn[rs.getRow() + 185].setBorder(null);
+				btn[rs.getRow() + 185].setName(rs.getString("name"));
 			}
 			
 			for(int i = 1; i <= productSubCnt; i++) {
-				btn[i + categorySub].addActionListener(e -> {
+				btn[i + 185].addActionListener(e -> {
 					for(int j = 1; j <= productSubCnt; j++) {
-						if(e.getSource() == btn[j + categorySub]) {
-							btn[j + categorySub].setBackground(new Color(0, 128, 0));
-							btn[j + categorySub].setForeground(Color.white);
+						if(e.getSource() == btn[j + 185]) {
+							btn[j + 185].setBackground(new Color(0, 128, 0));
+							btn[j + 185].setForeground(Color.white);
+							categoryDetail = btn[j + 185].getName();
 						}
 						
 						else {
-							btn[j + categorySub].setBackground(Color.white);
-							btn[j + categorySub].setForeground(Color.black);
+							btn[j + 185].setBackground(Color.white);
+							btn[j + 185].setForeground(Color.black);
 						}
 					}
 					
