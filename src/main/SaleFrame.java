@@ -64,6 +64,9 @@ public class SaleFrame extends BaseFrame {
 		jp[1].add(setBounds(pane3, 228, 239));
 
 		main.add(setBounds(lb[9] = new JLabel("선택한 카테고리 : "), 130, 935, 145, 25));
+		main.add(setBounds(lb[150] = new JLabel(), 230, 935, 50, 25));
+		main.add(setBounds(lb[151] = new JLabel(), lb[150].getX() + lb[150].getWidth(), 935, 50, 25));
+		main.add(setBounds(lb[152] = new JLabel(), lb[151].getX() + lb[151].getWidth(), 935, 50, 25));
 
 		main.add(setBounds(lb[10] = new JLabel(), 20, 990, 950, 2));
 
@@ -184,12 +187,21 @@ public class SaleFrame extends BaseFrame {
 				btn[i].addActionListener(e -> {
 					for(int j = 40; j < 59; j++) {
 						if(e.getSource() == btn[j]) {
+							jp[3].removeAll();
+							jp[4].removeAll();
+							jp[3].repaint();
+							jp[4].repaint();
 							btn[j].setBackground(new Color(0, 128, 0));
 							btn[j].setForeground(Color.white);
 							try {
 								rs = getResult("select * from category where name = ?", btn[j].getName());
 								rs.next();
 								categoryIndex = rs.getInt("no");
+								lb[150].setText(rs.getString("name") + " > ");
+								lb[151].setText(""); lb[152].setText("");
+								lb[150].setSize(lb[150].getText().length() * 9 + 30, 25);
+								lb[150].revalidate();
+								lb[150].repaint();
 							} catch (Exception e1) {
 								e1.printStackTrace();
 							}
@@ -244,11 +256,17 @@ public class SaleFrame extends BaseFrame {
 				btn[i + 58].addActionListener(e -> {
 					for(int j = 1; j <= productCnt; j++) {
 						if(e.getSource() == btn[j + 58]) {
+							jp[4].removeAll();
 							btn[j + 58].setBackground(new Color(0, 128, 0));
 							btn[j + 58].setForeground(Color.white);
 							try {
 								rs = getResult("select * from category where name = ?", btn[j + 58].getName());
 								if(rs.next()) {
+									lb[151].setText(rs.getString("name") + " > ");
+									lb[152].setText("");
+									lb[151].setBounds(lb[150].getX() + lb[150].getWidth(), 935, lb[151].getText().length() * 9 + 30, 25);
+									lb[151].revalidate();
+									lb[151].repaint();
 									categorySubIndex = rs.getInt("no");
 									changeCategoryDetail(rs.getInt("no"));
 								}
@@ -285,7 +303,7 @@ public class SaleFrame extends BaseFrame {
 				btn[rs.getRow() + 185].setName(rs.getString("name"));
 			}
 
-			if(rs.isLast()) {
+			if(rs.isAfterLast()) {
 				for(int i = 1; i <= productSubCnt; i++) {
 					btn[i + 185].addActionListener(e -> {
 						for(int j = 1; j <= productSubCnt; j++) {
@@ -296,6 +314,10 @@ public class SaleFrame extends BaseFrame {
 									rs = getResult("select * from category where name = ?", btn[j + 185].getName());
 									rs.next();
 									categoryDetailIndex = rs.getInt("no");
+									lb[152].setText(rs.getString("name"));
+									lb[152].setBounds(lb[151].getX() + lb[151].getWidth(), 935, lb[152].getText().length() * 9 + 30, 25);
+									lb[152].revalidate();
+									lb[152].repaint();
 								} catch (Exception e1) {
 									e1.printStackTrace();
 								}
