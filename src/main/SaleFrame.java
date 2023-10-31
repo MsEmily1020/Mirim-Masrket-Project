@@ -26,7 +26,7 @@ public class SaleFrame extends BaseFrame {
 	static int cnt = 1;
 	static int productCnt = 1;
 	static int productSubCnt = 1;
-	public static boolean isRegistration = false;
+	static boolean isAddProduct = false;
 
 	public static int categoryIndex;
 	public static int categorySubIndex;
@@ -143,12 +143,12 @@ public class SaleFrame extends BaseFrame {
 					jp[0].remove(jp[0].getComponentAt(((JButton)e2.getSource()).getX(), ((JButton) e2.getSource()).getY()));
 					jp[0].revalidate();
 					jp[0].repaint();
-					System.out.println(((JButton)e2.getSource()).getName());
 					new File("datafiles/image/post/" + newFolderNo + "/" + ((JButton)e2.getSource()).getName() + ".jpg").delete();
 					File[] fileList = new File("datafiles/image/post/" + newFolderNo + "/").listFiles();
 					for (int i = 0; i < fileList.length; i++)
 						fileList[i].renameTo(new File("datafiles/image/post/" + newFolderNo + "/" + (i + 1) + ".jpg"));
-					cnt = fileList.length + 1;
+					cnt = fileList.length;
+					if(cnt == 0) { isAddProduct = false; return; }
 					changeProductImage(fileList.length);
 				}), (cnt % 4) * 180 + 135, (cnt <= 3 ? 0 : 180), 45, 45));
 				btn[cnt + 1].requestFocus();
@@ -157,8 +157,11 @@ public class SaleFrame extends BaseFrame {
 				btn[cnt + 1].setContentAreaFilled(false);
 				btn[cnt + 1].setBorderPainted(false);
 				btn[cnt + 1].setName(cnt + "");
+				isAddProduct = true;
 
 				jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg", 170, 170)), (cnt % 4) * 180 + 10, (cnt <= 3 ? 0 : 180), 170, 170));
+				jp[0].revalidate();
+				jp[0].repaint();
 				++cnt;
 
 			} catch (Exception e1) {
@@ -209,20 +212,18 @@ public class SaleFrame extends BaseFrame {
 
 
 		btn[1].addActionListener(e -> {
-			System.out.println(categoryIndex + " " + categorySubIndex + " " + categoryDetailIndex);
+			if(categoryIndex == 0) { showErr("카테고리를 선택해주세요."); return; }
 			if(tf[0].getText().length() == 0 || tf[0].getText().equals("상품 제목을 입력해주세요.")) { showErr("빈칸이 존재합니다."); return; }
 			if(tf[1].getText().length() == 0 || tf[1].getText().equals("숫자만 입력해주세요.")) { showErr("빈칸이 존재합니다."); return; }
 			if(tf[2].getText().length() == 0 || tf[2].getText().equals("여러 장의 상품 사진과 구입 연도, 브랜드, 사용감, 하자 유무 등 구매자에게 필요한 정보를 꼭 포함해 주세요.")) { showErr("빈칸이 존재합니다."); return; }
 
-			if(jp[0].getComponent(1) == null) { showErr("등록이미지는 최소 한 개의 이미지가 등록되어야 합니다."); return; }
+			if(!isAddProduct) { showErr("등록이미지는 최소 한 개의 이미지가 등록되어야 합니다."); return; }
 
 			if(!tf[1].getText().matches(".*[0-9].*")) { showErr("가격은 숫자로만 입력해주세요."); return; }
 
-			isRegistration = true;
-
 			showInfo("등록이 완료되었습니다.");
 
-			update("insert into post values(null, ?, ?, ?, 0, ?, ?, ?, ?, 1, ?)", tf[0].getText(), tf[2].getText(), tf[1].getText(), rb[0].isSelected() ? 1 : 0, categoryIndex, categorySubIndex, categoryDetailIndex, u_no);
+			update("insert into post values(null, ?, ?, ?, 0, ?, ?, ?, ?, 1, ?)", tf[0].getText(), tf[2].getText(), tf[1].getText(), rb[0].isSelected() ? 1 : 0, categoryIndex, categorySubIndex == 0 ? null : categorySubIndex, categoryDetailIndex == 0 ? null : categoryDetailIndex, u_no);
 		});
 	}
 
@@ -340,7 +341,8 @@ public class SaleFrame extends BaseFrame {
 					File[] fileList = new File("datafiles/image/post/" + newFolderNo + "/").listFiles();
 					for (int j = 0; j < fileList.length; j++)
 						fileList[j].renameTo(new File("datafiles/image/post/" + newFolderNo + "/" + (j + 1) + ".jpg"));
-					cnt = fileList.length + 1;
+					cnt = fileList.length;
+					if(cnt == 0) { isAddProduct = false; return; }
 					changeProductImage(fileList.length);
 				}), (i % 4) * 180 + 135, (i <= 3 ? 0 : 180), 45, 45));
 				btn[i + 1].requestFocus();
@@ -351,11 +353,9 @@ public class SaleFrame extends BaseFrame {
 				btn[i + 1].setName(i + "");
 
 				jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + i + ".jpg", 170, 170)), (i % 4) * 180 + 10, (i <= 3 ? 0 : 180), 170, 170));
+				jp[0].revalidate();
+				jp[0].repaint();
 			}
-
-			jp[0].revalidate();
-			jp[0].repaint();
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
