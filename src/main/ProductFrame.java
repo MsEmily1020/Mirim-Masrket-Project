@@ -53,7 +53,7 @@ public class ProductFrame extends BaseFrame {
 			
 			main.add(setBounds(lb[11] = new JLabel(getIcon("datafiles/image/user/" + u_no + ".jpg", 45, 45)), 630, 550, 45, 45));
 			main.add(setBounds(lb[13] = new JLabel("상품 " + rs.getInt("pcnt") + " | 팔로워 "), 675, 580, 180, 20));
-			main.add(setBounds(lb[200] = new JLabel(rs.getString("fwer")), 760, 580, 30, 20));
+			main.add(setBounds(lb[200] = new JLabel(rs.getString("fwer")), 770, 580, 30, 20));
 			
 			lbTf += " | 조회수: " + rs.getString("view");
 			lbTf += " | 배송비: " + (rs.getInt("deliveryfee") == 0 ? "무료" : "있음"); 
