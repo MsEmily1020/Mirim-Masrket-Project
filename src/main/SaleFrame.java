@@ -197,6 +197,8 @@ public class SaleFrame extends BaseFrame {
 								rs = getResult("select * from category where name = ?", btn[j].getName());
 								rs.next();
 								categoryIndex = rs.getInt("no");
+								categorySubIndex = 0;
+								categoryDetailIndex = 0;
 								lb[150].setText(rs.getString("name") + " > ");
 								lb[151].setText(""); lb[152].setText("");
 								lb[150].setSize(lb[150].getText().length() * 9 + 30, 25);
@@ -235,7 +237,7 @@ public class SaleFrame extends BaseFrame {
 
 			showInfo("등록이 완료되었습니다.");
 
-			update("insert into post values(null, ?, ?, ?, 0, ?, ?, ?, ?, 1, ?)", tf[0].getText(), tf[2].getText(), tf[1].getText(), rb[0].isSelected() ? 1 : 0, categoryIndex, categorySubIndex == 0 ? null : categorySubIndex, categoryDetailIndex == 0 ? null : categoryDetailIndex, u_no);
+			update("insert into post values(null, ?, ?, ?, 0, ?, ?, ?, ?, 1, ?)", tf[0].getText(), tf[2].getText(), tf[1].getText(), rb[0].isSelected() ? 1 : 0, categoryIndex, categorySubIndex, categoryDetailIndex, u_no);
 		});
 	}
 
@@ -259,6 +261,7 @@ public class SaleFrame extends BaseFrame {
 							jp[4].removeAll();
 							btn[j + 58].setBackground(new Color(0, 128, 0));
 							btn[j + 58].setForeground(Color.white);
+							categoryDetailIndex = 0;
 							try {
 								rs = getResult("select * from category where name = ?", btn[j + 58].getName());
 								if(rs.next()) {
