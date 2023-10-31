@@ -196,6 +196,10 @@ public class Setting {
 				+ "ADD COLUMN `parent` TEXT NULL AFTER `name`;\r\n"
 				+ "");
 		
+		stmt.execute("ALTER TABLE `mirim-market`.`user` \r\n"
+				+ "ADD COLUMN `explain` TEXT NULL AFTER `email`;\r\n"
+				+ "");
+		
 		stmt.execute("DROP USER IF EXISTS 'user'@'127.0.0.1'");
 		stmt.execute("CREATE USER 'user'@'127.0.0.1' IDENTIFIED BY '1234'");
 		stmt.execute("GRANT SELECT, INSERT, DELETE, UPDATE ON `mirim-market`.* TO 'user'@'127.0.0.1'");

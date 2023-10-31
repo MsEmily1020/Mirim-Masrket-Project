@@ -156,6 +156,7 @@ public class MainFrame extends BaseFrame {
 			
 			favoriteLb.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
+					s_no = u_no;
 					favoritePage = true;
 					changePage(new StoreFrame().main);
 				};
