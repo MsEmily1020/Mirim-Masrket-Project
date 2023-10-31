@@ -7,7 +7,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.io.File;
-import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -151,6 +150,7 @@ public class SaleFrame extends BaseFrame {
 					for (int i = 0; i < fileList.length; i++)
 						fileList[i].renameTo(new File("datafiles/image/post/" + newFolderNo + "/" + (i + 1) + ".jpg"));
 					cnt = fileList.length;
+					lb[3].setText("<html>상품이미지<font color='red'>*</font> <font color='gray'>(" + cnt + "/7)</font></html>");
 					if(cnt == 0) { isAddProduct = false; return; }
 					changeProductImage(fileList.length);
 				}), (cnt % 4) * 180 + 135, (cnt <= 3 ? 0 : 180), 45, 45));
@@ -364,6 +364,7 @@ public class SaleFrame extends BaseFrame {
 					for (int j = 0; j < fileList.length; j++)
 						fileList[j].renameTo(new File("datafiles/image/post/" + newFolderNo + "/" + (j + 1) + ".jpg"));
 					cnt = fileList.length;
+					lb[3].setText("<html>상품이미지<font color='red'>*</font> <font color='gray'>(" + cnt + "/7)</font></html>");
 					if(cnt == 0) { isAddProduct = false; return; }
 					changeProductImage(fileList.length);
 				}), (i % 4) * 180 + 135, (i <= 3 ? 0 : 180), 45, 45));
