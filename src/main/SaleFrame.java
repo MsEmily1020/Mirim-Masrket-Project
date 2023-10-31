@@ -7,6 +7,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 import java.io.File;
+import java.sql.SQLException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
@@ -21,16 +22,16 @@ import javax.swing.border.LineBorder;
 import base.BaseFrame;
 
 public class SaleFrame extends BaseFrame {
-	
+
 	static int cnt = 1;
 	static int productCnt = 1;
 	static int productSubCnt = 1;
 	public static boolean isRegistration = false;
-	
-	public static String category;
-	public static String categorySub;
-	public static String categoryDetail;
-	
+
+	public static int categoryIndex;
+	public static int categorySubIndex;
+	public static int categoryDetailIndex;
+
 	public SaleFrame() {
 		super("미림장터", 1000, 1600);
 
@@ -53,11 +54,11 @@ public class SaleFrame extends BaseFrame {
 		JScrollPane pane1 = new JScrollPane(jp[2] = new JPanel(new GridLayout(0, 1)));
 		pane1.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		jp[1].add(setBounds(pane1, 225, 239));
-		
+
 		JScrollPane pane2 = new JScrollPane(jp[3] = new JPanel(new GridLayout(0, 1)));
 		pane2.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		jp[1].add(setBounds(pane2, 225, 239));
-		
+
 		JScrollPane pane3 = new JScrollPane(jp[4] = new JPanel(new GridLayout(0, 1)));
 		pane3.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 		jp[1].add(setBounds(pane3, 228, 239));
@@ -80,7 +81,7 @@ public class SaleFrame extends BaseFrame {
 		setComponent(main);
 		setComponent(jp[0]);
 		setComponent(jp[1]);
-		
+
 		jp[3].setBackground(Color.white);
 		jp[4].setBackground(Color.white);
 
@@ -113,7 +114,7 @@ public class SaleFrame extends BaseFrame {
 
 		btn[0].addActionListener(e -> {
 			if(cnt == 8) { showErr("등록할 수 있는 이미지 수를 초과 하였습니다."); return; }
-			
+
 			var fopen = new FileDialog(this, "이미지 열기", FileDialog.LOAD);
 			fopen.setVisible(true);
 			fopen.setLocationRelativeTo(null);
@@ -127,16 +128,16 @@ public class SaleFrame extends BaseFrame {
 				rs.next();
 
 				int newFolderNo = Integer.parseInt(rs.getString("no")) + 1;
-				
+
 				File newFolder = new File("datafiles/image/post/" + newFolderNo + "/");
 				if(!newFolder.isDirectory()) newFolder.mkdirs();
 
 				ImageIO.write(ImageIO.read(new File(path + name)), "jpg", new File(newFolder, cnt + ".jpg"));
-	
+
 				jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg", 170, 170)), 2, 2, 2, 2));
-				
+
 				lb[3].setText("<html>상품이미지<font color='red'>*</font> <font color='gray'>(" + cnt + "/7)</font></html>");
-				
+
 				jp[0].add(setBounds(btn[cnt + 1] = actbtn("X", e2 -> {
 					jp[0].remove(((JButton) e2.getSource()));
 					jp[0].remove(jp[0].getComponentAt(((JButton)e2.getSource()).getX(), ((JButton) e2.getSource()).getY()));
@@ -164,7 +165,7 @@ public class SaleFrame extends BaseFrame {
 				e1.printStackTrace();
 			}
 		});
-		
+
 		try {
 			rs = getResult("select * from category");
 			while(rs.next()) {
@@ -182,12 +183,19 @@ public class SaleFrame extends BaseFrame {
 						if(e.getSource() == btn[j]) {
 							btn[j].setBackground(new Color(0, 128, 0));
 							btn[j].setForeground(Color.white);
-							category = btn[j].getName();
+							try {
+								rs = getResult("select * from category where name = ?", btn[j].getName());
+								rs.next();
+								categoryIndex = rs.getInt("no");
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+
 							changeCategorySub(j - 39);
 							jp[3].revalidate();
 							jp[3].repaint();
 						}
-						
+
 						else {
 							btn[j].setBackground(Color.white);
 							btn[j].setForeground(Color.black);
@@ -198,25 +206,26 @@ public class SaleFrame extends BaseFrame {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
-		
-		
+
+
 		btn[1].addActionListener(e -> {
+			System.out.println(categoryIndex + " " + categorySubIndex + " " + categoryDetailIndex);
 			if(tf[0].getText().length() == 0 || tf[0].getText().equals("상품 제목을 입력해주세요.")) { showErr("빈칸이 존재합니다."); return; }
 			if(tf[1].getText().length() == 0 || tf[1].getText().equals("숫자만 입력해주세요.")) { showErr("빈칸이 존재합니다."); return; }
 			if(tf[2].getText().length() == 0 || tf[2].getText().equals("여러 장의 상품 사진과 구입 연도, 브랜드, 사용감, 하자 유무 등 구매자에게 필요한 정보를 꼭 포함해 주세요.")) { showErr("빈칸이 존재합니다."); return; }
-			
+
 			if(jp[0].getComponent(1) == null) { showErr("등록이미지는 최소 한 개의 이미지가 등록되어야 합니다."); return; }
-			
+
 			if(!tf[1].getText().matches(".*[0-9].*")) { showErr("가격은 숫자로만 입력해주세요."); return; }
-			
+
 			isRegistration = true;
-			
+
 			showInfo("등록이 완료되었습니다.");
-			
-			update("insert into post values(null, ?, ?, ?, 0, ?, ?, ?, ?, 1, ?)", tf[0].getText(), tf[2].getText(), tf[1].getText(), rb[0].isSelected() ? 1 : 0, 1000, 1000, 1000, u_no);
+
+			update("insert into post values(null, ?, ?, ?, 0, ?, ?, ?, ?, 1, ?)", tf[0].getText(), tf[2].getText(), tf[1].getText(), rb[0].isSelected() ? 1 : 0, categoryIndex, categorySubIndex, categoryDetailIndex, u_no);
 		});
 	}
-	
+
 	public void changeCategorySub(int category) {
 		jp[3].removeAll();
 		try {
@@ -229,7 +238,7 @@ public class SaleFrame extends BaseFrame {
 				btn[rs.getRow() + 58].setBorder(null);
 				btn[rs.getRow() + 58].setName(rs.getString("name"));
 			}
-			
+
 			for(int i = 1; i <= productCnt; i++) {
 				btn[i + 58].addActionListener(e -> {
 					for(int j = 1; j <= productCnt; j++) {
@@ -238,16 +247,18 @@ public class SaleFrame extends BaseFrame {
 							btn[j + 58].setForeground(Color.white);
 							try {
 								rs = getResult("select * from category where name = ?", btn[j + 58].getName());
-								if(rs.next())
+								if(rs.next()) {
+									categorySubIndex = rs.getInt("no");
 									changeCategoryDetail(rs.getInt("no"));
+								}
 							} catch (Exception e1) {
 								e1.printStackTrace();
 							}
-							categorySub = btn[j + 58].getName();
+
 							jp[3].revalidate();
 							jp[3].repaint();
 						}
-						
+
 						else {
 							btn[j + 58].setBackground(Color.white);
 							btn[j + 58].setForeground(Color.black);
@@ -259,7 +270,7 @@ public class SaleFrame extends BaseFrame {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void changeCategoryDetail(int categorySub) {
 		jp[4].removeAll();
 		try {
@@ -272,36 +283,44 @@ public class SaleFrame extends BaseFrame {
 				btn[rs.getRow() + 185].setBorder(null);
 				btn[rs.getRow() + 185].setName(rs.getString("name"));
 			}
-			
-			for(int i = 1; i <= productSubCnt; i++) {
-				btn[i + 185].addActionListener(e -> {
-					for(int j = 1; j <= productSubCnt; j++) {
-						if(e.getSource() == btn[j + 185]) {
-							btn[j + 185].setBackground(new Color(0, 128, 0));
-							btn[j + 185].setForeground(Color.white);
-							categoryDetail = btn[j + 185].getName();
+
+			if(rs.isLast()) {
+				for(int i = 1; i <= productSubCnt; i++) {
+					btn[i + 185].addActionListener(e -> {
+						for(int j = 1; j <= productSubCnt; j++) {
+							if(e.getSource() == btn[j + 185]) {
+								btn[j + 185].setBackground(new Color(0, 128, 0));
+								btn[j + 185].setForeground(Color.white);
+								try {
+									rs = getResult("select * from category where name = ?", btn[j + 185].getName());
+									rs.next();
+									categoryDetailIndex = rs.getInt("no");
+								} catch (Exception e1) {
+									e1.printStackTrace();
+								}
+							}
+
+							else {
+								btn[j + 185].setBackground(Color.white);
+								btn[j + 185].setForeground(Color.black);
+							}
 						}
-						
-						else {
-							btn[j + 185].setBackground(Color.white);
-							btn[j + 185].setForeground(Color.black);
-						}
-					}
-					
-					jp[4].revalidate();
-					jp[4].repaint();
-				});
+
+						jp[4].revalidate();
+						jp[4].repaint();
+					});
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		jp[4].revalidate();
 		jp[4].repaint();
 	}
-	
+
 	public void changeProductImage(int fileListSize) {
-		
+
 		for(Component comp : jp[0].getComponents()) {
 			if(comp != btn[0]) jp[0].remove(comp);
 		}
@@ -310,7 +329,7 @@ public class SaleFrame extends BaseFrame {
 			rs = getResult("select * from post order by no desc");
 			rs.next();
 			int newFolderNo = Integer.parseInt(rs.getString("no")) + 1;
-			
+
 			for(int i = 1; i <= fileListSize; i++) {
 				jp[0].add(setBounds(btn[i + 1] = actbtn("X", e2 -> {
 					jp[0].remove(((JButton) e2.getSource()));
@@ -330,13 +349,13 @@ public class SaleFrame extends BaseFrame {
 				btn[i + 1].setContentAreaFilled(false);
 				btn[i + 1].setBorderPainted(false);
 				btn[i + 1].setName(i + "");
-				
+
 				jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + i + ".jpg", 170, 170)), (i % 4) * 180 + 10, (i <= 3 ? 0 : 180), 170, 170));
 			}
-			
+
 			jp[0].revalidate();
 			jp[0].repaint();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
