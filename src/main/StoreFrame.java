@@ -1,9 +1,12 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -30,18 +33,23 @@ public class StoreFrame extends BaseFrame {
 			main.add(setBounds(area = new JTextArea(), 260, 50, 545, 170));
 			main.add(setBounds(btn[0] = new JButton("소개글 수정"), 260, 220, 105, 30));
 			
-			main.add(setBounds(jp[1] = new JPanel(null), 30, 290, 805, 410));
+			main.add(setBounds(jp[1] = new JPanel(null), 30, 290, 805, 1000));
 			jp[1].add(setBounds(jp[2] = new JPanel(new GridLayout()), 0, 0, 835, 35));
 			
 			// 버튼 클릭 후 panel
-			jp[1].add(setBounds(jp[3] = new JPanel(), 0, 35, 805, 305));
-			jp[1].add(setBounds(jp[4] = new JPanel(), 0, 35, 805, 305));
-			jp[1].add(setBounds(jp[5] = new JPanel(), 0, 35, 805, 305));
-			jp[1].add(setBounds(jp[6] = new JPanel(), 0, 35, 805, 305));
+			jp[1].add(setBounds(jp[3] = new JPanel(null), 0, 35, 805, 1000));
+			jp[1].add(setBounds(jp[4] = new JPanel(null), 0, 35, 805, 305));
+			jp[1].add(setBounds(jp[5] = new JPanel(null), 0, 35, 805, 305));
+			jp[1].add(setBounds(jp[6] = new JPanel(null), 0, 35, 805, 305));
 			
 			if(s_no == u_no) btnText = "상품,상점후기,찜,팔로잉".split(",");
-
+			
 			setComponent(main);
+			
+			jp[3].setBackground(Color.white);
+			jp[4].setBackground(Color.white);
+			jp[5].setBackground(Color.white);
+			jp[6].setBackground(Color.white);
 			
 			for(int i = 1; i <= btnText.length; i++) {
 				jp[2].add(setBounds(btn[i] = new JButton(btnText[i - 1]), (btnText.length % 2) * 60 + 200, 50));
@@ -105,6 +113,19 @@ public class StoreFrame extends BaseFrame {
 					}
 				});
 			}
+			
+			rs = getResult("select count(*) from post where user = ?", s_no);
+			rs.next();
+			int cnt = rs.getInt("count(*)");
+			jp[3].add(setBounds(new JLabel("<html>상품" + " <font color='red'>" + cnt + "</font></html>"),20, 20, 80, 20));
+			jp[3].add(setBounds(new JLabel(), 20, 55, 750, 1));
+			jp[3].add(setBounds(new JLabel("<html>전체" + " <font color='gray'>" + cnt + "개</font></html>"), 20, 70, 80, 20));
+			jp[3].add(setBounds(page = new JPanel(new FlowLayout(0)), 0, 100, 805, ((cnt % 5 == 0) ? cnt / 5 : cnt / 5 + 1) * 200 + 60));
+			page.setName("5");
+			page.setBackground(Color.white);
+			showProductList(page, getResult("select * from post where user = ?", s_no));
+
+			((JLabel)jp[3].getComponent(1)).setBorder(new LineBorder(Color.lightGray, 2));
 			
 		} catch (Exception e) {
 			e.printStackTrace();

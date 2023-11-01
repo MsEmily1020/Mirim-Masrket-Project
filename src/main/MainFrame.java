@@ -144,7 +144,8 @@ public class MainFrame extends BaseFrame {
 			btn[13].setBackground(new Color(238, 238, 238));
 
 			jsp.getViewport().setView(new BackgroundFrame().main);
-
+			jsp.getVerticalScrollBar().setUnitIncrement(8);
+			
 			recentProduct();
 			favoriteList();
 			

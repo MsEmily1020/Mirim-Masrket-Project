@@ -388,6 +388,6 @@ public class SaleFrame extends BaseFrame {
 	}
 
 	public static void main(String[] args) {
-		new SaleFrame().setVisible(true);
+		new MainFrame().setVisible(true);
 	}
 }

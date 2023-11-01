@@ -54,15 +54,12 @@ public class BackgroundFrame extends BaseFrame {
 			
 			showProductList(page, getResult("select * from post order by rand()"));
 			
-			Thread.sleep(100);
-			
 			main.setPreferredSize(new Dimension(860, 330 + (205 + 5) * 4));
 			
 			mainCls.jsp.getVerticalScrollBar().addAdjustmentListener(e -> {
 				try {
 					JPanel comp = (JPanel) mainCls.jsp.getViewport().getView();
 					if (e.getAdjustable().getMaximum() - e.getAdjustable().getVisibleAmount() == e.getValue()) {
-						Thread.sleep(500);
 						comp.setPreferredSize(new Dimension(860, comp.getPreferredSize().height + 210 * 4));
 					}
 				} catch (Exception e1) {
