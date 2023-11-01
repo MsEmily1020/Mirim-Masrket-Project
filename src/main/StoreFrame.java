@@ -1,7 +1,9 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
@@ -20,6 +22,9 @@ public class StoreFrame extends BaseFrame {
 
 	public StoreFrame() {
 		super("미림장터", 1000, 1000);
+		
+		u_no = 5;
+		s_no = 5;
 
 		try {
 			rs = getResult("select * from user where no = ?", s_no);
@@ -36,7 +41,7 @@ public class StoreFrame extends BaseFrame {
 			
 			// 버튼 클릭 후 panel
 			jp[1].add(setBounds(jp[3] = new JPanel(null), 0, 35, 805, 1000));
-			jp[1].add(setBounds(jp[4] = new JPanel(null), 0, 35, 805, 305));
+			jp[1].add(setBounds(jp[4] = new JPanel(new GridLayout(0, 1)), 0, 45, 805, 405));
 			jp[1].add(setBounds(jp[5] = new JPanel(null), 0, 35, 805, 305));
 			jp[1].add(setBounds(jp[6] = new JPanel(null), 0, 35, 805, 305));
 			
@@ -113,6 +118,29 @@ public class StoreFrame extends BaseFrame {
 						}
 					}
 				});
+			}
+			
+			rs = getResult("select *, (select count(*) from review where user = ?) as cnt from review r inner join post p on r.post = p.no where r.user = ?", s_no, s_no);
+			
+			rs.next();
+			
+			jp[4].setSize(new Dimension(jp[4].getWidth(), rs.getInt("cnt") * 150));
+
+			rs = getResult("select * from review r inner join post p on r.post = p.no inner join user u on p.user = u.no where r.user = ?", s_no);
+			
+			while(rs.next()) {
+				jp[4].add(setBounds(jp[7] = new JPanel(null), jp[4].getWidth(), 30));
+				jp[7].setBackground(Color.white);
+				jp[7].setBorder(new MatteBorder(1, 0, 1, 0, Color.black));
+				jp[7].add(setBounds(lb[1] = new JLabel(rs.getString("name")),30, 10, 50, 30));
+				for (int i = 1; i <= 5; i++) {
+					jp[7].add(setBounds(new JLabel("★"), 18 + i * 10, 30, 20, 30));
+					jp[7].getComponent(i).setFont(new Font("맑은 고딕", 1, 13));
+				}
+				for(int i = 1; i <= rs.getInt("score"); i++) jp[7].getComponent(i).setForeground(Color.orange); 
+				jp[7].add(setBounds(lb[2] = new JLabel(rs.getString("title") + " >", 0), 30, 70, rs.getString("title").length() * 15, 20));
+				lb[2].setBorder(new LineBorder(Color.black));
+				jp[7].add(setBounds(lb[3] = new JLabel("<html>" + rs.getString("content") + "</html>"), 30, 100, 780, 50));
 			}
 			
 			rs = getResult("select count(*) from post where user = ?", s_no);
