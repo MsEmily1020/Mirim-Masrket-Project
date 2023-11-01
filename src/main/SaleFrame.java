@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.border.LineBorder;
@@ -30,6 +31,8 @@ public class SaleFrame extends BaseFrame {
 	public static int categoryIndex;
 	public static int categorySubIndex;
 	public static int categoryDetailIndex;
+	
+	JTextArea area;
 
 	public SaleFrame() {
 		super("미림장터", 1000, 1600);
@@ -77,7 +80,7 @@ public class SaleFrame extends BaseFrame {
 		main.add(setBounds(lb[13] = new JLabel(), 20, 1125, 950, 2));
 
 		main.add(setBounds(lb[14] = new JLabel("<html>설명<font color='red'>*</font></html>"), 20, 1165, 55, 20));
-		main.add(setBounds(tf[2] = new JTextField("여러 장의 상품 사진과 구입 연도, 브랜드, 사용감, 하자 유무 등 구매자에게 필요한 정보를 꼭 포함해 주세요."), 120, 1160, 690, 150));
+		main.add(setBounds(area = new JTextArea("여러 장의 상품 사진과 구입 연도, 브랜드, 사용감, 하자 유무 등 구매자에게 필요한 정보를 꼭 포함해 주세요."), 120, 1160, 690, 150));
 		main.add(setBounds(btn[1] = new JButton("등록하기"), 680, 1330, 130, 40));
 
 		setComponent(main);
@@ -109,7 +112,8 @@ public class SaleFrame extends BaseFrame {
 
 		lb[13].setBorder(new LineBorder(Color.lightGray, 2));
 
-		tf[2].setBorder(new LineBorder(Color.gray));
+		area.setBorder(new LineBorder(Color.gray));
+		area.setLineWrap(true);
 
 		btn[1].setBackground(Color.red);
 		btn[1].setForeground(Color.white);
@@ -126,46 +130,58 @@ public class SaleFrame extends BaseFrame {
 			if (path == null || name == null) return;
 
 			try {
-				rs = getResult("select * from post order by no desc");
-				rs.next();
+				if(!isCorrectionProduct) { 
+					rs = getResult("select * from post order by no desc");
+					rs.next();
 
-				int newFolderNo = Integer.parseInt(rs.getString("no")) + 1;
+					int newFolderNo = Integer.parseInt(rs.getString("no")) + 1;
 
-				File newFolder = new File("datafiles/image/post/" + newFolderNo + "/");
-				if(!newFolder.isDirectory()) newFolder.mkdirs();
+					File newFolder = new File("datafiles/image/post/" + newFolderNo + "/");
+					if(!newFolder.isDirectory()) newFolder.mkdirs();
 
-				ImageIO.write(ImageIO.read(new File(path + name)), "jpg", new File(newFolder, cnt + ".jpg"));
+					ImageIO.write(ImageIO.read(new File(path + name)), "jpg", new File(newFolder, cnt + ".jpg"));
 
-				jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg", 170, 170)), 2, 2, 2, 2));
+					jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg", 170, 170)), 2, 2, 2, 2));
 
-				lb[3].setText("<html>상품이미지<font color='red'>*</font> <font color='gray'>(" + cnt + "/7)</font></html>");
+					lb[3].setText("<html>상품이미지<font color='red'>*</font> <font color='gray'>(" + cnt + "/7)</font></html>");
 
-				jp[0].add(setBounds(btn[cnt + 1] = actbtn("X", e2 -> {
-					jp[0].remove(((JButton) e2.getSource()));
-					jp[0].remove(jp[0].getComponentAt(((JButton)e2.getSource()).getX(), ((JButton) e2.getSource()).getY()));
+					jp[0].add(setBounds(btn[cnt + 1] = actbtn("X", e2 -> {
+						jp[0].remove(((JButton) e2.getSource()));
+						jp[0].remove(jp[0].getComponentAt(((JButton)e2.getSource()).getX(), ((JButton) e2.getSource()).getY()));
+						jp[0].revalidate();
+						jp[0].repaint();
+						new File("datafiles/image/post/" + newFolderNo + "/" + ((JButton)e2.getSource()).getName() + ".jpg").delete();
+						File[] fileList = new File("datafiles/image/post/" + newFolderNo + "/").listFiles();
+						for (int i = 0; i < fileList.length; i++)
+							fileList[i].renameTo(new File("datafiles/image/post/" + newFolderNo + "/" + (i + 1) + ".jpg"));
+						cnt = fileList.length;
+						lb[3].setText("<html>상품이미지<font color='red'>*</font> <font color='gray'>(" + cnt + "/7)</font></html>");
+						if(cnt == 0) { isAddProduct = false; return; }
+						changeProductImage(fileList.length);
+					}), (cnt % 4) * 180 + 135, (cnt <= 3 ? 0 : 180), 45, 45));
+					btn[cnt + 1].requestFocus();
+					btn[cnt + 1].setFont(new Font("맑은 고딕", 1, 15));
+					btn[cnt + 1].setOpaque(false);
+					btn[cnt + 1].setContentAreaFilled(false);
+					btn[cnt + 1].setBorderPainted(false);
+					btn[cnt + 1].setName(cnt + "");
+					isAddProduct = true;
+
+					jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg", 170, 170)), (cnt % 4) * 180 + 10, (cnt <= 3 ? 0 : 180), 170, 170));
 					jp[0].revalidate();
 					jp[0].repaint();
-					new File("datafiles/image/post/" + newFolderNo + "/" + ((JButton)e2.getSource()).getName() + ".jpg").delete();
-					File[] fileList = new File("datafiles/image/post/" + newFolderNo + "/").listFiles();
-					for (int i = 0; i < fileList.length; i++)
-						fileList[i].renameTo(new File("datafiles/image/post/" + newFolderNo + "/" + (i + 1) + ".jpg"));
-					cnt = fileList.length;
-					lb[3].setText("<html>상품이미지<font color='red'>*</font> <font color='gray'>(" + cnt + "/7)</font></html>");
-					if(cnt == 0) { isAddProduct = false; return; }
-					changeProductImage(fileList.length);
-				}), (cnt % 4) * 180 + 135, (cnt <= 3 ? 0 : 180), 45, 45));
-				btn[cnt + 1].requestFocus();
-				btn[cnt + 1].setFont(new Font("맑은 고딕", 1, 15));
-				btn[cnt + 1].setOpaque(false);
-				btn[cnt + 1].setContentAreaFilled(false);
-				btn[cnt + 1].setBorderPainted(false);
-				btn[cnt + 1].setName(cnt + "");
-				isAddProduct = true;
+					++cnt;
+				}
 
-				jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg", 170, 170)), (cnt % 4) * 180 + 10, (cnt <= 3 ? 0 : 180), 170, 170));
-				jp[0].revalidate();
-				jp[0].repaint();
-				++cnt;
+				else {
+					rs = getResult("select * from post where no =?", p_no);
+					rs.next();
+
+					File[] fileList = new File("datafiles/image/post/" + p_no + "/").listFiles();
+					for(int i = 0; i < fileList.length; i++) {
+						createProductImage(fileList.length);
+					}
+				}
 
 			} catch (Exception e1) {
 				e1.printStackTrace();
@@ -229,7 +245,7 @@ public class SaleFrame extends BaseFrame {
 			if(categoryIndex == 0) { showErr("카테고리를 선택해주세요."); return; }
 			if(tf[0].getText().length() == 0 || tf[0].getText().equals("상품 제목을 입력해주세요.")) { showErr("빈칸이 존재합니다."); return; }
 			if(tf[1].getText().length() == 0 || tf[1].getText().equals("숫자만 입력해주세요.")) { showErr("빈칸이 존재합니다."); return; }
-			if(tf[2].getText().length() == 0 || tf[2].getText().equals("여러 장의 상품 사진과 구입 연도, 브랜드, 사용감, 하자 유무 등 구매자에게 필요한 정보를 꼭 포함해 주세요.")) { showErr("빈칸이 존재합니다."); return; }
+			if(area.getText().length() == 0 || area.getText().equals("여러 장의 상품 사진과 구입 연도, 브랜드, 사용감, 하자 유무 등 구매자에게 필요한 정보를 꼭 포함해 주세요.")) { showErr("빈칸이 존재합니다."); return; }
 
 			if(!isAddProduct) { showErr("등록이미지는 최소 한 개의 이미지가 등록되어야 합니다."); return; }
 
@@ -237,8 +253,87 @@ public class SaleFrame extends BaseFrame {
 
 			showInfo("등록이 완료되었습니다.");
 
-			update("insert into post values(null, ?, ?, ?, 0, ?, ?, ?, ?, 1, ?)", tf[0].getText(), tf[2].getText(), tf[1].getText(), rb[0].isSelected() ? 1 : 0, categoryIndex, categorySubIndex, categoryDetailIndex, u_no);
+			update("insert into post values(null, ?, ?, ?, 0, ?, ?, ?, ?, 1, ?)", tf[0].getText(), area.getText(), tf[1].getText(), rb[0].isSelected() ? 1 : 0, categoryIndex, categorySubIndex, categoryDetailIndex, u_no);
 		});
+
+		// 수정
+		if(isCorrectionProduct) {
+			try {
+				rs = getResult("select * from post where no = ?", p_no); rs.next();
+
+				tf[0].setText(rs.getString("title"));
+
+				tf[1].setText(rs.getInt("price") + "");
+
+				area.setText(rs.getString("explanation"));
+
+				rb[0].setSelected(rs.getInt("deliveryfee") == 0 ? false : true);
+
+				rs = getResult("select * from category where no = ?", rs.getInt("category")); rs.next();
+
+				for(int i = 0; i < btn.length; i++) {
+					if(btn[i] == null) continue;
+					if(rs.isFirst()) {
+						if(rs.getString("name").equals(btn[i].getText())) {
+							btn[i].setBackground(new Color(0, 128, 0));
+							btn[i].setForeground(Color.white);
+							lb[150].setText(rs.getString("name") + " > ");
+							lb[151].setText(""); lb[152].setText("");
+							lb[150].setSize(lb[150].getText().length() * 9 + 30, 25);
+							lb[150].revalidate();
+							lb[150].repaint();
+							changeCategorySub(rs.getInt("no"));
+						}
+					}
+				}
+
+
+				rs = getResult("select * from post where no = ?", p_no); rs.next();
+
+				rs = getResult("select * from category where no = ?", rs.getInt("category_sub"));
+
+				if(rs.next()) {
+					for(int i = 0; i < btn.length; i++) {
+						if(btn[i] == null) continue;
+						if(rs.isFirst()) {
+							if(rs.getString("name").equals(btn[i].getText())) {
+								btn[i].setBackground(new Color(0, 128, 0));
+								btn[i].setForeground(Color.white);
+								lb[151].setText(rs.getString("name") + " > ");
+								lb[152].setText("");
+								lb[151].setBounds(lb[150].getX() + lb[150].getWidth(), 935, lb[151].getText().length() * 9 + 30, 25);
+								lb[151].revalidate();
+								lb[151].repaint();
+								changeCategoryDetail(rs.getInt("no")); 
+							}
+						}
+					}
+				}
+
+
+				rs = getResult("select * from post where no = ?", p_no); rs.next();
+
+				rs = getResult("select * from category where no = ?", rs.getInt("category_detail"));
+
+				if (rs.next()) {
+					for(int i = 0; i < btn.length; i++) {
+						if(btn[i] == null) continue;
+						if(rs.getString("name").equals(btn[i].getText())) {
+							btn[i].setBackground(new Color(0, 128, 0));
+							btn[i].setForeground(Color.white);
+							lb[152].setText(rs.getString("name"));
+							lb[152].setBounds(lb[151].getX() + lb[151].getWidth(), 935, lb[152].getText().length() * 9 + 30, 25);
+							lb[152].revalidate();
+							lb[152].repaint();
+						}
+					}
+				}
+
+				btn[1].setText("수정하기");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void changeCategorySub(int category) {
@@ -271,7 +366,7 @@ public class SaleFrame extends BaseFrame {
 									lb[151].revalidate();
 									lb[151].repaint();
 									categorySubIndex = rs.getInt("no");
-									changeCategoryDetail(rs.getInt("no"));
+									changeCategoryDetail(categorySubIndex);
 								}
 							} catch (Exception e1) {
 								e1.printStackTrace();
@@ -385,6 +480,10 @@ public class SaleFrame extends BaseFrame {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	public void createProductImage(int fileLength) {
+
 	}
 
 	public static void main(String[] args) {

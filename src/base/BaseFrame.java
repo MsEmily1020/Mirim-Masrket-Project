@@ -48,6 +48,7 @@ import javax.swing.border.MatteBorder;
 
 import main.MainFrame;
 import main.ProductFrame;
+import main.SaleFrame;
 
 /**
  * 공통된 부분을 메소드로 작업하는 클래스입니다.
@@ -65,6 +66,7 @@ public class BaseFrame extends JFrame {
 	public static int p_no = 1;
 	public static int s_no = 1;
 	public static boolean favoritePage = false;
+	public static boolean isCorrectionProduct = false;
 
 	public JTextArea jta;
 	public JScrollPane jsp;
@@ -92,7 +94,7 @@ public class BaseFrame extends JFrame {
 
 			rs = getResult("select * from post");
 			for (int i = 1; rs.next(); i++) {
-				filter.put(i, new ArrayList(Arrays.asList(rs.getInt("category"), rs.getInt("category_sub"), rs.getInt("category_datail"))));
+				filter.put(i, new ArrayList(Arrays.asList(rs.getInt("category"), rs.getInt("category_sub"), rs.getInt("category_detail"))));
 			}
 
 			rs = getResult("select * from category");
@@ -187,6 +189,7 @@ public class BaseFrame extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
+				update("delete from history where user_no = 0");
 				try {
 					rs = getResult("select * from post order by no desc");
 					rs.next();
@@ -315,6 +318,10 @@ public class BaseFrame extends JFrame {
 					public void mouseClicked(MouseEvent e) {
 						try {
 							p_no = Integer.parseInt(((JPanel) e.getSource()).getName());
+							if(isCorrectionProduct) {
+								changePage(new SaleFrame().main);
+								return;
+							}
 							var rs1 = getResult("select * from post where no = ?", p_no);
 							rs1.next();
 							if(rs1.getInt("state") == 2) { showErr("해당 상품은 예약상품입니다."); return; }

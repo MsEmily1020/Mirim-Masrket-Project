@@ -1,12 +1,10 @@
 package main;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -42,7 +40,10 @@ public class StoreFrame extends BaseFrame {
 			jp[1].add(setBounds(jp[5] = new JPanel(null), 0, 35, 805, 305));
 			jp[1].add(setBounds(jp[6] = new JPanel(null), 0, 35, 805, 305));
 			
-			if(s_no == u_no) btnText = "상품,상점후기,찜,팔로잉".split(",");
+			if(s_no == u_no) { 
+				btnText = "상품,상점후기,찜,팔로잉".split(",");
+				isCorrectionProduct = true;
+			}
 			
 			setComponent(main);
 			

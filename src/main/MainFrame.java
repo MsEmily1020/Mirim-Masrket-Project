@@ -47,9 +47,23 @@ public class MainFrame extends BaseFrame {
 			main.add(setBounds(btn[9] = actbtn("", e -> search()), 600, 46, 28, 28));
 
 			btn[5].addActionListener(e -> changeFrame(new MainFrame()));
-			btn[6].addActionListener(e -> changePage(new SaleFrame().main));
-			btn[7].addActionListener(e -> { favoritePage = false; s_no = u_no; changePage(new StoreFrame().main); });
-			btn[8].addActionListener(e -> changeFrame(new ChartFrame()));
+			btn[6].addActionListener(e -> { 
+				if(u_no == 0) { showErr("로그인을 해주세요."); return;}
+				isCorrectionProduct = false;
+				changePage(new SaleFrame().main);
+			});
+
+			btn[7].addActionListener(e -> {
+				if(u_no == 0) { showErr("로그인을 해주세요."); return;}
+				favoritePage = false; 
+				s_no = u_no; 
+				changePage(new StoreFrame().main); 
+			});
+
+			btn[8].addActionListener(e -> {
+				if(u_no == 0) { showErr("로그인을 해주세요."); return; }
+				changeFrame(new ChartFrame()); 
+			});
 
 			main.add(setBounds(tf[0] = new JTextField("상품명, 지역명, @상점명 입력"), 171, 46, 430, 28));
 
@@ -145,16 +159,16 @@ public class MainFrame extends BaseFrame {
 
 			jsp.getViewport().setView(new BackgroundFrame().main);
 			jsp.getVerticalScrollBar().setUnitIncrement(8);
-			
+
 			recentProduct();
 			favoriteList();
-			
+
 			tf[0].addKeyListener(new KeyAdapter() {
 				public void keyPressed(KeyEvent e) {
 					if(e.getKeyCode() == KeyEvent.VK_ENTER) search();
 				};
 			});
-			
+
 			favoriteLb.addMouseListener(new MouseAdapter() {
 				public void mouseClicked(java.awt.event.MouseEvent e) {
 					s_no = u_no;
@@ -200,7 +214,14 @@ public class MainFrame extends BaseFrame {
 	private void search() {
 		try {
 			if(tf[0].getText().equals("상품명, 지역명, @상점명 입력") || tf[0].getText().length() == 0) { showErr("검색어를 입력해주세요."); return; }
-			
+
+			if(u_no == 0) {
+				rs = getResult("select * from post where title like '%" + tf[0].getText() + "%'");
+				if(!rs.next()) { showErr("검색 결과가 없습니다."); return; }
+				changePage(new SearchFrame(tf[0].getText()).main);
+				return;
+			}
+
 			jp[3].removeAll();
 
 			update("insert into history values(null, ?, ?)", u_no, tf[0].getText());
@@ -224,11 +245,11 @@ public class MainFrame extends BaseFrame {
 			rs = getResult("select * from post where title like '%" + rs.getString("content") + "%'");
 			if(!rs.next()) { showErr("검색 결과가 없습니다."); return; }
 
+			changePage(new SearchFrame().main);
+			return;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		changePage(new SearchFrame().main);
 	}
 
 	public void search(Object obj) {

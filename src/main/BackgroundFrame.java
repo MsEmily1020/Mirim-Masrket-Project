@@ -22,7 +22,7 @@ public class BackgroundFrame extends BaseFrame {
 			main.add(setBounds(jp[0] = new JPanel(new FlowLayout(0, 0, 0)), 0, 0, 860 * 60, 275));
 			main.add(setBounds(page = new JPanel(new FlowLayout(0)), 0, 330, 860, 50000));
 			
-			for (int i = 0; i < 60; i++) {
+			for (int i = 0; i < 1000; i++) {
 				jp[0].add(new JLabel(getIcon("./datafiles/image/background/" + ((i % 7) + 1) + ".jpg", 860, 275)));
 			}
 			
