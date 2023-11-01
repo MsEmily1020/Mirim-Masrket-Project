@@ -118,9 +118,14 @@ public class StoreFrame extends BaseFrame {
 			rs = getResult("select count(*) from post where user = ?", s_no);
 			rs.next();
 			int cnt = rs.getInt("count(*)");
+			
 			jp[3].add(setBounds(new JLabel("<html>상품" + " <font color='red'>" + cnt + "</font></html>"),20, 20, 80, 20));
 			jp[3].add(setBounds(new JLabel(), 20, 55, 750, 1));
 			jp[3].add(setBounds(new JLabel("<html>전체" + " <font color='gray'>" + cnt + "개</font></html>"), 20, 70, 80, 20));
+			if (cnt == 0) {
+				jp[3].add(setBounds(new JLabel("등록한 상품이 존재하지 않습니다.", 0), 30, 130, 805, 20));
+				return;
+			}
 			jp[3].add(setBounds(page = new JPanel(new FlowLayout(0)), 0, 100, 805, ((cnt % 5 == 0) ? cnt / 5 : cnt / 5 + 1) * 200 + 60));
 			page.setName("5");
 			page.setBackground(Color.white);
