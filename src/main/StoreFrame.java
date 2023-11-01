@@ -30,8 +30,14 @@ public class StoreFrame extends BaseFrame {
 			main.add(setBounds(area = new JTextArea(), 260, 50, 545, 170));
 			main.add(setBounds(btn[0] = new JButton("소개글 수정"), 260, 220, 105, 30));
 			
-			main.add(setBounds(jp[1] = new JPanel(), 30, 290, 805, 410));
+			main.add(setBounds(jp[1] = new JPanel(null), 30, 290, 805, 410));
 			jp[1].add(setBounds(jp[2] = new JPanel(new GridLayout()), 0, 0, 835, 35));
+			
+			// 버튼 클릭 후 panel
+			jp[1].add(setBounds(jp[3] = new JPanel(), 0, 35, 805, 305));
+			jp[1].add(setBounds(jp[4] = new JPanel(), 0, 35, 805, 305));
+			jp[1].add(setBounds(jp[5] = new JPanel(), 0, 35, 805, 305));
+			jp[1].add(setBounds(jp[6] = new JPanel(), 0, 35, 805, 305));
 			
 			if(s_no == u_no) btnText = "상품,상점후기,찜,팔로잉".split(",");
 
@@ -42,8 +48,16 @@ public class StoreFrame extends BaseFrame {
 				btn[i].setBackground(Color.white);
 				btn[i].setBorder(new MatteBorder(0, 0, 1, 0, Color.black));
 			}
+			
+			jp[4].setVisible(false);
+			jp[5].setVisible(false);
+			jp[6].setVisible(false);
 
-			if(favoritePage) btn[2].setBorder(new MatteBorder(1, 1, 0, 1, Color.black));
+			if(favoritePage) {
+				jp[5].setVisible(true);
+				jp[3].setVisible(false);
+				btn[2].setBorder(new MatteBorder(1, 1, 0, 1, Color.black));
+			}
 			else btn[1].setBorder(new MatteBorder(1, 1, 0, 1, Color.black));
 
 			area.setText(rs.getString("explain") == null ? "" : rs.getString("explain"));
@@ -80,10 +94,12 @@ public class StoreFrame extends BaseFrame {
 				btn[i].addActionListener(e -> {
 					for(int j = 1; j <= btnText.length; j++) {
 						if(e.getSource() == btn[j]) {
+							if(btn[j].getText().equals(btnText[j - 1])) jp[j + 2].setVisible(true);
 							btn[j].setBorder(new MatteBorder(1, 1, 0, 1, Color.black));
 						}
 						
 						else {
+							jp[j + 2].setVisible(false);
 							btn[j].setBorder(new MatteBorder(0, 0, 1, 0, Color.black));
 						}
 					}
