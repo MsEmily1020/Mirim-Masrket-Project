@@ -41,6 +41,8 @@ public class SearchFrame extends BaseFrame {
 
 			btn[0].addActionListener(e -> {
 				try {
+					btn[0].setForeground(new Color(0, 128, 0));
+					for(int i = 1; i <= 3; i++) btn[i].setForeground(Color.gray);
 					page.removeAll();
 					showProductList(page, getResult("select * from post where title like '%" + rs.getString("content") + "%' order by no desc"));
 				} catch (Exception e1) {
@@ -50,6 +52,8 @@ public class SearchFrame extends BaseFrame {
 
 			btn[1].addActionListener(e -> {
 				try {
+					btn[1].setForeground(new Color(0, 128, 0));
+					for(int i = 0; i <= 3 && i != 1; i++) btn[i].setForeground(Color.gray);
 					page.removeAll();
 					showProductList(page, getResult("select * from post where title like '%" + rs.getString("content") + "%' order by view desc"));
 				} catch (Exception e1) {
@@ -59,6 +63,8 @@ public class SearchFrame extends BaseFrame {
 
 			btn[2].addActionListener(e -> {
 				try {
+					btn[2].setForeground(new Color(0, 128, 0));
+					for(int i = 0; i <= 3 && i != 2; i++) btn[i].setForeground(Color.gray);
 					page.removeAll();
 					showProductList(page, getResult("select * from post where title like '%" + rs.getString("content") + "%' order by price"));
 				} catch (Exception e1) {
@@ -68,6 +74,8 @@ public class SearchFrame extends BaseFrame {
 
 			btn[3].addActionListener(e -> {
 				try {
+					btn[3].setForeground(new Color(0, 128, 0));
+					for(int i = 0; i <= 2; i++) btn[i].setForeground(Color.gray);
 					page.removeAll();
 					showProductList(page, getResult("select * from post where title like '%" + rs.getString("content") + "%' order by price desc"));
 				} catch (Exception e1) {
@@ -115,9 +123,13 @@ public class SearchFrame extends BaseFrame {
 			setComponent(jp[0]);
 
 			lb[4].setForeground(new Color(0, 128, 0));
+			
+			for(int i = 0 ; i < 4; i++) btn[i].setForeground(Color.gray); 
 
 			btn[0].addActionListener(e -> {
 				try {
+					btn[0].setForeground(new Color(0, 128, 0));
+					for(int i = 1; i <= 3; i++) btn[i].setForeground(Color.gray);
 					page.removeAll();
 					showProductList(page, getResult("select * from post where title like '%" + content + "%' order by no desc"));
 				} catch (Exception e1) {
@@ -127,6 +139,8 @@ public class SearchFrame extends BaseFrame {
 
 			btn[1].addActionListener(e -> {
 				try {
+					btn[1].setForeground(new Color(0, 128, 0));
+					for(int i = 0; i <= 3 && i != 1; i++) btn[i].setForeground(Color.gray);
 					page.removeAll();
 					showProductList(page, getResult("select * from post where title like '%" + content + "%' order by view desc"));
 				} catch (Exception e1) {
@@ -136,6 +150,8 @@ public class SearchFrame extends BaseFrame {
 
 			btn[2].addActionListener(e -> {
 				try {
+					btn[2].setForeground(new Color(0, 128, 0));
+					for(int i = 0; i <= 3 && i != 2; i++) btn[i].setForeground(Color.gray);
 					page.removeAll();
 					showProductList(page, getResult("select * from post where title like '%" + content + "%' order by price"));
 				} catch (Exception e1) {
@@ -145,6 +161,8 @@ public class SearchFrame extends BaseFrame {
 
 			btn[3].addActionListener(e -> {
 				try {
+					btn[3].setForeground(new Color(0, 128, 0));
+					for(int i = 0; i <= 2; i++) btn[i].setForeground(Color.gray);
 					page.removeAll();
 					showProductList(page, getResult("select * from post where title like '%" + content + "%' order by price desc"));
 				} catch (Exception e1) {
