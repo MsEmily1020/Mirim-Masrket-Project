@@ -317,6 +317,10 @@ public class BaseFrame extends JFrame {
 				p.addMouseListener(new MouseAdapter() {
 					public void mouseClicked(MouseEvent e) {
 						try {
+							if(u_no == 0) {
+								showErr("로그인 후 이용해주세요.");
+								return;
+							}
 							p_no = Integer.parseInt(((JPanel) e.getSource()).getName());
 							if(isCorrectionProduct) {
 								changePage(new SaleFrame().main);

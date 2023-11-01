@@ -48,20 +48,20 @@ public class MainFrame extends BaseFrame {
 
 			btn[5].addActionListener(e -> changeFrame(new MainFrame()));
 			btn[6].addActionListener(e -> { 
-				if(u_no == 0) { showErr("로그인을 해주세요."); return;}
+				if(u_no == 0) { showErr("로그인 후 이용해주세요."); return;}
 				isCorrectionProduct = false;
 				changePage(new SaleFrame().main);
 			});
 
 			btn[7].addActionListener(e -> {
-				if(u_no == 0) { showErr("로그인을 해주세요."); return;}
+				if(u_no == 0) { showErr("로그인 후 이용해주세요."); return;}
 				favoritePage = false; 
 				s_no = u_no; 
 				changePage(new StoreFrame().main); 
 			});
 
 			btn[8].addActionListener(e -> {
-				if(u_no == 0) { showErr("로그인을 해주세요."); return; }
+				if(u_no == 0) { showErr("로그인 후 이용해주세요."); return; }
 				changeFrame(new ChartFrame()); 
 			});
 
@@ -216,6 +216,17 @@ public class MainFrame extends BaseFrame {
 			if(tf[0].getText().equals("상품명, 지역명, @상점명 입력") || tf[0].getText().length() == 0) { showErr("검색어를 입력해주세요."); return; }
 
 			if(u_no == 0) {
+				jp[3].add(setBounds(actbtn("X", e -> {
+					jp[3].remove(((JButton) e.getSource()));
+					jp[3].remove(jp[3].getComponentAt(0, ((JButton) e.getSource()).getY()));
+					jp[3].revalidate();
+					jp[3].repaint();
+				}), (int) (jp[3].getWidth() * 0.05), jp[3].getHeight() / 10), 0);
+				jp[3].add(btn[20] = setBounds(actbtn(tf[0].getText(), e -> tf[0].setText(e.getActionCommand())), (int) (jp[3].getWidth() * 0.95), jp[3].getHeight() / 10), 0);
+				btn[20].setHorizontalAlignment(2);
+
+				setComponent(jp[3]);
+				
 				rs = getResult("select * from post where title like '%" + tf[0].getText() + "%'");
 				if(!rs.next()) { showErr("검색 결과가 없습니다."); return; }
 				changePage(new SearchFrame(tf[0].getText()).main);
