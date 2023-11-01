@@ -31,7 +31,7 @@ public class SaleFrame extends BaseFrame {
 	public static int categoryIndex;
 	public static int categorySubIndex;
 	public static int categoryDetailIndex;
-	
+
 	JTextArea area;
 
 	public SaleFrame() {
@@ -130,58 +130,46 @@ public class SaleFrame extends BaseFrame {
 			if (path == null || name == null) return;
 
 			try {
-				if(!isCorrectionProduct) { 
-					rs = getResult("select * from post order by no desc");
-					rs.next();
+				rs = getResult("select * from post order by no desc");
+				rs.next();
 
-					int newFolderNo = Integer.parseInt(rs.getString("no")) + 1;
+				int newFolderNo = Integer.parseInt(rs.getString("no")) + 1;
 
-					File newFolder = new File("datafiles/image/post/" + newFolderNo + "/");
-					if(!newFolder.isDirectory()) newFolder.mkdirs();
+				File newFolder = new File("datafiles/image/post/" + newFolderNo + "/");
+				if(!newFolder.isDirectory()) newFolder.mkdirs();
 
-					ImageIO.write(ImageIO.read(new File(path + name)), "jpg", new File(newFolder, cnt + ".jpg"));
+				ImageIO.write(ImageIO.read(new File(path + name)), "jpg", new File(newFolder, cnt + ".jpg"));
 
-					jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg", 170, 170)), 2, 2, 2, 2));
+				jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg", 170, 170)), 2, 2, 2, 2));
 
-					lb[3].setText("<html>상품이미지<font color='red'>*</font> <font color='gray'>(" + cnt + "/7)</font></html>");
+				lb[3].setText("<html>상품이미지<font color='red'>*</font> <font color='gray'>(" + cnt + "/7)</font></html>");
 
-					jp[0].add(setBounds(btn[cnt + 1] = actbtn("X", e2 -> {
-						jp[0].remove(((JButton) e2.getSource()));
-						jp[0].remove(jp[0].getComponentAt(((JButton)e2.getSource()).getX(), ((JButton) e2.getSource()).getY()));
-						jp[0].revalidate();
-						jp[0].repaint();
-						new File("datafiles/image/post/" + newFolderNo + "/" + ((JButton)e2.getSource()).getName() + ".jpg").delete();
-						File[] fileList = new File("datafiles/image/post/" + newFolderNo + "/").listFiles();
-						for (int i = 0; i < fileList.length; i++)
-							fileList[i].renameTo(new File("datafiles/image/post/" + newFolderNo + "/" + (i + 1) + ".jpg"));
-						cnt = fileList.length;
-						lb[3].setText("<html>상품이미지<font color='red'>*</font> <font color='gray'>(" + cnt + "/7)</font></html>");
-						if(cnt == 0) { isAddProduct = false; return; }
-						changeProductImage(fileList.length);
-					}), (cnt % 4) * 180 + 135, (cnt <= 3 ? 0 : 180), 45, 45));
-					btn[cnt + 1].requestFocus();
-					btn[cnt + 1].setFont(new Font("맑은 고딕", 1, 15));
-					btn[cnt + 1].setOpaque(false);
-					btn[cnt + 1].setContentAreaFilled(false);
-					btn[cnt + 1].setBorderPainted(false);
-					btn[cnt + 1].setName(cnt + "");
-					isAddProduct = true;
-
-					jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg", 170, 170)), (cnt % 4) * 180 + 10, (cnt <= 3 ? 0 : 180), 170, 170));
+				jp[0].add(setBounds(btn[cnt + 1] = actbtn("X", e2 -> {
+					jp[0].remove(((JButton) e2.getSource()));
+					jp[0].remove(jp[0].getComponentAt(((JButton)e2.getSource()).getX(), ((JButton) e2.getSource()).getY()));
 					jp[0].revalidate();
 					jp[0].repaint();
-					++cnt;
-				}
+					new File("datafiles/image/post/" + newFolderNo + "/" + ((JButton)e2.getSource()).getName() + ".jpg").delete();
+					File[] fileList = new File("datafiles/image/post/" + newFolderNo + "/").listFiles();
+					for (int i = 0; i < fileList.length; i++)
+						fileList[i].renameTo(new File("datafiles/image/post/" + newFolderNo + "/" + (i + 1) + ".jpg"));
+					cnt = fileList.length;
+					lb[3].setText("<html>상품이미지<font color='red'>*</font> <font color='gray'>(" + cnt + "/7)</font></html>");
+					if(cnt == 0) { isAddProduct = false; return; }
+					changeProductImage(fileList.length);
+				}), (cnt % 4) * 180 + 135, (cnt <= 3 ? 0 : 180), 45, 45));
+				btn[cnt + 1].requestFocus();
+				btn[cnt + 1].setFont(new Font("맑은 고딕", 1, 15));
+				btn[cnt + 1].setOpaque(false);
+				btn[cnt + 1].setContentAreaFilled(false);
+				btn[cnt + 1].setBorderPainted(false);
+				btn[cnt + 1].setName(cnt + "");
+				isAddProduct = true;
 
-				else {
-					rs = getResult("select * from post where no =?", p_no);
-					rs.next();
-
-					File[] fileList = new File("datafiles/image/post/" + p_no + "/").listFiles();
-					for(int i = 0; i < fileList.length; i++) {
-						createProductImage(fileList.length);
-					}
-				}
+				jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + newFolderNo + "/" + cnt + ".jpg", 170, 170)), (cnt % 4) * 180 + 10, (cnt <= 3 ? 0 : 180), 170, 170));
+				jp[0].revalidate();
+				jp[0].repaint();
+				++cnt;
 
 			} catch (Exception e1) {
 				e1.printStackTrace();
@@ -328,6 +316,12 @@ public class SaleFrame extends BaseFrame {
 						}
 					}
 				}
+
+				rs = getResult("select * from post where no = ?", p_no);
+				rs.next();
+
+				File[] fileList = new File("datafiles/image/post/" + p_no + "/").listFiles();
+				createProductImage(fileList.length);
 
 				btn[1].setText("수정하기");
 			} catch (Exception e) {
@@ -483,7 +477,43 @@ public class SaleFrame extends BaseFrame {
 	}
 
 	public void createProductImage(int fileLength) {
+		
+		for(Component comp : jp[0].getComponents()) {
+			if(comp != btn[0]) jp[0].remove(comp);
+		}
+		
+		cnt = fileLength;
+		lb[3].setText("<html>상품이미지<font color='red'>*</font> <font color='gray'>(" + cnt + "/7)</font></html>");
 
+		for(int i = 1; i <= cnt; i++) {
+			jp[0].add(setBounds(btn[i + 1] = actbtn("X", e -> {
+				jp[0].remove(((JButton) e.getSource()));
+				jp[0].remove(jp[0].getComponentAt(((JButton)e.getSource()).getX(), ((JButton) e.getSource()).getY()));
+				jp[0].revalidate();
+				jp[0].repaint();
+				new File("datafiles/image/post/" + p_no + "/" + ((JButton)e.getSource()).getName() + ".jpg").delete();
+				File[] fileList = new File("datafiles/image/post/" + p_no + "/").listFiles();
+				for (int j = 0; j < fileList.length; j++)
+					fileList[j].renameTo(new File("datafiles/image/post/" + p_no + "/" + (j + 1) + ".jpg"));
+				cnt = fileList.length;
+				lb[3].setText("<html>상품이미지<font color='red'>*</font> <font color='gray'>(" + cnt + "/7)</font></html>");
+				if(cnt == 0) { isAddProduct = false; return; }
+				createProductImage(fileList.length);
+			}), (i % 4) * 180 + 135, (i <= 3 ? 0 : 180), 45, 45));
+			btn[i + 1].requestFocus();
+			btn[i + 1].setFont(new Font("맑은 고딕", 1, 15));
+			btn[i + 1].setOpaque(false);
+			btn[i + 1].setContentAreaFilled(false);
+			btn[i + 1].setBorderPainted(false);
+			btn[i + 1].setName(i + "");
+			isAddProduct = true;
+
+			jp[0].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + p_no + "/" + i + ".jpg", 170, 170)), (i % 4) * 180 + 10, (i <= 3 ? 0 : 180), 170, 170));
+			jp[0].revalidate();
+			jp[0].repaint();
+		}
+		
+		cnt++;
 	}
 
 	public static void main(String[] args) {
