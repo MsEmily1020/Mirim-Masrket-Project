@@ -25,9 +25,6 @@ public class StoreFrame extends BaseFrame {
 	public StoreFrame() {
 		super("미림장터", 1000, 1000);
 
-		u_no = 5;
-		s_no = 5;
-
 		try {
 			rs = getResult("select * from user where no = ?", s_no);
 			rs.next();
