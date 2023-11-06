@@ -20,6 +20,7 @@ public class StoreFrame extends BaseFrame {
 
 	JTextArea area, area1;
 	String[] btnText = "상품,상점후기,팔로잉".split(","); 
+	int cnt;
 
 	public StoreFrame() {
 		super("미림장터", 1000, 1000);
@@ -124,7 +125,7 @@ public class StoreFrame extends BaseFrame {
 			rs = getResult("select count(*) as cnt from review where user = ?", s_no);
 			rs.next();
 
-			int cnt = rs.getInt("cnt");
+			cnt = rs.getInt("cnt");
 			if(cnt == 0) {
 				jp[4].setSize(new Dimension(jp[4].getWidth(), 130));
 				jp[4].add(setBounds(new JLabel("상점후기가 없습니다.", 0), 0, 0, 805, 20));
@@ -168,7 +169,7 @@ public class StoreFrame extends BaseFrame {
 								String content = ((JTextArea) jp[4].getComponent( Integer.parseInt(((JButton)e.getSource()).getName()) - 1 ).getComponentAt(((JButton)e.getSource()).getX(), ((JButton) e.getSource()).getY() - 40)).getText();
 								rs = getResult("select * from review where user = ?", s_no);
 								while(rs.next()) {
-									if(rs.getRow() == Integer.parseInt(((JButton)e.getSource()).getName())) {
+									if(rs.getInt("no") == Integer.parseInt(((JButton)e.getSource()).getName())) {
 										update("update review set content = ? where no = ?", content, rs.getInt("no"));
 										jp[4].getComponent( Integer.parseInt(((JButton)e.getSource()).getName()) - 1 ).getComponentAt(((JButton)e.getSource()).getX(), ((JButton) e.getSource()).getY() - 40).setEnabled(false);
 										((JButton)e.getSource()).setText("수정하기");
@@ -181,14 +182,33 @@ public class StoreFrame extends BaseFrame {
 						btn[rs.getRow() + 9].setBackground(Color.white);
 						btn[rs.getRow() + 9].setBorder(null);
 						btn[rs.getRow() + 9].setForeground(Color.LIGHT_GRAY);
-						btn[rs.getRow() + 9].setName(rs.getRow() + "");
-						jp[7].add(setBounds(btn[11] = actbtn("삭제하기", e -> {
+						btn[rs.getRow() + 9].setName(rs.getInt("no") + "");
 
+						jp[7].add(setBounds(btn[11] = actbtn("삭제하기", e -> {
+							try {
+								rs = getResult("select * from review where user = ?", s_no);
+								while(rs.next()) {
+									if(rs.getInt("no") == Integer.parseInt(((JButton)e.getSource()).getName())) {
+										update("delete from review where no = ?", rs.getInt("no"));
+									}
+								}
+								rs = getResult("select count(*) as cnt from review where user = ?", s_no);
+								rs.next();
+								
+								cnt = rs.getInt("cnt");
+
+								jp[4].setSize(new Dimension(jp[4].getWidth(), cnt * 180));
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+							jp[4].remove(jp[4].getComponentAt(((JButton)e.getSource()).getX(), ((JButton) e.getSource()).getY()));
+							jp[4].revalidate();
+							jp[4].repaint();
 						}), 90, 140, 50, 30));
 						btn[11].setBackground(Color.white);
 						btn[11].setBorder(null);
 						btn[11].setForeground(Color.LIGHT_GRAY);
-
+						btn[11].setName(rs.getInt("no") + "");
 					}
 				}
 			}
