@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -17,11 +18,14 @@ import base.BaseFrame;
 
 public class StoreFrame extends BaseFrame {
 
-	JTextArea area;
+	JTextArea area, area1;
 	String[] btnText = "상품,상점후기,팔로잉".split(","); 
 
 	public StoreFrame() {
 		super("미림장터", 1000, 1000);
+
+		u_no = 5;
+		s_no = 5;
 
 		try {
 			rs = getResult("select * from user where no = ?", s_no);
@@ -119,7 +123,7 @@ public class StoreFrame extends BaseFrame {
 			}
 			rs = getResult("select count(*) as cnt from review where user = ?", s_no);
 			rs.next();
-			
+
 			int cnt = rs.getInt("cnt");
 			if(cnt == 0) {
 				jp[4].setSize(new Dimension(jp[4].getWidth(), 130));
@@ -131,7 +135,7 @@ public class StoreFrame extends BaseFrame {
 				rs = getResult("select * from review r inner join post p on r.post = p.no inner join user u on p.user = u.no where r.user = ?", s_no);
 
 				while(rs.next()) {
-					jp[4].add(setBounds(jp[7] = new JPanel(null), jp[4].getWidth(), 30));
+					jp[4].add(setBounds(jp[7] = new JPanel(null), jp[4].getWidth(), 40));
 					jp[7].setBackground(Color.white);
 					jp[7].setBorder(new MatteBorder(1, 0, 1, 0, Color.lightGray));
 					jp[7].add(setBounds(lb[1] = new JLabel(rs.getString("name")),30, 10, 50, 30));
@@ -142,16 +146,49 @@ public class StoreFrame extends BaseFrame {
 					for(int i = 1; i <= rs.getInt("score"); i++) jp[7].getComponent(i).setForeground(Color.orange); 
 					jp[7].add(setBounds(lb[2] = new JLabel(rs.getString("title") + " >", 0), 30, 70, rs.getString("title").length() * 15, 20));
 					lb[2].setBorder(new LineBorder(Color.black));
-					jp[7].add(setBounds(lb[3] = new JLabel("<html>" + rs.getString("content") + "</html>"), 30, 90, 780, 50));
+					jp[7].add(setBounds(area1 = new JTextArea(), 30, 100, 750, 50));
+					area1.setText(rs.getString("content"));
+					area1.setLineWrap(true);
+					area1.setEnabled(false);
+					area1.setDisabledTextColor(Color.black);
 					if(u_no == s_no) {
-						jp[7].add(setBounds(btn[10] = new JButton("수정하기"), 30, 140, 50, 30));
-						btn[10].setBackground(Color.white);
-						btn[10].setBorder(null);
-						btn[10].setForeground(Color.LIGHT_GRAY);
-						jp[7].add(setBounds(btn[11] = new JButton("삭제하기"), 90, 140, 50, 30));
+						jp[7].add(setBounds(btn[rs.getRow() + 9] = actbtn("수정하기", e -> {
+							if(((JButton)e.getSource()).getText().equals("수정하기")) {
+								jp[4].getComponent( Integer.parseInt(((JButton)e.getSource()).getName()) - 1 ).getComponentAt(((JButton)e.getSource()).getX(), ((JButton) e.getSource()).getY() - 40).setEnabled(true);
+								jp[4].getComponent( Integer.parseInt(((JButton)e.getSource()).getName()) - 1 ).getComponentAt(((JButton)e.getSource()).getX(), ((JButton) e.getSource()).getY() - 40).requestFocus();
+								((JButton)e.getSource()).setText("완료");
+								return;
+							}
+							if(((JTextArea) jp[4].getComponent( Integer.parseInt(((JButton)e.getSource()).getName()) - 1 ).getComponentAt(((JButton)e.getSource()).getX(), ((JButton) e.getSource()).getY() - 40)).getText().length() == 0) {
+								showErr("빈칸입니다.");
+								return;
+							}
+
+							try {
+								String content = ((JTextArea) jp[4].getComponent( Integer.parseInt(((JButton)e.getSource()).getName()) - 1 ).getComponentAt(((JButton)e.getSource()).getX(), ((JButton) e.getSource()).getY() - 40)).getText();
+								rs = getResult("select * from review where user = ?", s_no);
+								while(rs.next()) {
+									if(rs.getRow() == Integer.parseInt(((JButton)e.getSource()).getName())) {
+										update("update review set content = ? where no = ?", content, rs.getInt("no"));
+										jp[4].getComponent( Integer.parseInt(((JButton)e.getSource()).getName()) - 1 ).getComponentAt(((JButton)e.getSource()).getX(), ((JButton) e.getSource()).getY() - 40).setEnabled(false);
+										((JButton)e.getSource()).setText("수정하기");
+									}
+								}
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+						}), 30, 140, 50, 30));
+						btn[rs.getRow() + 9].setBackground(Color.white);
+						btn[rs.getRow() + 9].setBorder(null);
+						btn[rs.getRow() + 9].setForeground(Color.LIGHT_GRAY);
+						btn[rs.getRow() + 9].setName(rs.getRow() + "");
+						jp[7].add(setBounds(btn[11] = actbtn("삭제하기", e -> {
+
+						}), 90, 140, 50, 30));
 						btn[11].setBackground(Color.white);
 						btn[11].setBorder(null);
 						btn[11].setForeground(Color.LIGHT_GRAY);
+
 					}
 				}
 			}
