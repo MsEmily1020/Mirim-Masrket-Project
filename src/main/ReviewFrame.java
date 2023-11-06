@@ -22,10 +22,9 @@ public class ReviewFrame extends BaseFrame {
 			rs.next();
 
 			main.add(setBounds(jp[0] = new JPanel(), 0, 10, 285, 55));
-			main.add(setBounds(jta = new JTextArea(rs.isFirst() ? rs.getString("content") : ""), 5, 70, 275, 70));
-			if(rs.isFirst()) this.setTitle("리뷰수정");  
+			main.add(setBounds(jta = new JTextArea(), 5, 70, 275, 70));
 			main.add(setBounds(btn[0] = actbtn("취소", e -> changeFrame(new MainFrame())), 5, 145, 140, 40));
-			main.add(setBounds(btn[1] = actbtn(rs.getRow() == 0 ? "등록" : "수정", e -> {
+			main.add(setBounds(btn[1] = actbtn("등록", e -> {
 				try {
 					if(!jp[0].getComponent(0).isEnabled()) { showErr("점수는 최소 1점 이상 입력해주세요."); return; }
 					if(jta.getText().length() == 0) { showErr("내용을 입력해주세요."); return; }
@@ -36,11 +35,6 @@ public class ReviewFrame extends BaseFrame {
 					if (e.getActionCommand().equals("등록")) {
 						update("insert into review(user, post, content, score) values(?,?,?,?)", u_no, p_no, jta.getText(), cnt);
 						showInfo("등록이 완료되었습니다.");
-					}
-
-					else if (e.getActionCommand().equals("수정")) {
-						update("update review set content = ?, score = ? where user = ? and post = ?", jta.getText(), cnt, u_no, p_no);
-						showInfo("수정이 완료되었습니다.");
 					}
 
 					changeFrame(new MainFrame());
