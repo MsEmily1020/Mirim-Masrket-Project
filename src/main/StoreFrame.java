@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
@@ -8,8 +9,8 @@ import java.awt.GridLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import javax.swing.AbstractButton;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -27,9 +28,9 @@ public class StoreFrame extends BaseFrame {
 	public StoreFrame() {
 		super("미림장터", 1000, 1000);
 
-		u_no = 5;
-		s_no = 5;
-		
+		u_no = 3;
+		s_no = 3;
+
 		try {
 			rs = getResult("select * from user where no = ?", s_no);
 			rs.next();
@@ -47,7 +48,7 @@ public class StoreFrame extends BaseFrame {
 			// 버튼 클릭 후 panel
 			jp[1].add(setBounds(jp[3] = new JPanel(null), 0, 35, 805, 1000));
 			jp[1].add(setBounds(jp[4] = new JPanel(new GridLayout(0, 1)), 0, 45, 805, 405));
-			jp[1].add(setBounds(jp[5] = new JPanel(null), 0, 35, 805, 305));
+			jp[1].add(setBounds(jp[5] = new JPanel(null), 0, 35, 805, 1000));
 			jp[1].add(setBounds(jp[6] = new JPanel(null), 0, 35, 805, 305));
 
 			if(s_no == u_no) { 
@@ -149,7 +150,7 @@ public class StoreFrame extends BaseFrame {
 					for(int i = 1; i <= rs.getInt("score"); i++) jp[7].getComponent(i).setForeground(Color.orange); 
 					jp[7].add(setBounds(lb[2] = new JLabel(rs.getString("title") + " >", 0), 30, 70, rs.getString("title").length() * 15, 20));
 					lb[2].setName(rs.getString("title"));
-					
+
 					lb[2].addMouseListener(new MouseAdapter() {
 						@Override
 						public void mouseClicked(MouseEvent e) {
@@ -211,7 +212,7 @@ public class StoreFrame extends BaseFrame {
 								}
 								rs = getResult("select count(*) as cnt from review where user = ?", s_no);
 								rs.next();
-								
+
 								cnt = rs.getInt("cnt");
 
 								jp[4].setSize(new Dimension(jp[4].getWidth(), cnt * 180));
@@ -228,6 +229,68 @@ public class StoreFrame extends BaseFrame {
 						btn[11].setName(rs.getInt("no") + "");
 					}
 				}
+			}
+
+			rs = getResult("select count(*) from favorite where user = ?", s_no);
+			rs.next();
+			cnt = rs.getInt("count(*)");
+			if(cnt == 0) {
+				jp[5].add(setBounds(new JLabel("찜한 상품이 없습니다.", 0), 30, 130, 805, 20));
+			}
+
+			else {
+				jp[5].add(setBounds(new JLabel("<html>찜 <font color='red'>" + cnt + "</font></html>"), 20, 20, 80, 20));
+				jp[5].add(setBounds(new JLabel(), 20, 55, 750, 1));
+				((JLabel)jp[5].getComponent(1)).setBorder(new LineBorder(Color.LIGHT_GRAY, 2));
+				jp[5].add(setBounds(ch[0] = new JCheckBox(), 20, 70, 20, 20));
+				ch[0].setBackground(Color.white);
+				jp[5].add(setBounds(btn[190] = new JButton("선택삭제"), 60, 70, 90, 20));
+				btn[190].setBackground(Color.white);
+				btn[190].setBorder(new LineBorder(Color.black));
+
+				jp[5].add(setBounds(jp[8] = new JPanel(new FlowLayout(FlowLayout.LEADING, 20, 20)), 0, 100, jp[5].getWidth(), ((cnt % 2 == 0) ? (cnt / 2) : (cnt / 2 + 1)) * 140));
+				jp[8].setBackground(Color.white);
+
+				rs = getResult("select * from favorite f join post p on p.no = f.post where f.user = ?", s_no);
+				while(rs.next()) {
+					jp[8].add(setBounds(jp[9] = new JPanel(null), jp[8].getWidth() / 2 - 30, 100));
+					jp[9].add(setBounds(ch[1] = new JCheckBox(), 340, 15, 20, 20));
+					jp[9].setBorder(new LineBorder(Color.black));
+					jp[9].setBackground(Color.white);
+					jp[9].add(setBounds(new JLabel(getIcon("datafiles/image/post/" + rs.getInt("no") + "/1.jpg", 100, 92)), 3, 3, 100, 92));
+					jp[9].add(setBounds(new JLabel(rs.getString("title")), 120, 10, 200, 30));
+					ch[1].setBackground(Color.white);
+					jp[9].add(setBounds(new JLabel(String.format("%,d원", rs.getInt("price"))), 120, 60, 300, 40));
+				}
+
+				for(Component comp : jp[8].getComponents()) {
+					((JCheckBox)((JPanel) comp).getComponent(0)).addActionListener(e -> {
+						if(!((JCheckBox)((JPanel) comp).getComponent(0)).isSelected()) {
+							ch[0].setSelected(false);
+						}
+					});
+				}
+
+				ch[0].addActionListener(e -> {
+					if(ch[0].isSelected()) {
+						for(Component comp : jp[8].getComponents())
+							((JCheckBox)((JPanel) comp).getComponent(0)).setSelected(true);
+						return;
+					}
+
+					for(Component comp : jp[8].getComponents())
+						((JCheckBox)((JPanel) comp).getComponent(0)).setSelected(false);
+				});
+
+				btn[190].addActionListener(e -> {
+					for(Component comp : jp[8].getComponents()) {
+						if(((JCheckBox)((JPanel) comp).getComponent(0)).isSelected()) {
+							jp[8].remove(comp);
+							jp[8].revalidate();
+							jp[8].repaint();
+						}
+					}
+				});
 			}
 
 			rs = getResult("select count(*) from post where user = ?", s_no);
