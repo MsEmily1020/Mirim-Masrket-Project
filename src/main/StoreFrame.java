@@ -28,8 +28,8 @@ public class StoreFrame extends BaseFrame {
 	public StoreFrame() {
 		super("미림장터", 1000, 1000);
 		
-		u_no = 3;
-		s_no = 3;
+		u_no = 5;
+		s_no = 5;
 
 		try {
 			rs = getResult("select * from user where no = ?", s_no);
@@ -220,6 +220,8 @@ public class StoreFrame extends BaseFrame {
 								cnt = rs.getInt("cnt");
 
 								jp[4].setSize(new Dimension(jp[4].getWidth(), cnt * 180));
+								btn[2].setText("상점후기 " + cnt);
+								btnText[1] = btn[2].getText();
 							} catch (Exception e1) {
 								e1.printStackTrace();
 							}
