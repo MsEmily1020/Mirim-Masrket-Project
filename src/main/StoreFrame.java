@@ -22,15 +22,12 @@ import base.BaseFrame;
 public class StoreFrame extends BaseFrame {
 
 	JTextArea area, area1;
-	String[] btnText = "상품,상점후기,팔로잉".split(","); 
+	String[] btnText = "상품,상점후기".split(","); 
 	int cnt;
 
 	public StoreFrame() {
 		super("미림장터", 1000, 1000);
 		
-		u_no = 5;
-		s_no = 5;
-
 		try {
 			rs = getResult("select * from user where no = ?", s_no);
 			rs.next();
@@ -49,10 +46,9 @@ public class StoreFrame extends BaseFrame {
 			jp[1].add(setBounds(jp[3] = new JPanel(null), 0, 35, 805, 1000));
 			jp[1].add(setBounds(jp[4] = new JPanel(new GridLayout(0, 1)), 0, 45, 805, 405));
 			jp[1].add(setBounds(jp[5] = new JPanel(null), 0, 35, 805, 1000));
-			jp[1].add(setBounds(jp[6] = new JPanel(null), 0, 35, 805, 305));
 
 			if(s_no == u_no) { 
-				btnText = "상품,상점후기,찜,팔로잉".split(",");
+				btnText = "상품,상점후기,찜".split(",");
 				isCorrectionProduct = true;
 			}
 
@@ -61,7 +57,6 @@ public class StoreFrame extends BaseFrame {
 			jp[3].setBackground(Color.white);
 			jp[4].setBackground(Color.white);
 			jp[5].setBackground(Color.white);
-			jp[6].setBackground(Color.white);
 
 			for(int i = 1; i <= btnText.length; i++) {
 				jp[2].add(setBounds(btn[i] = new JButton(btnText[i - 1]), (btnText.length % 2) * 60 + 190, 50));
@@ -71,7 +66,6 @@ public class StoreFrame extends BaseFrame {
 
 			jp[4].setVisible(false);
 			jp[5].setVisible(false);
-			jp[6].setVisible(false);
 
 			if(favoritePage) {
 				jp[5].setVisible(true);
