@@ -100,7 +100,7 @@ public class StoreFrame extends BaseFrame {
 
 				else {
 					if(area.getText().length() != 0) {
-						update("update user set explain = ? where no = ?", area.getText(), s_no);
+						update("update user set user.explain = ? where no = ?", area.getText(), s_no);
 						showInfo("수정이 완료되었습니다.");
 					} 
 					area.setEnabled(false);
