@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -25,6 +27,9 @@ public class StoreFrame extends BaseFrame {
 	public StoreFrame() {
 		super("미림장터", 1000, 1000);
 
+		u_no = 5;
+		s_no = 5;
+		
 		try {
 			rs = getResult("select * from user where no = ?", s_no);
 			rs.next();
@@ -143,6 +148,21 @@ public class StoreFrame extends BaseFrame {
 					}
 					for(int i = 1; i <= rs.getInt("score"); i++) jp[7].getComponent(i).setForeground(Color.orange); 
 					jp[7].add(setBounds(lb[2] = new JLabel(rs.getString("title") + " >", 0), 30, 70, rs.getString("title").length() * 15, 20));
+					lb[2].setName(rs.getString("title"));
+					
+					lb[2].addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							try {
+								rs = getResult("select * from post where title = ?", ((JLabel)e.getSource()).getName());
+								rs.next();
+								p_no = rs.getInt("no");
+								changePage(new ProductFrame().main);
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
+						}
+					});
 					lb[2].setBorder(new LineBorder(Color.black));
 					jp[7].add(setBounds(area1 = new JTextArea(), 30, 100, 750, 50));
 					area1.setText(rs.getString("content"));
