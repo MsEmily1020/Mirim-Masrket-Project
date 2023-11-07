@@ -27,7 +27,7 @@ public class StoreFrame extends BaseFrame {
 
 	public StoreFrame() {
 		super("미림장터", 1000, 1000);
-
+		
 		u_no = 3;
 		s_no = 3;
 
@@ -125,10 +125,14 @@ public class StoreFrame extends BaseFrame {
 					}
 				});
 			}
+			
 			rs = getResult("select count(*) as cnt from review where user = ?", s_no);
 			rs.next();
 
 			cnt = rs.getInt("cnt");
+			btn[2].setText("상점후기 " + cnt);
+			btnText[1] = btn[2].getText();
+			
 			if(cnt == 0) {
 				jp[4].setSize(new Dimension(jp[4].getWidth(), 130));
 				jp[4].add(setBounds(new JLabel("상점후기가 없습니다.", 0), 0, 0, 805, 20));
@@ -234,6 +238,10 @@ public class StoreFrame extends BaseFrame {
 			rs = getResult("select count(*) from favorite where user = ?", s_no);
 			rs.next();
 			cnt = rs.getInt("count(*)");
+
+			btn[3].setText("찜 " + cnt);
+			btnText[2] = btn[3].getText();
+			
 			if(cnt == 0) {
 				jp[5].add(setBounds(new JLabel("찜한 상품이 없습니다.", 0), 30, 130, 805, 20));
 			}
@@ -296,6 +304,15 @@ public class StoreFrame extends BaseFrame {
 				btn[190].addActionListener(e -> {
 					for(Component comp : jp[8].getComponents()) {
 						if(((JCheckBox)((JPanel) comp).getComponent(0)).isSelected()) {
+							update("delete from favorite where no = ?", Integer.parseInt(comp.getName()));
+							try {
+								rs = getResult("select count(*) as cnt from favorite where user = ?", s_no);
+								rs.next();
+								btn[3].setText("찜 " + rs.getInt("cnt"));
+								btnText[2] = btn[3].getText();
+							} catch (Exception e1) {
+								e1.printStackTrace();
+							}
 							jp[8].remove(comp);
 							jp[8].revalidate();
 							jp[8].repaint();
@@ -307,6 +324,9 @@ public class StoreFrame extends BaseFrame {
 			rs = getResult("select count(*) from post where user = ?", s_no);
 			rs.next();
 			cnt = rs.getInt("count(*)");
+			
+			btn[1].setText("상품 " + cnt);
+			btnText[0] = btn[1].getText();
 
 			jp[3].add(setBounds(new JLabel("<html>상품" + " <font color='red'>" + cnt + "</font></html>"),20, 20, 80, 20));
 			jp[3].add(setBounds(new JLabel(), 20, 55, 750, 1));

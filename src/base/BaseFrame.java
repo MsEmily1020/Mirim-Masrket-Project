@@ -85,7 +85,6 @@ public class BaseFrame extends JFrame {
 
 	public static HashMap<Integer, String> category = new HashMap();
 	public static HashMap<Integer, ArrayList> filter = new HashMap();
-	public static HashMap<Component, Component> list = new HashMap();
 
 	static {
 		try {
@@ -258,9 +257,7 @@ public class BaseFrame extends JFrame {
 	}
 
 	public void changePage(Component page) {
-		list.put(page, mainCls.jsp.getViewport().getView());
 		mainCls.jsp.getViewport().setView(page);
-
 	}
 
 	public void setComponent(JPanel jp) {
