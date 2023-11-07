@@ -261,6 +261,17 @@ public class StoreFrame extends BaseFrame {
 					jp[9].add(setBounds(new JLabel(rs.getString("title")), 120, 10, 200, 30));
 					ch[1].setBackground(Color.white);
 					jp[9].add(setBounds(new JLabel(String.format("%,d원", rs.getInt("price"))), 120, 60, 300, 40));
+					jp[9].setName(rs.getInt("no") + "");
+				}
+				
+				for(Component comp : jp[8].getComponents()) {
+					comp.addMouseListener(new MouseAdapter() {
+						@Override
+						public void mouseClicked(MouseEvent e) {
+							p_no = Integer.parseInt(e.getComponent().getName());
+							changePage(new ProductFrame().main);
+						}
+					});
 				}
 
 				for(Component comp : jp[8].getComponents()) {
