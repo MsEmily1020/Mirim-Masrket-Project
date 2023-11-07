@@ -310,6 +310,7 @@ public class StoreFrame extends BaseFrame {
 								rs.next();
 								btn[3].setText("찜 " + rs.getInt("cnt"));
 								btnText[2] = btn[3].getText();
+								((JLabel) jp[5].getComponent(0)).setText("<html>찜 <font color='red'>" + rs.getInt("cnt") + "</font></html>");
 							} catch (Exception e1) {
 								e1.printStackTrace();
 							}
