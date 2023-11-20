@@ -2,7 +2,7 @@
 - 2023 JAVA GUI &lt;미림장터 프로젝트>
 
 ## ⌚ Project execution period
-- 2023.08.30 ~
+- 2023.08.30 ~ 2023.11.20
 
 ## 🛠 Development Environment
 - Language : Java
