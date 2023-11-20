@@ -1,5 +1,6 @@
 package main;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -34,7 +35,10 @@ public class StoreFrame extends BaseFrame {
 
 			main.add(setBounds(lb[0] = new JLabel(), 30, 33, 805, 1));
 
-			main.add(setBounds(jp[0] = new JPanel(), 30, 35, 210, 215));
+			main.add(setBounds(jp[0] = new JPanel(new BorderLayout()), 30, 35, 210, 215));
+			jp[0].add(new JLabel("<html><div 'text-align:center'>" + rs.getString("name") + "<br>" + rs.getString("phone") + "</div></html>"));
+			((JLabel)jp[0].getComponent(0)).setHorizontalAlignment(JLabel.CENTER);
+			
 			main.add(setBounds(area = new JTextArea(), 260, 50, 545, 170));
 			main.add(setBounds(btn[0] = new JButton("소개글 수정"), 260, 220, 105, 30));
 			if(u_no != s_no) btn[0].setVisible(false);
