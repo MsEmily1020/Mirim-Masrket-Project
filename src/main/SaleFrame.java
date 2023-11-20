@@ -240,8 +240,18 @@ public class SaleFrame extends BaseFrame {
 			if(!tf[1].getText().matches(".*[0-9].*")) { showErr("가격은 숫자로만 입력해주세요."); return; }
 
 			showInfo("등록이 완료되었습니다.");
+			
+			try {
+				rs = getResult("select * from post order by no desc");
+				rs.next();
+				
+				int newIndex = rs.getInt("no") + 1;
 
-			update("insert into post values(null, ?, ?, ?, 0, ?, ?, ?, ?, 1, ?)", tf[0].getText(), area.getText(), tf[1].getText(), rb[0].isSelected() ? 1 : 0, categoryIndex, categorySubIndex, categoryDetailIndex, u_no);
+				update("insert into post values(?, ?, ?, ?, 0, ?, ?, ?, ?, 1, ?)", newIndex, tf[0].getText(), area.getText(), tf[1].getText(), rb[0].isSelected() ? 1 : 0, categoryIndex, categorySubIndex, categoryDetailIndex, u_no);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
+
 		});
 
 		// 수정
