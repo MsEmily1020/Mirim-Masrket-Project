@@ -62,9 +62,9 @@ public class BaseFrame extends JFrame {
 
 	public static MainFrame mainCls;
 
-	public static int u_no = 1;
+	public static int u_no = 5;
 	public static int p_no = 1;
-	public static int s_no = 1;
+	public static int s_no = 5;
 	public static boolean favoritePage = false;
 	public static boolean isCorrectionProduct = false;
 

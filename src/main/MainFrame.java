@@ -29,6 +29,8 @@ public class MainFrame extends BaseFrame {
 		super("메인", 1000, 700);
 		mainCls = this;
 		try {
+			SaleFrame.isCorrectionProduct = false;
+			
 			main.add(setBounds(btn[2] = new JButton("로그인/회원가입"), 860, 10, 105, 25));
 			if(u_no > 0) btn[2].setText("로그아웃");
 
