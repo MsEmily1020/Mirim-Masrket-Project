@@ -12,11 +12,14 @@ import base.BaseFrame;
 
 public class SearchFrame extends BaseFrame {
 
+	String content;
+	
 	public SearchFrame() {
 		super("미림장터", 880, 640);
 		try {
 			rs = getResult("select * from history where user_no = ? order by no desc", u_no);
 			rs.next();
+			content = rs.getString("content");
 
 			main.add(setBounds(btn[0] = new JButton("최신순"), 650, 60, 50, 20));
 			main.add(setBounds(btn[1] = new JButton("인기순"), 700, 60, 50, 20));
@@ -32,7 +35,7 @@ public class SearchFrame extends BaseFrame {
 
 			page.setName("5");
 
-			showProductList(page, getResult("select * from post where title like '%" + rs.getString("content") + "%'"));
+			showProductList(page, getResult("select * from post where title like '%" + content + "%'"));
 
 			setComponent(main);
 			setComponent(jp[0]);
@@ -44,7 +47,7 @@ public class SearchFrame extends BaseFrame {
 					btn[0].setForeground(new Color(0, 128, 0));
 					for(int i = 1; i <= 3; i++) btn[i].setForeground(Color.gray);
 					page.removeAll();
-					showProductList(page, getResult("select * from post where title like '%" + rs.getString("content") + "%' order by no desc"));
+					showProductList(page, getResult("select * from post where title like '%" + content + "%' order by no desc"));
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -55,7 +58,7 @@ public class SearchFrame extends BaseFrame {
 					btn[1].setForeground(new Color(0, 128, 0));
 					for(int i = 0; i <= 3 && i != 1; i++) btn[i].setForeground(Color.gray);
 					page.removeAll();
-					showProductList(page, getResult("select * from post where title like '%" + rs.getString("content") + "%' order by view desc"));
+					showProductList(page, getResult("select * from post where title like '%" + content + "%' order by view desc"));
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -66,7 +69,7 @@ public class SearchFrame extends BaseFrame {
 					btn[2].setForeground(new Color(0, 128, 0));
 					for(int i = 0; i <= 3 && i != 2; i++) btn[i].setForeground(Color.gray);
 					page.removeAll();
-					showProductList(page, getResult("select * from post where title like '%" + rs.getString("content") + "%' order by price"));
+					showProductList(page, getResult("select * from post where title like '%" + content + "%' order by price"));
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
@@ -77,13 +80,13 @@ public class SearchFrame extends BaseFrame {
 					btn[3].setForeground(new Color(0, 128, 0));
 					for(int i = 0; i <= 2; i++) btn[i].setForeground(Color.gray);
 					page.removeAll();
-					showProductList(page, getResult("select * from post where title like '%" + rs.getString("content") + "%' order by price desc"));
+					showProductList(page, getResult("select * from post where title like '%" + content + "%' order by price desc"));
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 			});
 
-			rs = getResult("select count(*) as cnt from post where title like '%" + rs.getString("content") + "%'");
+			rs = getResult("select count(*) as cnt from post where title like '%" + content + "%'");
 			rs.next();
 			
 			jp[0].add(lb[6] = new JLabel(rs.getInt("cnt") + "개"));
